@@ -1,0 +1,39 @@
+/* Make the background container full-screen and fixed */
+.background-container {
+  background: url('../../assets/mainbuilding3.jpg') no-repeat center center fixed;
+  background-size: cover;
+  min-height: 100vh; /* Make sure it covers the entire viewport */
+  display: flex;
+  justify-content: center; /* Horizontally center content */
+  position: relative;
+  z-index: -555;
+}
+
+/* The overlay with 90% opacity and centered text */
+.welcome-overlay {
+  background-color: rgba(255, 255, 255, 0.9); /* White background with 90% opacity */
+  padding: 20px;
+  border-radius: 0 0 10px 10px; /* Optional: rounded corners */
+  border: 2px solid black;
+  border-top: none;
+  text-align: center;
+  width: 80%; /* You can adjust the width to control the size of the overlay */
+  max-width: 80%; /* Max width to prevent it from getting too wide */
+  min-height: 80%;
+  position: absolute; /* Position it in the center */
+  z-index: 0; /* Ensure it is above the background */
+}
+
+/* Make the heading more prominent */
+.welcome-overlay h1 {
+  font-size: 36px;
+  font-family: 'Arial', sans-serif;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+/* Optional: style the paragraph text */
+.welcome-overlay p {
+  font-size: 16px;
+  color: #666;
+}

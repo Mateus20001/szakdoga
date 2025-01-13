@@ -1,0 +1,38 @@
+mat-card {
+  background-color: white;
+  box-shadow: 1px 1px 1px #1e1e1e;
+}
+.news {
+  margin: 15px 5px 15px 15px;
+  min-height: 300px;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 80%;
+}
+img {
+  width: 100px;
+}
+.news-card {
+  display: grid; /* Use grid layout */
+  grid-template-columns: 200px 1fr; /* 200px for image, rest for content */
+  grid-gap: 20px; /* Space between image and content */
+  padding: 10px;
+  border-radius: 10px;
+  margin: 15px 5px 15px 15px;
+  min-height: 300px;
+}
+.news-card img {
+  width: 200px;
+}
+.news-card .mat-card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.news-card .mat-card-content {
+  font-size: 1.2rem;
+  color: #555;
+}
+.news-card > div {
+  border-left: 2px solid #ddd; /* Vertical line */
+  padding-left: 20px; /* Space between the line and text */
+}

@@ -1,0 +1,177 @@
+h2 {
+  margin-bottom: 10px;
+}
+
+:host {
+  background: url('../../assets/mainbuilding3.jpg') no-repeat center center fixed;
+  background-size: cover;
+  min-height: 100vh; /* Ensures the background covers full height */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  mask-image: radial-gradient(circle, rgba(255, 255, 255, 1) 90%, rgba(255, 255, 255, 0) 100%);
+  -webkit-mask-image: radial-gradient(circle, rgba(255, 255, 255, 1) 90%, rgba(255, 255, 255, 0) 100%);
+  z-index: -1000;
+
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    background-color: #ffffff;
+    margin-left: 600px;
+    z-index: -50;
+    box-shadow: 5px 5px 4px #1e1e1e;
+  }
+#brandlogo {
+    height: 100px;
+  }
+.paper {
+  border-radius: 2px;
+  border: 1px solid black;
+  display: flex;
+  flex-wrap: wrap;
+  position: absolute;
+  flex-direction: column;         /* Stack images vertically */
+  justify-content: center;        /* Center vertically */
+  align-items: center;
+  top: 0;
+  left: 0;
+  width: 415px;
+  height: 240px;
+  background-color: #f0f0f0;
+  z-index: -500;
+  animation: moveInPaper 1.5s ease-out forwards;
+}
+.paper2 {
+  display: flex;
+  flex-wrap: wrap;
+  position: absolute;
+  flex-direction: column;         /* Stack images vertically */
+  justify-content: center;        /* Center vertically */
+  align-items: center;
+  position: absolute;
+  box-shadow: 2px 2px 2px #1e1e1e;
+  top: 10%;
+  left: 25%;
+  width: 360px;
+  height: 245px;
+  border-radius: 2px;
+  border: 1px solid black;
+  background-color: rgb(100, 100, 100);
+  z-index: -100;
+  animation: moveInWhitePaper 1.5s ease-out forwards;
+}
+.container {
+  width: 300px;
+  padding: 15px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  border: 1px solid black;
+  opacity: 90%;
+  right: 30%;
+  bottom: 100px;
+  box-shadow: 5px 5px 4px #313131;
+  margin: 10% 10% 5px 10%;
+  position: relative;
+  transform: translateX(-100%);
+  animation: moveInForm 1s ease-out forwards;
+}
+#versionControl {
+    margin: 0 8%;
+    width: 10%;
+    z-index: -1;
+    box-shadow: 2px 2px 2px #1e1e1e;
+}
+
+@keyframes moveInPaper {
+  from {
+    transform: translateX(-150%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes moveInWhitePaper {
+    from {
+      transform: translateX(150%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+@keyframes moveInForm {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+button {
+  width: 100%;
+}
+.news-div {
+  opacity: 80%;
+  position: absolute;
+  padding:5px;
+  border-radius: 15px 0 0 0;
+  border: 2px solid black;
+  top: 25%;
+  left: 40%;
+  width: 59%;
+  background-color: white;
+  z-index: -1;
+  transition: opacity 0.3s ease-in-out;
+}
+.news-div:hover {
+  opacity: 100%;
+}
+mat-card {
+  background-color: white;
+  box-shadow: 1px 1px 1px #1e1e1e;
+}
+.news {
+  margin: 15px 5px 15px 15px;
+  min-height: 300px;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 80%;
+}
+#error {
+  height: 30px;
+  color:red;
+  margin:auto, 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* Style for the scrollable box container */
+.scrollable-box {
+  width: 100%;               /* Full width */
+  max-width: 800px;          /* Optional: limit the width of the box */
+  height: 300px;             /* Fixed height to enable scrolling */
+  overflow-y: auto;          /* Vertical scroll if content overflows */
+  padding: 10px;
+  margin: 20px auto;         /* Center horizontally if needed */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional shadow for box effect */
+  box-sizing: border-box;    /* Ensures padding doesn’t affect width/height */
+}
+
+.buildingsimage {
+  border-radius: 2px;
+  border: 1px solid black;
+  max-width: 95%; /* Scale images to a uniform size */
+  height: auto;
+  object-fit: cover; /* Crop to fit without distortion */
+}

@@ -1,0 +1,39 @@
+<header>
+  <img id="brandlogo" src="../../assets/neptun1_1170x216.png" alt="Brand Logo" />
+</header>
+
+<div class="paper" [style.backgroundColor]="backgroundColor"><img class="buildingsimage" src="../../assets/mainbulding.jpg" alt=""></div>
+<div class="paper2" [style.backgroundColor]="paper2Color"><img class="buildingsimage" src="../../assets/tik.jpg" alt=""></div>
+<div class="container">
+  <h2>Login</h2>
+  <div id="error">{{ errorMessage }}</div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="fill">
+      <mat-label>Identifier</mat-label>
+      <input matInput formControlName="id" placeholder="Enter your identifier" />
+      <mat-error *ngIf="form.get('id')?.invalid && form.get('id')?.touched">
+        Identifier must be 6 characters long.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Password</mat-label>
+      <input matInput type="password" formControlName="password" placeholder="Enter your password" />
+      <mat-error *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
+        Password is required.
+      </mat-error>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Login</button>
+  </form>
+</div>
+<div class="container" id="versionControl">
+  version: 0.1
+</div>
+<div class="news-div">
+  <h1 id="welcome">Üdvözöllek a a Szegedi Tudományegyetem Neptun oldalán</h1>
+  Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum similique dolores a dignissimos illum eum magni iste tempora odit! Nisi quia cumque quas! Molestiae at voluptates, assumenda eveniet voluptas porro.
+  <div class="scrollable-box">
+    <app-news></app-news>
+  </div>
+</div>

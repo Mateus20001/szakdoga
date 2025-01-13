@@ -1,0 +1,10 @@
+    <div id="button">
+        {{menuName}}
+        <div id="dropdown">
+            <ul>
+              <li *ngFor="let menuItem of menuDropdownList">
+                <a routerLink="{{menuItem.link}}">{{menuItem.name}}</a>
+              </li>
+            </ul>
+        </div>
+    </div>
