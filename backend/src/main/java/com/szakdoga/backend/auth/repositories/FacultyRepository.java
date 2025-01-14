@@ -1,4 +1,7 @@
 package com.szakdoga.backend.auth.repositories;
 
-public interface FacultyRepository {
+import com.szakdoga.backend.auth.model.FacultyEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface FacultyRepository extends JpaRepository<FacultyEntity, Long> {
 }

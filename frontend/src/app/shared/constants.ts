@@ -10,27 +10,47 @@ export interface MenuDropdown {
 }
 export const MenuDropdownMenuObjects: MenuDropdown[] = [
     {
+      menuName: "Általános",
+      menuDropdownList: [
+        {
+          name: "Hírek",
+          link: "/news",
+          roles: []
+        },
+        {
+          name: "Szakokról",
+          link: "/aboutMajors",
+          roles: []
+        },
+        {
+          name: "Karokról",
+          link: "/aboutFaculties",
+          roles: []
+        }
+      ]
+    },
+    {
         menuName: "Saját adatok",
         menuDropdownList: [
           {
             name: "Személyes adatok",
             link: "/personaldata",
-            roles: [] // Visible to all roles
+            roles: [] 
           },
           {
             name: "Elérhetőségek",
             link: "/contacts",
-            roles: [] // Visible to all roles
+            roles: [] 
           },
           {
             name: "Képzettségek",
             link: "/idk",
-            roles: ["USER", "ADMIN"] // Visible to USER and ADMIN roles only
+            roles: [] 
           },
           {
             name: "Adatmódosítás",
             link: "/profilechange",
-            roles: [] // Visible to all roles
+            roles: [] 
           }
         ]
       },
@@ -40,7 +60,42 @@ export const MenuDropdownMenuObjects: MenuDropdown[] = [
           {
             name: "Képzés adatok",
             link: "/dashboard",
-            roles: ["STUDENT"] // Visible to ADMIN role only
+            roles: ["STUDENT"] 
+          },
+          { 
+            name: "Kurzus felvétele",
+            link: "/courseadmission",
+            roles: ["STUDENT"]
+          },
+          { 
+            name: "Órarendtervező",
+            link: "/timetablemaker",
+            roles: ["STUDENT"]
+          },
+          { 
+            name: "Felvett kurzusok",
+            link: "/coursestaken",
+            roles: ["STUDENT"]
+          },
+          { 
+            name: "Vizsgajelentkezés",
+            link: "/examadmission",
+            roles: ["STUDENT"]
+          },
+          { 
+            name: "Felvett vizsgák",
+            link: "/examstaken",
+            roles: ["STUDENT"]
+          }
+        ]
+      },
+      {
+        menuName: "Admin Funkciók",
+        menuDropdownList: [
+          {
+            name: "Felhasználó hozzáadása",
+            link: "/addProfile",
+            roles: ["ADMIN"]
           }
         ]
       }

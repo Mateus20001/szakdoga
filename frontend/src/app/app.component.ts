@@ -4,13 +4,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from './auth/auth.service';
 import { Router, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { MajorService } from './services/major.service';
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, LayoutComponent, HttpClientModule, CommonModule], 
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  providers: [AuthService]
+  providers: [AuthService, MajorService]
 })
 export class AppComponent {
   title = 'frontend';

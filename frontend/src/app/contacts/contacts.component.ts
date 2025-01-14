@@ -19,25 +19,9 @@ export class ContactsComponent implements OnInit {
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.loadUsers();
-    const userIdFromStorage = localStorage.getItem("loggedInUser");
-    this.userId = userIdFromStorage !== null ? userIdFromStorage : "ERROR";
-    if (this.userId === "ERROR") {
-      throw Error("PRoblem")
-    }
+    const accesstoken = localStorage.getItem("loggedInUser");
 
     this.loading = true; // Set loading to true
     
-  }
-  loadUsers(): void {
-    this.authService.getAllUsers().subscribe(
-      (data: User[]) => {
-        this.users = data;
-        console.log('Users loaded:', this.users);
-      },
-      (error) => {
-        console.error('Error loading users:', error);
-      }
-    );
   }
 }

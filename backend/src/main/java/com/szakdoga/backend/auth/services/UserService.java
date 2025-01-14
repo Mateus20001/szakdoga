@@ -1,10 +1,11 @@
 package com.szakdoga.backend.auth.services;
 import com.szakdoga.backend.auth.dtos.LoginUserDto;
 import com.szakdoga.backend.auth.dtos.RegisterUserDto;
-import com.szakdoga.backend.auth.model.User;
-import com.szakdoga.backend.auth.repositories.UserRepository;
+import com.szakdoga.backend.auth.model.*;
+import com.szakdoga.backend.auth.repositories.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,31 +13,55 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
-
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
-
+    private final EmailRepository emailRepository;
+    private final MajorRepository majorRepository;
+    private final MajorDetailsRepository majorDetailsRepository;
     private final AuthenticationManager authenticationManager;
     private PasswordEncoder passwordEncoder;
-
+    private final RoleRepository roleRepository;
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
-    public UserService(UserRepository userRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, EmailRepository emailRepository, MajorRepository majorRepository, MajorDetailsRepository majorDetailsRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
         this.userRepository = userRepository;
+        this.emailRepository = emailRepository;
+        this.majorRepository = majorRepository;
+        this.majorDetailsRepository = majorDetailsRepository;
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
     }
-    public User signup(RegisterUserDto input) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public User createUser(RegisterUserDto input) {
         User user = new User();
-        user.setName(input.getName());
         user.setFirstName(input.getFirstName());
-        user.setPassword(passwordEncoder.encode(input.getPassword()));
+        user.setPassword(passwordEncoder.encode("12345678"));
         user.setLastName(input.getLastName());
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());
-        return userRepository.save(user);
+
+        List<EmailEntity> emailEntities = input.getEmails().stream()
+                .map(email -> new EmailEntity(user, email)) // Create EmailEntity instances
+                .collect(Collectors.toList());
+        List<MajorEntity> majorEntities = input.getMajors().stream()
+                .map(major -> new MajorEntity(user, Integer.parseInt(major), majorDetailsRepository)) // Create EmailEntity instances
+                .collect(Collectors.toList());
+        List<RoleEntity> roleEntities = input.getRoles().stream()
+                .map(roleEntity -> new RoleEntity(user, roleEntity)) // Create EmailEntity instances
+                .collect(Collectors.toList());
+        user.setMajors(majorEntities);
+        user.setEmails(emailEntities);
+        user.setRoles(roleEntities);
+        userRepository.save(user);
+        roleRepository.saveAll(roleEntities);
+        majorRepository.saveAll(majorEntities);
+        emailRepository.saveAll(emailEntities);
+        return user;
     }
 
     public User authenticate(LoginUserDto input) {

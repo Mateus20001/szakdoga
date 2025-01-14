@@ -20,7 +20,7 @@ import { SignupDTO } from '../models/signupDTO';
     MatButtonModule,
     MatFormFieldModule,
     MatCardModule,
-    CommonModule, NewsComponent],
+    CommonModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })

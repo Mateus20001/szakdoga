@@ -1,0 +1,48 @@
+<div class="profile-container">
+    <div class="profile-header">
+      <h2>Profile Details</h2>
+    </div>
+  
+    <div class="profile-details">
+      <div class="profile-info">
+        <label for="name">Full Name:</label>
+        <p id="name">{{ userDetails?.firstName }} {{ userDetails?.lastName }}</p>
+      </div>
+  
+      <div class="profile-info">
+        <label for="username">Username:</label>
+        <p id="username">{{ userDetails?.name }}</p>
+      </div>
+  
+      <div class="profile-info">
+        <label for="roles">Roles:</label>
+        <p id="roles">{{ userDetails?.roles?.join(', ') }}</p>
+      </div>
+  
+      <div class="profile-info">
+        <label for="emails">Emails:</label>
+        <p id="emails">{{ userDetails?.emails?.join(', ') }}</p>
+      </div>
+  
+      <div class="profile-info">
+        <label for="majors">Majors:</label>
+        <p id="majors">{{ userDetails?.majors?.join(', ') }}</p>
+      </div>
+  
+      <div class="profile-info">
+        <label for="faculties">Faculties:</label>
+        <p id="faculties">{{ userDetails?.faculties?.join(', ') }}</p>
+      </div>
+  
+      <div class="profile-info">
+        <label for="createdAt">Created At:</label>
+        <p id="createdAt">{{ userDetails?.createdAt }}</p>
+      </div>
+  
+      <div class="profile-info">
+        <label for="updatedAt">Last Updated:</label>
+        <p id="updatedAt">{{ userDetails?.updatedAt }}</p>
+      </div>
+    </div>
+  </div>
+  

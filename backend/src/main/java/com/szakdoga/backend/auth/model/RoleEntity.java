@@ -9,6 +9,7 @@ public class RoleEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private int id;
 
     @Column(name = "role_name", nullable = false)
@@ -22,7 +23,7 @@ public class RoleEntity {
     public RoleEntity() {
     }
 
-    public RoleEntity(String roleName, User user) {
+    public RoleEntity(User user, String roleName) {
         this.roleName = roleName;
         this.user = user;
     }

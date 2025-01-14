@@ -1,91 +1,53 @@
 package com.szakdoga.backend.auth.dtos;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
 public class RegisterUserDto {
 
+    @Getter
+    @Setter
     private String firstName;
+    @Getter
+    @Setter
     private String lastName;
-    private String password;
-    private String name;
-    private List<String> roleNames; // Ez egy lista a szerepkörökről
-    private List<String> emailAddresses; // Lista az email címekről
-    private List<String> majorNames; // Lista a szakok neveiről
-    private List<String> facultyNames; // Lista a karok neveiről
-    public RegisterUserDto(String firstName, String lastName, String password, String antecedent,
-                       List<String> roleNames, List<String> emailAddresses, List<String> majorNames,
-                       List<String> facultyNames) {
+    private List<String> roles; // Ez egy lista a szerepkörökről
+    private List<String> emails; // Lista az email címekről
+    private List<String> majors; // Lista a szakok neveiről
+    public RegisterUserDto(String firstName, String lastName,
+                       List<String> roleNames, List<String> emailAddresses, List<String> majorNames) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.password = password;
-        this.name = antecedent;
-        this.roleNames = roleNames;
-        this.emailAddresses = emailAddresses;
-        this.majorNames = majorNames;
-        this.facultyNames = facultyNames;
+        this.roles = roleNames;
+        this.emails = emailAddresses;
+        this.majors = majorNames;
     }
 
-    public String getFirstName() {
-        return firstName;
+
+    public List<String> getRoles() {
+        return roles;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
     }
 
-    public String getLastName() {
-        return lastName;
+    public List<String> getEmails() {
+        return emails;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setEmails(List<String> emails) {
+        this.emails = emails;
     }
 
-    public String getPassword() {
-        return password;
+    public List<String> getMajors() {
+        return majors;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setMajors(List<String> majors) {
+        this.majors = majors;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String antecedent) {
-        this.name = antecedent;
-    }
-
-    public List<String> getRoleNames() {
-        return roleNames;
-    }
-
-    public void setRoleNames(List<String> roleNames) {
-        this.roleNames = roleNames;
-    }
-
-    public List<String> getEmailAddresses() {
-        return emailAddresses;
-    }
-
-    public void setEmailAddresses(List<String> emailAddresses) {
-        this.emailAddresses = emailAddresses;
-    }
-
-    public List<String> getMajorNames() {
-        return majorNames;
-    }
-
-    public void setMajorNames(List<String> majorNames) {
-        this.majorNames = majorNames;
-    }
-
-    public List<String> getFacultyNames() {
-        return facultyNames;
-    }
-
-    public void setFacultyNames(List<String> facultyNames) {
-        this.facultyNames = facultyNames;
-    }
 }

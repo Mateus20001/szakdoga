@@ -20,4 +20,37 @@ public class EmailEntity {
 
     @Column(name = "email", length = 512)
     private String email;
+
+    public EmailEntity(User user, String email) {
+        this.user = user;
+        this.email = email;
+    }
+
+    public EmailEntity() {
+
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

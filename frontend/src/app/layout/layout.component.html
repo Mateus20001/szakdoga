@@ -1,5 +1,5 @@
 <nav *ngIf="router.url !== '/login'">
-    <a routerLink="/main"><img id="brandlogo" src="../../favicon.ico"></a>
+    <a routerLink="main"><img id="brandlogo" src="../../favicon.ico"></a>
     <span id="dropdownnav" *ngFor="let menuCategory of menuDropdownItems">
         <ng-container *ngIf="shouldDisplayMenuCategory(menuCategory)">
           <app-dropdown-menu
@@ -10,8 +10,11 @@
     </span>
 
     <div style="display: flex; align-items: center;">
-        <button id="profileButton" mat-icon-button color="welcome"><img src="../../assets/pngwing.com.png"></button>
-        <p id="profileName" routerLink="/profile">{{profileName}}</p>
+        <button id="profileButton" mat-icon-button color="welcome" (click)="navigateToProfile()">
+          <img src="../../assets/pngwing.com.png" alt="Profile">
+        </button>
+      
+        <p id="profileName" (click)="navigateToProfile()">{{ profileName }}</p>
         <button id="logoutButton" mat-icon-button color="warn" (click)="logout()"><img src="../../assets/logout-512.png"></button>
     </div> 
 </nav>

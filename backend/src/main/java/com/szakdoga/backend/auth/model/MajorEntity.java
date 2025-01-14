@@ -1,5 +1,6 @@
 package com.szakdoga.backend.auth.model;
 
+import com.szakdoga.backend.auth.repositories.MajorDetailsRepository;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +19,41 @@ public class MajorEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "major", length = 512)
-    private String major;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "major_id", nullable = false)
+    private MajorDetails major;
+
+    public MajorEntity(User user, int majorId, MajorDetailsRepository majorDetailsRepository) {
+        this.user = user;
+        this.major = majorDetailsRepository.findById(majorId)
+                .orElseThrow(() -> new IllegalArgumentException("Major not found with id: " + majorId));
+    }
+
+    public MajorEntity() {
+
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public MajorDetails getMajor() {
+        return major;
+    }
+
+    public void setMajor(MajorDetails major) {
+        this.major = major;
+    }
 }

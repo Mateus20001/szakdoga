@@ -1,0 +1,12 @@
+.add-user-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px; /* Adds spacing between form elements */
+    max-width: 400px;
+    margin: 0 auto;
+    z-index: 100;
+  }
+  
+  mat-form-field {
+    width: 100%;
+  }

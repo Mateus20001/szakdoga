@@ -61,4 +61,7 @@ export class LayoutComponent {
   scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+  navigateToProfile() {
+    this.router.navigate(['/profile']);
+  }
 }

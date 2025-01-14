@@ -1,0 +1,12 @@
+<div class="major-container">
+    <mat-card *ngFor="let major of majors" class="major-card">
+      <mat-card-header>
+        <mat-card-title>{{ major.name }}</mat-card-title>
+        <mat-card-subtitle>Faculty: {{ major.facultyName }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ major.description }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  

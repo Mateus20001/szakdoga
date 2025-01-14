@@ -1,0 +1,51 @@
+<div class="add-user-form">
+  <h2>Add User</h2>
+  <form (ngSubmit)="onSubmit()" #userForm="ngForm">
+    <!-- First Name -->
+    <mat-form-field appearance="fill">
+      <mat-label>First Name</mat-label>
+      <input matInput type="text" name="firstName" [(ngModel)]="user.firstName" required />
+    </mat-form-field>
+
+    <!-- Last Name -->
+    <mat-form-field appearance="fill">
+      <mat-label>Last Name</mat-label>
+      <input matInput type="text" name="lastName" [(ngModel)]="user.lastName" required />
+    </mat-form-field>
+
+    <div *ngFor="let i of getRange(currentemailscount+1); let index = index">
+      <mat-form-field appearance="fill">
+        <mat-label>Email {{index +1}} </mat-label>
+        <input matInput type="email" name="email{{index}}" [(ngModel)]="user.emails[index]" (ngModelChange)="onEmailChange(index)">
+      </mat-form-field>
+    </div>
+
+
+    <div *ngFor="let i of getRange(currentmajors+1); let index = index">
+      <label for="major{{ index }}">Major {{index+1}} </label>
+      <select id="major{{ index }}" [(ngModel)]="user.majors[index]" name="major{{ index }}" (ngModelChange)="onMajorChange(index)">
+        <option *ngFor="let major of majors" [value]="major.id">
+          {{ major.name }}
+        </option>
+      </select>
+    </div>
+    
+    <h3>Roles</h3>
+    <div>
+      <div>
+        <label>Select Roles:</label>
+        <div *ngFor="let role of roles">
+          <input
+            type="checkbox"
+            [id]="role.id"
+            [value]="role.id"
+            (change)="onRoleChange($event)"
+          />
+          <label [for]="role.id">{{ role.name }}</label>
+        </div>
+      </div>
+    </div>
+    <!-- Submit Button -->
+    <button mat-raised-button color="primary" type="submit">Add User</button>
+  </form>
+</div>

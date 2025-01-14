@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { User } from '../models/user';
 import { SignupDTO } from '../models/signupDTO';
 import { UserSessionEntity } from '../models/userSessionEntity';
+import { UserDetailsDTO } from '../models/userDetailsDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -60,13 +61,47 @@ export class AuthService {
   }
 
   getUserNameAndRoles(authToken: string | null): Observable<UserSessionEntity> {
+  if (!authToken) {
+    throw new Error('No authentication token provided');
+  }
+
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${authToken}`,
+  });
+
+  return this.http.get<UserSessionEntity>(`${this.baseUrl}/me`, { headers }).pipe(
+    catchError((error) => {
+      console.error('Error fetching user info', error);
+      return throwError(() => new Error('Failed to fetch user info'));
+    })
+  );
+}
+
+  saveUser(authToken: string | null, user: any) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${authToken}`,
+    });
+  
+    return this.http.post(`${this.baseUrl}/save`, user, { headers });
+  }
+  
+  getUserDetails(authToken: string | null): Observable<UserDetailsDTO> {
+    if (!authToken) {
+      throw new Error('No authentication token provided');
+    }
+
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Authorization: `Bearer ${authToken}`,
     });
 
-    return this.http.get<UserSessionEntity>(`${this.baseUrl}/me`, { headers }).pipe(
-      catchError(this.handleError)
+    return this.http.get<UserDetailsDTO>(`${this.baseUrl}/me/details`, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error fetching user details', error);
+        return throwError(() => new Error('Failed to fetch user details'));
+      })
     );
   }
 }

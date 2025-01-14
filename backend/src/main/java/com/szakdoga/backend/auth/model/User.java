@@ -20,7 +20,7 @@ public class User implements UserDetails {
     @Column(name = "id", length = 6, unique = true, nullable = false)
     private String id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
 
     @JsonIgnore
@@ -53,10 +53,6 @@ public class User implements UserDetails {
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<MajorEntity> majors;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<FacultyEntity> faculties;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -192,11 +188,4 @@ public class User implements UserDetails {
         this.majors = majors;
     }
 
-    public List<FacultyEntity> getFaculties() {
-        return faculties;
-    }
-
-    public void setFaculties(List<FacultyEntity> faculties) {
-        this.faculties = faculties;
-    }
 }
