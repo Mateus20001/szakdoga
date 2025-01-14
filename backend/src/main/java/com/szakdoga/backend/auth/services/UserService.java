@@ -1,18 +1,24 @@
 package com.szakdoga.backend.auth.services;
+import com.szakdoga.backend.auth.PasswordGenerator;
 import com.szakdoga.backend.auth.dtos.LoginUserDto;
 import com.szakdoga.backend.auth.dtos.RegisterUserDto;
 import com.szakdoga.backend.auth.model.*;
 import com.szakdoga.backend.auth.repositories.*;
+import com.szakdoga.backend.exceptions.InvalidCredentialsException;
+import com.szakdoga.backend.exceptions.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,6 +31,8 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    @Autowired
+    private EmailService emailService;
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     public UserService(UserRepository userRepository, EmailRepository emailRepository, MajorRepository majorRepository, MajorDetailsRepository majorDetailsRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
@@ -40,14 +48,21 @@ public class UserService {
     public User createUser(RegisterUserDto input) {
         User user = new User();
         user.setFirstName(input.getFirstName());
-        user.setPassword(passwordEncoder.encode("12345678"));
+        String randomPassword = PasswordGenerator.generateRandomPassword(12);
+        user.setPassword(passwordEncoder.encode(randomPassword));
         user.setLastName(input.getLastName());
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());
-
+        if (input.getEmails().isEmpty()) {
+            throw new RuntimeException("No email provided!");
+        }
         List<EmailEntity> emailEntities = input.getEmails().stream()
                 .map(email -> new EmailEntity(user, email)) // Create EmailEntity instances
                 .collect(Collectors.toList());
+        Optional<EmailEntity> existingEmail = emailRepository.findByEmail(emailEntities.getFirst().getEmail());
+        if (existingEmail.isPresent()) {
+            throw new RuntimeException("Email already exists in the database!");
+        }
         List<MajorEntity> majorEntities = input.getMajors().stream()
                 .map(major -> new MajorEntity(user, Integer.parseInt(major), majorDetailsRepository)) // Create EmailEntity instances
                 .collect(Collectors.toList());
@@ -61,19 +76,29 @@ public class UserService {
         roleRepository.saveAll(roleEntities);
         majorRepository.saveAll(majorEntities);
         emailRepository.saveAll(emailEntities);
+        if (!emailEntities.isEmpty()) {
+            EmailEntity firstEmail = emailEntities.getFirst();
+            emailService.sendEmail(firstEmail.getEmail(), user.getId(), randomPassword);
+        } else {
+
+        }
         return user;
     }
 
     public User authenticate(LoginUserDto input) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        input.getId(),
-                        input.getPassword()
-                )
-        );
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            input.getId(),
+                            input.getPassword()
+                    )
+            );
 
-        return userRepository.findById(input.getId())
-                .orElseThrow();
+            return userRepository.findById(input.getId())
+                    .orElseThrow(() -> new UserNotFoundException("User with ID " + input.getId() + " not found."));
+        } catch (AuthenticationException e) {
+            throw new InvalidCredentialsException("Invalid ID or password.", e);
+        }
     }
     public List<User> findAllUsers() {
         log.info("Fetching all users...");
@@ -85,13 +110,6 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found!"));
     }
 
-    public User createUser(User user) {
-        log.info("Creating a new user...");
-        user.setCreatedAt(LocalDateTime.now());
-        user.setUpdatedAt(LocalDateTime.now());
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
-    }
 
     public User updateUser(User user) {
         if (!userRepository.existsById(user.getId())) {

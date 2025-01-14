@@ -10,7 +10,7 @@ import { MajorService } from '../services/major.service';
 @Component({
   selector: 'app-add-profile',
   standalone: true,
-  imports: [CommonModule, MatFormField, MatLabel, FormsModule, MatInputModule, ReactiveFormsModule, MatOption],
+  imports: [CommonModule, MatFormField, MatLabel, FormsModule, MatInputModule, ReactiveFormsModule],
   templateUrl: './add-profile.component.html',
   styleUrl: './add-profile.component.scss'
 })
@@ -25,6 +25,8 @@ export class AddProfileComponent {
     majors: [],
     roles: []
   };
+  message: string = '';
+  messageType: string = ''; 
   ngOnInit() {
     this.majorService.getMajors().subscribe(
       (data) => {
@@ -48,10 +50,8 @@ export class AddProfileComponent {
     const roleName = roleNames[roleId];
   
     if (checkbox.checked && roleName) {
-      // Add roleName (string) to user.roles array
       this.user.roles.push(roleName);
     } else {
-      // Remove roleName (string) from user.roles array
       this.user.roles = this.user.roles.filter((role: string) => role !== roleName);
     }
   }
@@ -66,11 +66,15 @@ export class AddProfileComponent {
   onSubmit() {
     console.log('User data:', this.user);
     this.userService.saveUser(localStorage.getItem("loggedInUser"), this.user).subscribe(
-      response => {
+      (response: any) => {
         console.log('User submitted successfully:', response);
+        this.message = 'User created successfully! ID: ' + response.userId;
+        this.messageType = 'success'; 
       },
       error => {
         console.error('Error submitting user:', error);
+        this.message = 'Error submitting user: ' + error.error.message;
+        this.messageType = 'error'; 
       }
     );
   }

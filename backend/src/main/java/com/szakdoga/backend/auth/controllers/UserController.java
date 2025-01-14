@@ -5,8 +5,12 @@ import com.szakdoga.backend.auth.dtos.RegisterUserDto;
 import com.szakdoga.backend.auth.dtos.UserDetailsDTO;
 import com.szakdoga.backend.auth.dtos.UserNameAndRolesDTO;
 import com.szakdoga.backend.auth.model.*;
+import com.szakdoga.backend.auth.services.EmailService;
 import com.szakdoga.backend.auth.services.JwtService;
 import com.szakdoga.backend.auth.services.UserService;
+import com.szakdoga.backend.exceptions.ErrorResponse;
+import com.szakdoga.backend.exceptions.InvalidCredentialsException;
+import com.szakdoga.backend.exceptions.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -44,15 +49,26 @@ public class UserController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
-        User authenticatedUser = userService.authenticate(loginUserDto);
+    public ResponseEntity<?> authenticate(@RequestBody LoginUserDto loginUserDto) {
+        try {
+            User authenticatedUser = userService.authenticate(loginUserDto);
 
-        String jwtToken = jwtService.generateToken(authenticatedUser.getId());
+            String jwtToken = jwtService.generateToken(authenticatedUser.getId());
 
-        LoginResponse loginResponse = new LoginResponse();
-        loginResponse.setToken(jwtToken);
+            LoginResponse loginResponse = new LoginResponse();
+            loginResponse.setToken(jwtToken);
 
-        return ResponseEntity.ok(loginResponse);
+            return ResponseEntity.ok(loginResponse);
+        } catch (InvalidCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse("Invalid credentials. Please check your ID and password."));
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponse(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse("An unexpected error occurred. Please try again later."));
+        }
     }
 
     @GetMapping
@@ -71,12 +87,6 @@ public class UserController {
         return ResponseEntity.ok(user);  // Return the user with HTTP status 200 OK
     }
 
-    // Create a new user
-    @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User createdUser = userService.createUser(user);
-        return ResponseEntity.status(201).body(createdUser);  // Return 201 Created status
-    }
 
     // Update an existing user
     @PutMapping("/{id}")
@@ -149,17 +159,27 @@ public class UserController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/save")
-    public ResponseEntity<String> saveUser(@RequestBody RegisterUserDto registerUserDto) {
+    public ResponseEntity<Map<String, Object>> saveUser(@RequestBody RegisterUserDto registerUserDto) {
+        try {
+            User user = userService.createUser(registerUserDto);
+            Map<String, Object> response = Map.of(
+                    "message", "User data received successfully!",
+                    "userId", user.getId()
+            );
 
-        User user = userService.createUser(registerUserDto);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            Map<String, Object> errorResponse = Map.of(
+                    "error", "Error occurred while saving the user",
+                    "message", e.getMessage()
+            );
 
-        // Return a response
-        return ResponseEntity.ok("User data received successfully!" + user);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }
     }
 
     @GetMapping(path = "/me/details", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDetailsDTO> getCurrentUserDetails() {
-        // Retrieve the authentication object
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -208,6 +228,5 @@ public class UserController {
         log.info("User details retrieved successfully!" + userDTO.getId() + userDTO.getEmails());
         return ResponseEntity.ok(userDTO);
     }
-
 
 }
