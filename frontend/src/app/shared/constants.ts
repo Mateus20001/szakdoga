@@ -90,6 +90,36 @@ export const MenuDropdownMenuObjects: MenuDropdown[] = [
         ]
       },
       {
+        menuName: "Tanítás    ",
+        menuDropdownList: [
+          {
+            name: "Tanított Hallgatók adatai",
+            link: "/yourStudentStatistic",
+            roles: ["TEACHER"] 
+          },
+          { 
+            name: "Kurzus meghirdetése",
+            link: "/courseadd",
+            roles: ["TEACHER"]
+          },
+          { 
+            name: "Tanított kurzusok",
+            link: "/coursesTeaching",
+            roles: ["TEACHER"]
+          },
+          { 
+            name: "Vizsga meghirdetése",
+            link: "/examadd",
+            roles: ["TEACHER"]
+          },
+          { 
+            name: "Meghirdetett vizsgák",
+            link: "/examsannounced",
+            roles: ["TEACHER"]
+          }
+        ]
+      },
+      {
         menuName: "Admin Funkciók",
         menuDropdownList: [
           {

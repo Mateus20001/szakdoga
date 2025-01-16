@@ -1,4 +1,7 @@
 package com.szakdoga.backend.courses.repositories;
 
-public interface CourseRepository {
+import com.szakdoga.backend.courses.models.CourseEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CourseRepository extends JpaRepository<CourseEntity, Long> {
 }

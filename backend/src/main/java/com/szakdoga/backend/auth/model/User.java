@@ -1,6 +1,7 @@
 package com.szakdoga.backend.auth.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.szakdoga.backend.courses.models.CourseEntity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,6 +23,9 @@ public class User implements UserDetails {
 
     @Column(name = "name")
     private String name;
+
+    @Column(name = "firstLogIn")
+    private boolean firstLogIn;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.EAGER)
@@ -53,6 +57,10 @@ public class User implements UserDetails {
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<MajorEntity> majors;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<CourseEntity> appliedCourses;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
