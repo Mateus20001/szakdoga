@@ -90,7 +90,7 @@ export const MenuDropdownMenuObjects: MenuDropdown[] = [
         ]
       },
       {
-        menuName: "Tanítás    ",
+        menuName: "Tanítás",
         menuDropdownList: [
           {
             name: "Tanított Hallgatók adatai",
@@ -125,6 +125,16 @@ export const MenuDropdownMenuObjects: MenuDropdown[] = [
           {
             name: "Felhasználó hozzáadása",
             link: "/addProfile",
+            roles: ["ADMIN"]
+          },
+          {
+            name: "Hírek hozzáadása",
+            link: "/addNews",
+            roles: ["ADMIN"]
+          },
+          {
+            name: "Karok hozzáadása",
+            link: "/addFaculties",
             roles: ["ADMIN"]
           }
         ]

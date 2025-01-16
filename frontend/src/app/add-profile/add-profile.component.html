@@ -13,10 +13,18 @@
       <input matInput type="text" name="lastName" [(ngModel)]="user.lastName" required />
     </mat-form-field>
 
-    <div *ngFor="let i of getRange(currentemailscount+1); let index = index">
+    <div *ngFor="let i of getRange(currentemailscount + 1); let index = index">
       <mat-form-field appearance="fill">
-        <mat-label>Email {{index +1}} </mat-label>
-        <input matInput type="email" name="email{{index}}" [(ngModel)]="user.emails[index]" (ngModelChange)="onEmailChange(index)">
+        <mat-label>Email {{ index + 1 }}: </mat-label>
+        <input matInput 
+               type="email" 
+               name="email{{index}}" 
+               [(ngModel)]="user.emails[index]" 
+               (ngModelChange)="onEmailChange(index)"
+               [pattern]="emailPattern" 
+               [ngClass]="{'invalid-email': !isEmailValid(index)}" 
+               placeholder="Enter email">
+        <mat-error *ngIf="!isEmailValid(index)">Invalid email format</mat-error>
       </mat-form-field>
     </div>
 
@@ -29,6 +37,22 @@
         </option>
       </select>
     </div>
+
+    <div *ngFor="let i of getRange(currentphonenumberscount+1); let index = index">
+      <mat-form-field appearance="fill">
+        <mat-label>Phone Number {{index +1}}: </mat-label>
+        <input matInput 
+            type="text" 
+            name="phone_number{{index}}" 
+            [(ngModel)]="user.phone_numbers[index]" 
+            (ngModelChange)="onPhoneNumberChange(index)"
+            [pattern]="phoneNumberPattern"
+            [ngClass]="{'invalid-phone': !isPhoneNumberValid(index)}" 
+            placeholder="Enter phone number">
+            <mat-error *ngIf="!isPhoneNumberValid(index)">Invalid phone number</mat-error>
+        </mat-form-field>
+    </div>
+
     
     <h3>Roles</h3>
     <div>

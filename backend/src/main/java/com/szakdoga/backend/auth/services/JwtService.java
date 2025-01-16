@@ -80,4 +80,7 @@ public class JwtService {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
+    public long getTokenValidityInSeconds() {
+        return jwtExpiration / 1000; // Convert milliseconds to seconds
+    }
 }

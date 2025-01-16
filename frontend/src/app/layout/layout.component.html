@@ -1,5 +1,5 @@
 <nav *ngIf="router.url !== '/login'">
-    <a routerLink="main"><img id="brandlogo" src="../../favicon.ico"></a>
+    <a (click)="navigateToMain()"><img id="brandlogo" src="../../favicon.ico"></a>
     <span id="dropdownnav" *ngFor="let menuCategory of menuDropdownItems">
         <ng-container *ngIf="shouldDisplayMenuCategory(menuCategory)">
           <app-dropdown-menu
@@ -8,14 +8,16 @@
           </app-dropdown-menu>
         </ng-container>
     </span>
-
     <div style="display: flex; align-items: center;">
         <button id="profileButton" mat-icon-button color="welcome" (click)="navigateToProfile()">
-          <img src="../../assets/pngwing.com.png" alt="Profile">
+          <img src="../../assets/icons/pngwing.com.png" alt="Profile">
         </button>
       
-        <p id="profileName" (click)="navigateToProfile()">{{ profileName }}</p>
-        <button id="logoutButton" mat-icon-button color="warn" (click)="logout()"><img src="../../assets/logout-512.png"></button>
+        <p id="profileName" (click)="navigateToProfile()">{{ profileName}}</p>
+        <div class="countdown-timer" *ngIf="remainingTime > 0">
+          {{" "}}{{ formatTime(remainingTime) }}
+        </div>
+        <button id="logoutButton" mat-icon-button color="warn" (click)="logout()"><img src="../../assets/icons/logout-512.png"></button>
     </div> 
 </nav>
 <div class="background-container" *ngIf="!isLoginPage()">

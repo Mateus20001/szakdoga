@@ -8,6 +8,9 @@ import { ProfileComponent } from '../profile/profile.component';
 import { AddProfileComponent } from '../add-profile/add-profile.component';
 import { adminGuard } from '../guards/admin.guard';
 import { MajorsComponent } from '../majors/majors.component';
+import { AddnewsComponent } from '../addnews/addnews.component';
+import { NewsComponent } from '../news/news.component';
+import { AddFacultyComponent } from '../add-faculty/add-faculty.component';
 
 
 export const routes: Route[] = [
@@ -18,5 +21,8 @@ export const routes: Route[] = [
   { path: 'profile', component: ProfileComponent, canActivate: [authGuard]},
   { path: 'aboutMajors', component: MajorsComponent, canActivate: [authGuard]},
   { path: 'addProfile', component: AddProfileComponent, canActivate: [authGuard, adminGuard]},
+  { path: 'addNews', component: AddnewsComponent, canActivate: [authGuard, adminGuard]},
+  { path: 'addFaculties', component: AddFacultyComponent, canActivate: [authGuard, adminGuard]},
+  { path: 'news', component: NewsComponent, canActivate: [authGuard]},
   { path: '**', redirectTo: 'login' }
 ];

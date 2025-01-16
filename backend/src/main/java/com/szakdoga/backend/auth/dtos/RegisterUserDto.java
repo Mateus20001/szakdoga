@@ -16,13 +16,15 @@ public class RegisterUserDto {
     private List<String> roles; // Ez egy lista a szerepkörökről
     private List<String> emails; // Lista az email címekről
     private List<String> majors; // Lista a szakok neveiről
+    private List<String> phone_numbers;
     public RegisterUserDto(String firstName, String lastName,
-                       List<String> roleNames, List<String> emailAddresses, List<String> majorNames) {
+                       List<String> roleNames, List<String> emailAddresses, List<String> majorNames, List<String> phone_numbers) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.roles = roleNames;
         this.emails = emailAddresses;
         this.majors = majorNames;
+        this.phone_numbers = phone_numbers;
     }
 
 
@@ -50,4 +52,11 @@ public class RegisterUserDto {
         this.majors = majors;
     }
 
+    public List<String> getPhone_numbers() {
+        return phone_numbers;
+    }
+
+    public void setPhone_numbers(List<String> phone_numbers) {
+        this.phone_numbers = phone_numbers;
+    }
 }

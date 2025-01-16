@@ -45,6 +45,7 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem('loggedInUser');
+    localStorage.removeItem('expirationTime');
     this.router.navigate(['/login']);
   }
 
@@ -103,5 +104,14 @@ export class AuthService {
         return throwError(() => new Error('Failed to fetch user details'));
       })
     );
+  }
+  isAuthenticated(): boolean {
+    const expirationTime = localStorage.getItem('expirationTime');
+    return expirationTime ? Date.now() < parseInt(expirationTime) : false;
+  }
+  checkTokenExpiration() {
+    if (!this.isAuthenticated()) {
+      this.logout();
+    }
   }
 }

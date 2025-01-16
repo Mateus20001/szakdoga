@@ -7,6 +7,7 @@ export class UserDetailsDTO {
     emails: string[];
     majors: string[];
     faculties: string[];
+    phone_numbers: string[];
     createdAt: string;
     updatedAt: string;
   
@@ -19,6 +20,7 @@ export class UserDetailsDTO {
       emails: string[],
       majors: string[],
       faculties: string[],
+      phone_numbers: string[],
       createdAt: string,
       updatedAt: string
     ) {
@@ -30,6 +32,7 @@ export class UserDetailsDTO {
       this.emails = emails;
       this.majors = majors;
       this.faculties = faculties;
+      this.phone_numbers = phone_numbers;
       this.createdAt = createdAt;
       this.updatedAt = updatedAt;
     }

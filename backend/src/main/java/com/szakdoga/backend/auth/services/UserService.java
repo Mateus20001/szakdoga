@@ -28,6 +28,7 @@ public class UserService {
     private final EmailRepository emailRepository;
     private final MajorRepository majorRepository;
     private final MajorDetailsRepository majorDetailsRepository;
+    private final PhoneRepository phoneRepository;
     private final AuthenticationManager authenticationManager;
     private PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
@@ -35,11 +36,12 @@ public class UserService {
     private EmailService emailService;
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
-    public UserService(UserRepository userRepository, EmailRepository emailRepository, MajorRepository majorRepository, MajorDetailsRepository majorDetailsRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, EmailRepository emailRepository, MajorRepository majorRepository, MajorDetailsRepository majorDetailsRepository, PhoneRepository phoneRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.emailRepository = emailRepository;
         this.majorRepository = majorRepository;
         this.majorDetailsRepository = majorDetailsRepository;
+        this.phoneRepository = phoneRepository;
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
@@ -56,6 +58,9 @@ public class UserService {
         if (input.getEmails().isEmpty()) {
             throw new RuntimeException("No email provided!");
         }
+        if (input.getEmails().size() > 4) {
+            throw new RuntimeException("Too many emails provided!");
+        }
         List<EmailEntity> emailEntities = input.getEmails().stream()
                 .map(email -> new EmailEntity(user, email)) // Create EmailEntity instances
                 .collect(Collectors.toList());
@@ -69,19 +74,26 @@ public class UserService {
         List<RoleEntity> roleEntities = input.getRoles().stream()
                 .map(roleEntity -> new RoleEntity(user, roleEntity)) // Create EmailEntity instances
                 .collect(Collectors.toList());
+        List<PhoneEntity> phone_numbers = input.getPhone_numbers().stream()
+                .map(phoneEntity -> new PhoneEntity(user, phoneEntity)) // Create EmailEntity instances
+                .collect(Collectors.toList());
+        user.setPhone_numbers(phone_numbers);
         user.setMajors(majorEntities);
         user.setEmails(emailEntities);
         user.setRoles(roleEntities);
         userRepository.save(user);
-        roleRepository.saveAll(roleEntities);
-        majorRepository.saveAll(majorEntities);
-        emailRepository.saveAll(emailEntities);
-        if (!emailEntities.isEmpty()) {
-            EmailEntity firstEmail = emailEntities.getFirst();
-            emailService.sendEmail(firstEmail.getEmail(), user.getId(), randomPassword);
-        } else {
-
+        if (!input.getPhone_numbers().isEmpty()) {
+            phoneRepository.saveAll(phone_numbers);
         }
+        if (!roleEntities.isEmpty()) {
+            roleRepository.saveAll(roleEntities);
+        }
+        if (!majorEntities.isEmpty()) {
+            majorRepository.saveAll(majorEntities);
+        }
+        emailRepository.saveAll(emailEntities);
+        EmailEntity firstEmail = emailEntities.getFirst();
+        emailService.sendEmail(firstEmail.getEmail(), user.getId(), randomPassword);
         return user;
     }
 

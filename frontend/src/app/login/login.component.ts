@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
+import { MatButtonModule, MatIconAnchor, MatIconButton } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../auth/auth.service';
@@ -20,7 +20,8 @@ import { SignupDTO } from '../models/signupDTO';
     MatButtonModule,
     MatFormFieldModule,
     MatCardModule,
-    CommonModule],
+    CommonModule,
+    MatIconButton],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
@@ -31,6 +32,9 @@ export class LoginComponent {
   paper2Color!: string;
   private formSubmitAttempt: boolean | undefined
   errorMessage: string | null = null;
+  passwordVisible: boolean = false;
+  passwordControl: FormControl = new FormControl('', [Validators.required, Validators.minLength(8)]);
+
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
@@ -47,7 +51,7 @@ export class LoginComponent {
         Validators.maxLength(6),
         this.identifierValidator
       ]],
-      password: ['', [Validators.required, Validators.minLength(8)]]
+      password: this.passwordControl,
     });
 
   }
@@ -83,6 +87,8 @@ export class LoginComponent {
           data => {
             console.log(data.token)
             localStorage.setItem('loggedInUser', data.token);
+            const expirationTime = Date.now() + data.expiresIn * 1000;
+            localStorage.setItem('expirationTime', expirationTime.toString());
             this.router.navigate(['/main']);
           },
           error => {
@@ -91,5 +97,8 @@ export class LoginComponent {
         );
       }
       this.formSubmitAttempt = true;
+    }
+    togglePasswordVisibility(): void {
+      this.passwordVisible = !this.passwordVisible;
     }
   }

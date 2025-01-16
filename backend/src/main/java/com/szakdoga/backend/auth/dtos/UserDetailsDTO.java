@@ -10,6 +10,39 @@ public class UserDetailsDTO {
     private String lastName;
     private String name;
 
+
+    private List<String> roles;
+    private List<String> emails;
+    private List<String> majors;
+    private List<String> faculties;
+    private List<String> phone_numbers;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+    // Constructor
+    public UserDetailsDTO(String id, String firstName, String lastName, String name,
+                          List<String> roles, List<String> emails, List<String> majors, List<String> faculties, List<String> phoneNumbers, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.name = name;
+        this.roles = roles;
+        this.emails = emails;
+        this.majors = majors;
+        this.faculties = faculties;
+        this.phone_numbers = phoneNumbers;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    public List<String> getPhone_numbers() {
+        return phone_numbers;
+    }
+
+    public void setPhone_numbers(List<String> phone_numbers) {
+        this.phone_numbers = phone_numbers;
+    }
+
     public String getId() {
         return id;
     }
@@ -87,28 +120,6 @@ public class UserDetailsDTO {
     }
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    private List<String> roles;
-    private List<String> emails;
-    private List<String> majors;
-    private List<String> faculties;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-
-    // Constructor
-    public UserDetailsDTO(String id, String firstName, String lastName, String name,
-                   List<String> roles, List<String> emails, List<String> majors, List<String> faculties, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.name = name;
-        this.roles = roles;
-        this.emails = emails;
-        this.majors = majors;
-        this.faculties = faculties;
-        this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 }

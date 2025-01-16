@@ -17,8 +17,29 @@ public class FacultyEntity implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "description", nullable = false)
+    @Lob
+    @Column(name = "description", nullable = false, columnDefinition = "TEXT")
     private String description;
+
+    @Lob
+    @Column(name = "image", nullable = false)
+    private byte[] image;
+
+    public FacultyEntity(byte[] image) {
+        this.image = image;
+    }
+
+    public FacultyEntity() {
+
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
 
     public int getId() {
         return id;

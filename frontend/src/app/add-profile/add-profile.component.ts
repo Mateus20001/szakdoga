@@ -17,12 +17,14 @@ import { MajorService } from '../services/major.service';
 export class AddProfileComponent {
   currentmajors = 0;
   currentemailscount = 0;
+  currentphonenumberscount = 0;
   majors: { id: string; name: string }[] = [];
   user: any = {
     firstName: '',
     lastName: '',
     emails: [],
     majors: [],
+    phone_numbers: [],
     roles: []
   };
   message: string = '';
@@ -65,6 +67,11 @@ export class AddProfileComponent {
 
   onSubmit() {
     console.log('User data:', this.user);
+    if (!this.user.emails[0]) {
+      this.message = 'Please provide at least one email.';
+      this.messageType = 'error';
+      return;
+    }
     this.userService.saveUser(localStorage.getItem("loggedInUser"), this.user).subscribe(
       (response: any) => {
         console.log('User submitted successfully:', response);
@@ -87,9 +94,27 @@ export class AddProfileComponent {
     }
   }
   onEmailChange(index: number) {
-    if (this.user.emails[index] && this.currentemailscount < this.user.emails.length) {
+    if (this.user.emails[index] && this.currentemailscount < this.user.emails.length && this.user.emails.length < 5) {
       this.currentemailscount++;
-      console.log(this.currentemailscount);
     }
+  }
+  emailPattern = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+(?<![.-])\\.[a-zA-Z]{2,}$'; //will throw error: \ => in HTML, \\ => in angular is the escape character
+
+  // Method to validate email format
+  isEmailValid(index: number): boolean {
+    const email = this.user.emails[index];
+    return email ? new RegExp(this.emailPattern).test(email) : true;
+  }
+
+  onPhoneNumberChange(index: number) {
+    if (this.user.phone_numbers[index] && this.currentphonenumberscount < this.user.phone_numbers.length && this.user.phone_numbers.length < 5) {
+      this.currentphonenumberscount++;
+    }
+  }
+  phoneNumberPattern = '^[0-9]{10}$';
+
+  isPhoneNumberValid(index: number): boolean {
+    const phoneNumber = this.user.phone_numbers[index];
+    return phoneNumber ? new RegExp(this.phoneNumberPattern).test(phoneNumber) : true;
   }
 }

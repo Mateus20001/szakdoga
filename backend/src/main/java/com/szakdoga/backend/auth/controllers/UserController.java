@@ -27,6 +27,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -54,10 +55,11 @@ public class UserController {
             User authenticatedUser = userService.authenticate(loginUserDto);
 
             String jwtToken = jwtService.generateToken(authenticatedUser.getId());
+            long expiresIn = jwtService.getTokenValidityInSeconds();
 
             LoginResponse loginResponse = new LoginResponse();
             loginResponse.setToken(jwtToken);
-
+            loginResponse.setExpiresIn(expiresIn);
             return ResponseEntity.ok(loginResponse);
         } catch (InvalidCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -212,6 +214,11 @@ public class UserController {
                 .distinct() // To avoid duplicates if majors belong to the same faculty
                 .collect(Collectors.toList());
 
+        List<String> phoneNumbers = user.getPhone_numbers()
+                .stream()
+                .map(phoneEntity -> phoneEntity.getPhone_number())
+                .collect(Collectors.toList());
+
         // Map User to UserDTO
         UserDetailsDTO userDTO = new UserDetailsDTO(
                 user.getId(),
@@ -222,6 +229,7 @@ public class UserController {
                 user.getEmails().stream().map(EmailEntity::getEmail).collect(Collectors.toList()),
                 majorNames,
                 facultyNames,
+                phoneNumbers,
                 user.getCreatedAt(),
                 user.getUpdatedAt()
         );

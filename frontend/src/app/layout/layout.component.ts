@@ -20,6 +20,8 @@ export class LayoutComponent {
   roles: Role[] = [];
   menuDropdownItems: MenuDropdown[] = MenuDropdownMenuObjects;
   showBackToTop = 0; // Opacity value (0 or 1)
+  remainingTime: number = 0;
+  private timerInterval: any;
   ngOnInit() {
     if (localStorage.getItem("loggedInUser") !== null) {
       this.authService.getUserNameAndRoles(localStorage.getItem("loggedInUser")).subscribe(
@@ -34,6 +36,26 @@ export class LayoutComponent {
     } else {
       this.authService.logout();
     }
+    this.timerInterval = setInterval(() => {
+      this.updateRemainingTime();
+      if (this.remainingTime <= 0) {
+        clearInterval(this.timerInterval);
+        this.authService.logout();
+      }
+    }, 1000);
+  }
+  updateRemainingTime() {
+    const expirationTime = localStorage.getItem('expirationTime');
+    if (expirationTime) {
+      this.remainingTime = Math.max(0, parseInt(expirationTime) - Date.now());
+    }
+  }
+
+  formatTime(milliseconds: number): string {
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   }
   shouldDisplayMenuItem(menuItem: MenuItem): boolean {
     return menuItem.roles.length === 0 || this.roles.some(role => menuItem.roles.includes(role));
@@ -63,5 +85,8 @@ export class LayoutComponent {
   }
   navigateToProfile() {
     this.router.navigate(['/profile']);
+  }
+  navigateToMain() {
+    this.router.navigate(['/main']);
   }
 }

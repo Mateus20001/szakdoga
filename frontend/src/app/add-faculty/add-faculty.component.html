@@ -1,0 +1,22 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="facultyForm" enctype="multipart/form-data">
+    <mat-form-field appearance="fill">
+      <mat-label>Faculty Name</mat-label>
+      <input matInput formControlName="name" placeholder="Enter faculty name" />
+    </mat-form-field>
+  
+    <mat-form-field appearance="fill">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" placeholder="Enter description"></textarea>
+    </mat-form-field>
+  
+    <label for="image-upload">Upload Image:</label>
+    <input type="file" id="image-upload" (change)="onFileSelect($event)" />
+    <div *ngIf="filePreview">
+        <img [src]="filePreview" alt="Image preview" style="max-width: 200px; max-height: 200px;" />
+    </div>
+  
+    <button mat-raised-button color="primary" type="submit" [disabled]="facultyForm.invalid || !selectedFile">
+      Submit
+    </button>
+  </form>
+  

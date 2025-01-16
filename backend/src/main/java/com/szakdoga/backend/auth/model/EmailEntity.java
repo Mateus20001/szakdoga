@@ -18,12 +18,21 @@ public class EmailEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "email", length = 512)
+    @Column(name = "email", length = 512, nullable = false)
     private String email;
 
+    @Column(name = "public", nullable = false)
+    private boolean _public;
+
+    public EmailEntity(User user, String email, Boolean _public) {
+        this.user = user;
+        this.email = email;
+        this._public = _public;
+    }
     public EmailEntity(User user, String email) {
         this.user = user;
         this.email = email;
+        this._public = true;
     }
 
     public EmailEntity() {

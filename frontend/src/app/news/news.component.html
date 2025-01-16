@@ -1,9 +1,9 @@
-<div class="news-container">
-    <mat-card *ngFor="let item of news" class="news-card">
-      <img mat-card-image [src]="item.imageUrl" alt="{{ item.title }}">
-      <div>
-        <mat-card-title>{{ item.title }}</mat-card-title>
-        <mat-card-content>{{ item.description }}</mat-card-content>
-      </div>
-    </mat-card>
-  </div>
+<div *ngFor="let article of news">
+  <mat-card (click)="openDialog(article)" style="cursor: pointer;">
+    <img mat-card-image *ngIf="article.imageUrl" [src]="article.imageUrl" alt="News Image" />
+    <mat-card-content>
+      <mat-card-title>{{ article.title }}</mat-card-title>
+      <p>{{ article.shortDesc }}</p>
+    </mat-card-content>
+  </mat-card>
+</div>
