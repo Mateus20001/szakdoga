@@ -2,10 +2,6 @@ package com.szakdoga.backend.auth.model;
 
 import com.szakdoga.backend.auth.repositories.MajorDetailsRepository;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
-import java.io.Serializable;
 
 @Entity
 @Table(name = "user_majors")
@@ -19,7 +15,7 @@ public class MajorEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "major_id", nullable = false)
     private MajorDetails major;
 
@@ -33,7 +29,7 @@ public class MajorEntity {
 
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

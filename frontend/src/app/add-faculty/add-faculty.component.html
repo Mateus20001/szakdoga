@@ -1,22 +1,55 @@
-<form (ngSubmit)="onSubmit()" [formGroup]="facultyForm" enctype="multipart/form-data">
+<label class="switch">
+  <input type="checkbox" [(ngModel)]="isAlternateForm" />
+  <span class="slider"></span>
+</label>
+
+<div *ngIf="!isAlternateForm">
+  <form (ngSubmit)="onSubmit()" [formGroup]="facultyForm" enctype="multipart/form-data">
     <mat-form-field appearance="fill">
       <mat-label>Faculty Name</mat-label>
       <input matInput formControlName="name" placeholder="Enter faculty name" />
     </mat-form-field>
-  
+
     <mat-form-field appearance="fill">
       <mat-label>Description</mat-label>
       <textarea matInput formControlName="description" placeholder="Enter description"></textarea>
     </mat-form-field>
-  
+
     <label for="image-upload">Upload Image:</label>
     <input type="file" id="image-upload" (change)="onFileSelect($event)" />
     <div *ngIf="filePreview">
-        <img [src]="filePreview" alt="Image preview" style="max-width: 200px; max-height: 200px;" />
+      <img [src]="filePreview" alt="Image preview" style="max-width: 200px; max-height: 200px;" />
     </div>
-  
+
     <button mat-raised-button color="primary" type="submit" [disabled]="facultyForm.invalid || !selectedFile">
       Submit
     </button>
   </form>
-  
+</div>
+
+<div *ngIf="isAlternateForm">
+  <form (ngSubmit)="onMajorSubmit()" [formGroup]="majorForm" enctype="multipart/form-data">
+    <mat-form-field appearance="fill">
+      <mat-label>Major Title</mat-label>
+      <input matInput formControlName="name" placeholder="Enter major title" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Major Details</mat-label>
+      <textarea matInput formControlName="description" placeholder="Enter major details"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Faculty</mat-label>
+      <mat-select formControlName="facultyId">
+        <mat-option *ngFor="let faculty of faculties" [value]="faculty.id">
+          {{ faculty.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-raised-button color="accent" type="submit" [disabled]="majorForm.invalid">
+      Submit Course
+    </button>
+  </form>
+</div>

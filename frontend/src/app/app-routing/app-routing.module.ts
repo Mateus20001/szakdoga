@@ -11,6 +11,10 @@ import { MajorsComponent } from '../majors/majors.component';
 import { AddnewsComponent } from '../addnews/addnews.component';
 import { NewsComponent } from '../news/news.component';
 import { AddFacultyComponent } from '../add-faculty/add-faculty.component';
+import { FacultiesComponent } from '../faculties/faculties.component';
+import { AddCourseComponent } from '../add-course/add-course.component';
+import { CoursesComponent } from '../courses/courses.component';
+import { EditCourseComponent } from '../edit-course/edit-course.component';
 
 
 export const routes: Route[] = [
@@ -24,5 +28,9 @@ export const routes: Route[] = [
   { path: 'addNews', component: AddnewsComponent, canActivate: [authGuard, adminGuard]},
   { path: 'addFaculties', component: AddFacultyComponent, canActivate: [authGuard, adminGuard]},
   { path: 'news', component: NewsComponent, canActivate: [authGuard]},
+  { path: 'aboutFaculties', component: FacultiesComponent, canActivate: [authGuard]},
+  { path: 'addCourse', component: AddCourseComponent, canActivate: [authGuard]},
+  { path: 'courses', component: CoursesComponent, canActivate: [authGuard]},
+  { path: 'edit-course/:id', component: EditCourseComponent, canActivate: [authGuard]},
   { path: '**', redirectTo: 'login' }
 ];

@@ -21,3 +21,42 @@ mat-form-field {
   font-weight: bold;
   margin-top: 10px;
 }
+.remove-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: red;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.remove-btn:hover {
+  color: darkred;
+}
+.input-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.input-with-button {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+}
+
+.remove-btn {
+  margin-left: 10px; 
+  color: red;
+  font-size: 24px;  
+  cursor: pointer;
+}
+
+.remove-btn:hover {
+  color: darkred; 
+}
+

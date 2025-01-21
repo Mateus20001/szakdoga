@@ -1,0 +1,22 @@
+<div class="faculty-list">
+    <h2>Faculties</h2>
+  
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+  
+    <div *ngIf="faculties.length > 0; else noFaculties">
+      <ul>
+        <li *ngFor="let faculty of faculties">
+          <h3>{{ faculty.name }}</h3>
+          <p>{{ faculty.description }}</p>
+          <img *ngIf="facultyImages[faculty.id]" [src]="facultyImages[faculty.id]" alt="Faculty Image" style="max-width: 100px; max-height: 100px;">
+        </li>
+      </ul>
+    </div>
+  
+    <ng-template #noFaculties>
+      <p>No faculties available.</p>
+    </ng-template>
+  </div>
+  

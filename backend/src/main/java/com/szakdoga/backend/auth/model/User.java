@@ -1,7 +1,8 @@
 package com.szakdoga.backend.auth.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.szakdoga.backend.courses.models.CourseEntity;
+import com.szakdoga.backend.courses.models.CourseApplicationEntity;
+import com.szakdoga.backend.courses.models.CourseDateEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -59,7 +60,7 @@ public class User implements UserDetails {
     private List<EmailEntity> emails;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<MajorEntity> majors;
 
     @Getter
@@ -70,7 +71,8 @@ public class User implements UserDetails {
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<CourseEntity> appliedCourses;
+    private List<CourseApplicationEntity> appliedCourses;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -128,7 +130,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return "";
+        return this.id;
     }
 
     @Override

@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { MajorWithFacultyDTO } from '../models/majorWithFacultyDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,14 @@ export class MajorService {
   getMajors(): Observable<{ id: string; name: string }[]> {
     return this.http.get<{ id: string; name: string }[]>(this.baseUrl); 
   }
-  getmajorNameAndDescription(): Observable<{ id: string; name: string; description: string; facultyName: string }[]> {
-    return this.http.get<{ id: string; name: string; description: string; facultyName: string }[]>(this.baseUrl + "/descriptions");
+  getMajorNamesAndDescriptions(): Observable<MajorWithFacultyDTO[]> {
+    return this.http.get<MajorWithFacultyDTO[]>(`${this.baseUrl}/descriptions`);
+  }
+  addMajor(major: { name: string; description: string; facultyId: string }): Observable<any> {
+    const authToken = localStorage.getItem("loggedInUser");
+    const headers = new HttpHeaders({
+          Authorization: `Bearer ${authToken}`,
+    });
+    return this.http.post<any>(this.baseUrl + '/add', major, { headers });
   }
 }

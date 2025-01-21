@@ -1,12 +1,10 @@
-<div class="major-container">
-    <mat-card *ngFor="let major of majors" class="major-card">
-      <mat-card-header>
-        <mat-card-title>{{ major.name }}</mat-card-title>
-        <mat-card-subtitle>Faculty: {{ major.facultyName }}</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        <p>{{ major.description }}</p>
-      </mat-card-content>
-    </mat-card>
-  </div>
-  
+<div *ngIf="majors.length > 0">
+  <ul>
+    <li *ngFor="let major of majors">
+      <strong>{{ major.name }}</strong>: {{ major.description }} (Faculty: {{ major.facultyName }})
+    </li>
+  </ul>
+</div>
+<div *ngIf="majors.length === 0">
+  <p>No major details available.</p>
+</div>

@@ -1,0 +1,69 @@
+<div class="container">
+    <h2>Add Course</h2>
+    <form [formGroup]="courseForm" (ngSubmit)="submit()">
+      <div>
+        <label>Name:</label>
+        <input formControlName="name" type="text" />
+      </div>
+  
+      <div>
+        <label>Description:</label>
+        <textarea formControlName="description"></textarea>
+      </div>
+  
+      <div>
+        <label>Credits:</label>
+        <input formControlName="credits" type="number" />
+      </div>
+  
+      <div>
+        <label>Requirement Type:</label>
+        <select formControlName="requirementType">
+          <option value="COLLOQUIUM">Colloquium</option>
+          <option value="PRACTICE">Practice</option>
+          <option value="PE">PE</option>
+        </select>
+      </div>
+  
+      <div>
+        <label>Required Courses:</label>
+        <select formControlName="requiredCourses" multiple>
+          <option *ngFor="let course of courses" [value]="course.id">
+            {{ course.name }}
+          </option>
+        </select>
+      </div>
+  
+      <div>
+        <h3>Enrollment Types</h3>
+        <button type="button" (click)="addEnrollmentType()">Add Enrollment Type</button>
+        <div formArrayName="enrollmentTypes">
+          <div
+            *ngFor="let enrollmentType of enrollmentTypes.controls; let i = index"
+            [formGroupName]="i"
+          >
+            <div>
+              <label>Major:</label>
+              <select formControlName="majorId">
+                <option *ngFor="let major of majors" [value]="major.id">
+                  {{ major.name }}
+                </option>
+              </select>
+            </div>
+            <div>
+              <label>Enrollment Type:</label>
+              <select formControlName="enrollmentType">
+                <option value="MANDATORY">Mandatory</option>
+                <option value="MANDATORY_OPTIONAL">Mandatory Optional</option>
+                <option value="OPTIONAL">Optional</option>
+              </select>
+            </div>
+            <button type="button" (click)="removeEnrollmentType(i)">Remove</button>
+          </div>
+        </div>
+      </div>
+  
+      <button type="submit" [disabled]="courseForm.invalid">Add Course</button>
+    </form>
+  </div>
+  

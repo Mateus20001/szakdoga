@@ -1,0 +1,5 @@
+<div class="course-card" *ngFor="let course of courses">
+    <h3>{{ course.name }}</h3>
+    <p>{{ course.description }}</p>
+    <button (click)="editCourse(course.id)">Edit</button>
+  </div>

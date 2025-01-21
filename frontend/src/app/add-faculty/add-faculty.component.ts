@@ -1,24 +1,31 @@
-import { NgIf } from '@angular/common';
+import { NgFor, NgForOf, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { FacultyService } from '../services/faculty.service';
 import { MatInputModule } from '@angular/material/input';
+import { MatOption } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+import { MajorService } from '../services/major.service';
 
 @Component({
   selector: 'app-add-faculty',
   standalone: true,
-  imports: [MatFormField, ReactiveFormsModule, MatLabel, NgIf, MatInputModule],
+  imports: [MatFormField, ReactiveFormsModule, MatLabel, NgIf, MatInputModule, FormsModule, MatSelectModule, NgFor, NgForOf],
   templateUrl: './add-faculty.component.html',
   styleUrl: './add-faculty.component.scss'
 })
 export class AddFacultyComponent {
+  isAlternateForm = false;
   facultyForm: FormGroup;
+  majorForm: FormGroup;
+  faculties: { id: number; name: string }[] = [];
   selectedFile: File | null = null;
   filePreview: string | ArrayBuffer | null = null;
 
-  constructor(private fb: FormBuilder, private facultyService: FacultyService) {
+  constructor(private fb: FormBuilder, private facultyService: FacultyService, private majorService: MajorService) {
     this.facultyForm = new FormGroup("");
+    this.majorForm = new FormGroup("");
   }
 
   ngOnInit(): void {
@@ -26,6 +33,22 @@ export class AddFacultyComponent {
       name: ['', Validators.required],
       description: ['', Validators.required]
     });
+    this.majorForm = this.fb.group({
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+      facultyId: ['', Validators.required]
+    });
+    this.loadFaculties();
+  }
+  loadFaculties(): void {
+    this.facultyService.getFaculties().subscribe(
+      (data: { id: number; name: string }[]) => {
+        this.faculties = data;
+      },
+      (error) => {
+        console.error('Error loading faculties:', error);
+      }
+    );
   }
 
   onFileSelect(event: any): void {
@@ -56,5 +79,17 @@ export class AddFacultyComponent {
         console.error('Error adding faculty', error);
       }
     );
+  }
+  onMajorSubmit() {
+    if (this.majorForm.valid) {
+      this.majorService.addMajor(this.majorForm.value).subscribe(
+        (response) => {
+          console.log('Major added successfully:', response);
+        },
+        (error) => {
+          console.error('Error adding major:', error);
+        }
+      );
+    }
   }
 }

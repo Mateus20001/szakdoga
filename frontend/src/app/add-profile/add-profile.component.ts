@@ -6,11 +6,13 @@ import { AuthService } from '../auth/auth.service';
 import { MatInputModule } from '@angular/material/input';
 import { MatOption } from '@angular/material/core';
 import { MajorService } from '../services/major.service';
+import { MatIconButton } from '@angular/material/button';
+import { MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-add-profile',
   standalone: true,
-  imports: [CommonModule, MatFormField, MatLabel, FormsModule, MatInputModule, ReactiveFormsModule],
+  imports: [CommonModule, MatFormField, MatLabel, FormsModule, MatInputModule, ReactiveFormsModule, MatIconButton, MatOption, MatSelect],
   templateUrl: './add-profile.component.html',
   styleUrl: './add-profile.component.scss'
 })
@@ -116,5 +118,30 @@ export class AddProfileComponent {
   isPhoneNumberValid(index: number): boolean {
     const phoneNumber = this.user.phone_numbers[index];
     return phoneNumber ? new RegExp(this.phoneNumberPattern).test(phoneNumber) : true;
+  }
+  removeMajor(index: number): void {
+    this.user.majors.splice(index, 1);
+    this.currentmajors--; 
+  }
+
+  removePhoneNumber(index: number): void {
+    this.user.phone_numbers.splice(index, 1); 
+    this.currentphonenumberscount--; 
+  }
+  removeEmail(index: number): void {
+    this.user.emails.splice(index, 1);
+    if (this.currentemailscount > 0) {
+      this.currentemailscount--; 
+    }
+  }
+  onEmailBlur(index: number): void {
+    if (!this.user.emails[index] && this.currentemailscount > 0) {
+      this.removeEmail(index);
+    }
+  }
+  onPhoneBlur(index: number): void {
+    if (!this.user.phone_numbers[index] && this.currentphonenumberscount > 0) {
+      this.removePhoneNumber(index);
+    }
   }
 }

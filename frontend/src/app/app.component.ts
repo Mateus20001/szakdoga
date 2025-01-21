@@ -7,13 +7,14 @@ import { CommonModule } from '@angular/common';
 import { MajorService } from './services/major.service';
 import { NewsService } from './services/news.service';
 import { FacultyService } from './services/faculty.service';
+import { CourseService } from './services/course.service';
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, LayoutComponent, HttpClientModule, CommonModule], 
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  providers: [AuthService, MajorService, NewsService, FacultyService]
+  providers: [AuthService, MajorService, NewsService, FacultyService, CourseService]
 })
 export class AppComponent {
   title = 'frontend';

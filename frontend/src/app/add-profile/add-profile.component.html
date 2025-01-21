@@ -13,7 +13,7 @@
       <input matInput type="text" name="lastName" [(ngModel)]="user.lastName" required />
     </mat-form-field>
 
-    <div *ngFor="let i of getRange(currentemailscount + 1); let index = index">
+    <div *ngFor="let i of getRange(currentemailscount + 1); let index = index" class="input-container">
       <mat-form-field appearance="fill">
         <mat-label>Email {{ index + 1 }}: </mat-label>
         <input matInput 
@@ -23,23 +23,29 @@
                (ngModelChange)="onEmailChange(index)"
                [pattern]="emailPattern" 
                [ngClass]="{'invalid-email': !isEmailValid(index)}" 
+               (blur)="onEmailBlur(index)"
                placeholder="Enter email">
         <mat-error *ngIf="!isEmailValid(index)">Invalid email format</mat-error>
       </mat-form-field>
+      <button type="button" mat-icon-button *ngIf="user.emails.length > 0 && user.emails[index]" (click)="removeEmail(index)">&times; </button>
+
     </div>
 
 
-    <div *ngFor="let i of getRange(currentmajors+1); let index = index">
-      <label for="major{{ index }}">Major {{index+1}} </label>
-      <select id="major{{ index }}" [(ngModel)]="user.majors[index]" name="major{{ index }}" (ngModelChange)="onMajorChange(index)">
-        <option *ngFor="let major of majors" [value]="major.id">
-          {{ major.name }}
-        </option>
-      </select>
-    </div>
-
-    <div *ngFor="let i of getRange(currentphonenumberscount+1); let index = index">
+    <div *ngFor="let i of getRange(currentmajors+1); let index = index" class="input-container">
       <mat-form-field appearance="fill">
+        <mat-label>Major {{ index + 1 }}</mat-label>
+        <mat-select id="major{{ index }}" [(ngModel)]="user.majors[index]" name="major{{ index }}" (ngModelChange)="onMajorChange(index)">
+          <mat-option *ngFor="let major of majors" [value]="major.id">
+            {{ major.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button type="button" mat-icon-button *ngIf="user.majors.length > 0 && user.majors[index]" (click)="removeMajor(index)">&times; </button>
+    </div>
+
+    <div *ngFor="let i of getRange(currentphonenumberscount+1); let index = index" class="input-container">
+      <mat-form-field appearance="fill" style="width: 100%; position: relative;">
         <mat-label>Phone Number {{index +1}}: </mat-label>
         <input matInput 
             type="text" 
@@ -48,9 +54,11 @@
             (ngModelChange)="onPhoneNumberChange(index)"
             [pattern]="phoneNumberPattern"
             [ngClass]="{'invalid-phone': !isPhoneNumberValid(index)}" 
+            (blur)="onPhoneBlur(index)"
             placeholder="Enter phone number">
             <mat-error *ngIf="!isPhoneNumberValid(index)">Invalid phone number</mat-error>
         </mat-form-field>
+        <button type="button" mat-icon-button  *ngIf="user.phone_numbers.length > 0 && user.phone_numbers[index]" (click)="removePhoneNumber(index)">&times;</button>
     </div>
 
     

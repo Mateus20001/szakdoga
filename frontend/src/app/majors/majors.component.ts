@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MajorService } from '../services/major.service';
 import { MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
+import { MajorWithFacultyDTO } from '../models/majorWithFacultyDTO';
 
 @Component({
   selector: 'app-majors',
@@ -12,15 +13,14 @@ import { CommonModule } from '@angular/common';
 })
 export class MajorsComponent {
   constructor(private majorService: MajorService) {}
-  majors: { id: string; name: string; description: string; facultyName: string }[] = [];
+  majors: MajorWithFacultyDTO[] = [];
   ngOnInit() {
-    this.majorService.getmajorNameAndDescription().subscribe(
-      data => {
-        this.majors = data;
-        console.log(data)
+    this.majorService.getMajorNamesAndDescriptions().subscribe(
+      (response: MajorWithFacultyDTO[]) => {
+        this.majors = response;
       },
-      error => {
-        
+      (error) => {
+        console.error('Error fetching major descriptions', error);
       }
     )
   }
