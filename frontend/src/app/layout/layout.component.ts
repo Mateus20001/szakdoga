@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, Renderer2 } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { DropdownMenuComponent } from '../dropdown-menu/dropdown-menu.component';
 import { CommonModule } from '@angular/common';
@@ -22,7 +22,11 @@ export class LayoutComponent {
   showBackToTop = 0; // Opacity value (0 or 1)
   remainingTime: number = 0;
   private timerInterval: any;
+  
+  constructor(public router: Router, private authService: AuthService, private renderer: Renderer2) {}
+
   ngOnInit() {
+    this.adjustBackgroundHeight();
     if (localStorage.getItem("loggedInUser") !== null) {
       this.authService.getUserNameAndRoles(localStorage.getItem("loggedInUser")).subscribe(
         data => {
@@ -63,7 +67,6 @@ export class LayoutComponent {
   shouldDisplayMenuCategory(menuCategory: MenuDropdown): boolean {
     return menuCategory.menuDropdownList.some(menuItem => this.shouldDisplayMenuItem(menuItem));
   }
-  constructor(public router: Router, private authService: AuthService) {}
   logout() {
     this.authService.logout();
   }
@@ -73,13 +76,10 @@ export class LayoutComponent {
     return this.router.url === '/login';
   }
 
-  // Listen for scroll events to toggle the "Back to Top" button visibility
   @HostListener('window:scroll', ['$event'])
   onWindowScroll() {
-    // If scroll position is more than 300px, show the button with opacity 1; otherwise, opacity 0
     this.showBackToTop = window.scrollY > 300 ? 1 : 0;
   }
-  // Scroll back to the top of the page
   scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -89,4 +89,16 @@ export class LayoutComponent {
   navigateToMain() {
     this.router.navigate(['/main']);
   }
+  adjustBackgroundHeight() {
+    const contentHeight = document.documentElement.scrollHeight;
+    const backgroundContainer = document.querySelector('.background-container') as HTMLElement;
+
+    if (backgroundContainer) {
+      this.renderer.setStyle(backgroundContainer, 'height', `${contentHeight}px`);
+    }
+  }
+  ngAfterViewInit() {
+    this.adjustBackgroundHeight();
+    window.addEventListener('resize', () => this.adjustBackgroundHeight());
+  } 
 }

@@ -29,33 +29,32 @@ nav > div {
 #profileName {
     cursor: pointer;
 }
-/* Make the background container full-screen and fixed */
 .background-container {
     background: url('../../assets/mainbuilding3.jpg') no-repeat center center fixed;
     background-size: cover;
-    min-height: 100vh; /* Make sure it covers the entire viewport */
+    position: absolute;
     display: flex;
-    justify-content: center; /* Horizontally center content */
-    position: relative;
+    justify-content: center;
+    width: 100%; 
     z-index: -555;
+    min-height: 100vh;
   }
   
-  /* The overlay with 90% opacity and centered text */
+  
   .welcome-overlay {
-    background-color: rgba(255, 255, 255, 0.9); /* White background with 90% opacity */
+    background-color: rgba(255, 255, 255, 0.9); 
     padding: 20px;
-    border-radius: 0 0 10px 10px; /* Optional: rounded corners */
+    border-radius: 0 0 10px 10px; 
     border: 2px solid black;
     border-top: none;
     text-align: center;
-    width: 80%; /* You can adjust the width to control the size of the overlay */
-    max-width: 80%; /* Max width to prevent it from getting too wide */
-    min-height: 8000px;
-    position: absolute; /* Position it in the center */
-    z-index: 11110; /* Ensure it is above the background */
+    width: 80%;
+    max-width: 80%; 
+    min-height: 80%;
+    position: absolute; 
+    z-index: 11110;
   }
   
-  /* Make the heading more prominent */
   .welcome-overlay h1 {
     font-size: 36px;
     font-family: 'Arial', sans-serif;
@@ -63,37 +62,35 @@ nav > div {
     color: #333;
   }
   
-  /* Optional: style the paragraph text */
   .welcome-overlay p {
     font-size: 16px;
     color: #666;
   }
-/* "Back to Top" button styles */
 .back-to-top {
     position: fixed;
-    bottom: 20px; /* Position 20px from the bottom */
-    right: 20px; /* Position 20px from the right */
-    width: 60px; /* Circle width */
-    height: 60px; /* Circle height */
-    border-radius: 50%; /* Makes it circular */
-    background-color: black; /* Black background */
-    color: white; /* White arrow color */
-    font-size: 30px; /* Size of the arrow */
+    bottom: 20px; 
+    right: 20px; 
+    width: 60px;
+    height: 60px;
+    border-radius: 50%; 
+    background-color: black;
+    color: white;
+    font-size: 30px; 
     display: flex;
     align-items: center;
     justify-content: center;
     border: none;
     cursor: pointer;
-    transition: opacity 0.3s ease-in-out; /* Smooth transition for opacity */
-    z-index: 1000; /* Ensure it's above other content */
+    transition: opacity 0.3s ease-in-out;
+    z-index: 1000; 
   }
   
   .back-to-top:hover {
-    background-color: #333; /* Darker shade of black when hovered */
+    background-color: #333;
   }
   
   .back-to-top:focus {
-    outline: none; /* Remove focus outline */
+    outline: none; 
   }
 #dropdownnav {
   display:grid;

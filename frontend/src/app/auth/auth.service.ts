@@ -114,4 +114,57 @@ export class AuthService {
       this.logout();
     }
   }
+  getFirstLoginStatus(authToken: string | null): Observable<boolean> {
+    if (!authToken) {
+      throw new Error('No authentication token provided');
+    }
+  
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${authToken}`,
+    });
+  
+    return this.http.get<boolean>(`${this.baseUrl}/me/first-login`, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error fetching first login status', error);
+        return throwError(() => new Error('Failed to fetch first login status'));
+      })
+    );
+  }
+
+  changePassword(authToken: string | null, newPassword: string, confirmPassword: string): Observable<void> {
+    if (!authToken) {
+      throw new Error('No authentication token provided');
+    }
+  
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${authToken}`,
+    });
+  
+    return this.http.post<void>(
+      `${this.baseUrl}/me/change-password`,
+      { newPassword, confirmPassword },
+      { headers }
+    ).pipe(
+      catchError((error) => {
+        console.error('Error changing password', error);
+        return throwError(() => new Error('Failed to change password'));
+      })
+    );
+  }
+  
+  changeUsername(authToken: string, newUsername: string): Observable<void> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${authToken}`,
+    });
+  
+    return this.http.post<void>(`${this.baseUrl}/me/change-username`, { newUsername }, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error changing username:', error);
+        return throwError(() => new Error('Failed to change username'));
+      })
+    );
+  }
 }

@@ -15,6 +15,8 @@ import { FacultiesComponent } from '../faculties/faculties.component';
 import { AddCourseComponent } from '../add-course/add-course.component';
 import { CoursesComponent } from '../courses/courses.component';
 import { EditCourseComponent } from '../edit-course/edit-course.component';
+import { ChangeUsernameComponent } from '../profile/change-username/change-username.component';
+import { ChangePasswordComponent } from '../profile/change-password/change-password.component';
 
 
 export const routes: Route[] = [
@@ -32,5 +34,7 @@ export const routes: Route[] = [
   { path: 'addCourse', component: AddCourseComponent, canActivate: [authGuard]},
   { path: 'courses', component: CoursesComponent, canActivate: [authGuard]},
   { path: 'edit-course/:id', component: EditCourseComponent, canActivate: [authGuard]},
+  { path: 'changeUsername', component: ChangeUsernameComponent, canActivate: [authGuard]},
+  { path: 'changePassword', component: ChangePasswordComponent, canActivate: [authGuard]},
   { path: '**', redirectTo: 'login' }
 ];

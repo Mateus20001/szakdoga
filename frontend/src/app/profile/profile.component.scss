@@ -21,36 +21,37 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
-  }
-  
-  .profile-info {
+  }.profile-info {
     display: flex;
-    flex-direction: column;
+    align-items: center; 
+    justify-content: space-between;
+    margin-bottom: 16px;
   }
   
   .profile-info label {
     font-weight: bold;
-    margin-bottom: 5px;
     color: #333;
+    flex: 0 0 250px; 
   }
   
   .profile-info p {
     font-size: 16px;
     color: #555;
     margin: 0;
-    padding: 0;
+    padding: 10px;
     background-color: #e9ecef;
     border-radius: 4px;
-    padding: 10px;
+    flex: 1;
   }
   
-  .profile-info p:last-child {
-    background-color: transparent;
+  .profile-info button {
+    margin-left: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
-  .profile-info p + p {
-    margin-top: 5px;
-  }
+  
   
   @media (max-width: 600px) {
     .profile-container {
@@ -63,6 +64,36 @@
   
     .profile-details {
       gap: 10px;
+    }
+  }
+  
+  .change-password-card {
+    max-width: 800px;
+    margin-top: 20px;
+    margin: auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+  
+    mat-card-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #333;
+    }
+  
+    mat-card-content {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+  
+      p {
+        font-size: 14px;
+        color: #555;
+      }
+  
+      button {
+        align-self: flex-end;
+      }
     }
   }
   

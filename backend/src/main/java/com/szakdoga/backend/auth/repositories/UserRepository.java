@@ -12,4 +12,6 @@ import java.util.Optional;
 @CrossOrigin
 public interface UserRepository extends JpaRepository<User, String> {
     Optional<User> findByName(String name);
+
+    boolean existsByName(String name);
 }

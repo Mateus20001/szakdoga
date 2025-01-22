@@ -89,7 +89,11 @@ export class LoginComponent {
             localStorage.setItem('loggedInUser', data.token);
             const expirationTime = Date.now() + data.expiresIn * 1000;
             localStorage.setItem('expirationTime', expirationTime.toString());
-            this.router.navigate(['/main']);
+            if (data.firstlogin == true) {
+              this.router.navigate(['/changePassword'])
+            } else {
+              this.router.navigate(['/main']);
+            }
           },
           error => {
             this.errorMessage = error.error.message;

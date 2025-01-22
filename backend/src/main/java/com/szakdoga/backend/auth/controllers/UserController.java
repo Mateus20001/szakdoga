@@ -1,9 +1,6 @@
 package com.szakdoga.backend.auth.controllers;
 
-import com.szakdoga.backend.auth.dtos.LoginUserDto;
-import com.szakdoga.backend.auth.dtos.RegisterUserDto;
-import com.szakdoga.backend.auth.dtos.UserDetailsDTO;
-import com.szakdoga.backend.auth.dtos.UserNameAndRolesDTO;
+import com.szakdoga.backend.auth.dtos.*;
 import com.szakdoga.backend.auth.model.*;
 import com.szakdoga.backend.auth.services.EmailService;
 import com.szakdoga.backend.auth.services.JwtService;
@@ -58,6 +55,7 @@ public class UserController {
             long expiresIn = jwtService.getTokenValidityInSeconds();
 
             LoginResponse loginResponse = new LoginResponse();
+            loginResponse.setFirstlogin(authenticatedUser.isFirstLogIn());
             loginResponse.setToken(jwtToken);
             loginResponse.setExpiresIn(expiresIn);
             return ResponseEntity.ok(loginResponse);
@@ -114,6 +112,16 @@ public class UserController {
         private String token;
 
         private long expiresIn;
+
+        private boolean firstlogin;
+
+        public boolean isFirstlogin() {
+            return firstlogin;
+        }
+
+        public void setFirstlogin(boolean firstlogin) {
+            this.firstlogin = firstlogin;
+        }
 
         public String getToken() {
             return token;
@@ -236,5 +244,90 @@ public class UserController {
         log.info("User details retrieved successfully!" + userDTO.getId() + userDTO.getEmails());
         return ResponseEntity.ok(userDTO);
     }
+    @GetMapping(path = "/me/first-login", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> getFirstLoginStatus() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Return 401 if not authenticated
+        }
+
+        // Extract principal (user details)
+        Object principal = authentication.getPrincipal();
+
+        if (!(principal instanceof UserDetails)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // Return 403 if principal is not a valid UserDetails instance
+        }
+
+        UserDetails userDetails = (UserDetails) principal;
+        String userId = userDetails.getUsername(); // Assuming the username is the user ID
+
+        // Fetch the user entity from the database
+        User user = userService.findUserById(userId);
+        if (user == null) {
+            return ResponseEntity.notFound().build(); // Return 404 if user not found
+        }
+
+        Boolean firstLogin = user.isFirstLogIn(); // Assuming there is a getter for 'firstLogin'
+        return ResponseEntity.ok(firstLogin);
+    }
+
+
+    @PostMapping(path = "/me/change-password", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Return 401 if not authenticated
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // Return 403 if unauthorized
+        }
+
+        UserDetails userDetails = (UserDetails) principal;
+        String userId = userDetails.getUsername();
+
+        // Verify the user exists
+        User user = userService.findUserById(userId);
+        if (user == null) {
+            return ResponseEntity.notFound().build(); // Return 404 if user not found
+        }
+
+        // Validate and update the password
+        if (!changePasswordDTO.getNewPassword().equals(changePasswordDTO.getConfirmPassword())) {
+            return ResponseEntity.badRequest().build(); // Return 400 if passwords don't match
+        }
+
+        userService.changePassword(userId, changePasswordDTO.getNewPassword());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(path = "/me/change-username", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> changeUsername(@RequestBody ChangeUsernameDTO changeUsernameDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Return 401 if not authenticated
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // Return 403 if unauthorized
+        }
+
+        UserDetails userDetails = (UserDetails) principal;
+        String userId = userDetails.getUsername();
+
+        // Fetch the user entity from the database
+        User user = userService.findUserById(userId);
+        if (user == null) {
+            return ResponseEntity.notFound().build(); // Return 404 if user not found
+        }
+
+        // Update the username
+        userService.changeUsername(userId, changeUsernameDTO.getNewUsername());
+        return ResponseEntity.ok().build();
+    }
 }

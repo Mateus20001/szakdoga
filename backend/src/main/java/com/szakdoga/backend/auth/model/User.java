@@ -20,10 +20,13 @@ import java.util.Random;
 @Table(name = "users")
 public class User implements UserDetails {
 
+    @Setter
     @Id
     @Column(name = "id", length = 6, unique = true, nullable = false)
     private String id;
 
+    @Setter
+    @Getter
     @Column(name = "name")
     private String name;
 
@@ -32,33 +35,50 @@ public class User implements UserDetails {
     @Column(name = "firstLogIn")
     private boolean firstLogIn;
 
+    @Setter
+    @Getter
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<RoleEntity> roles;
 
+    @Getter
+    @Setter
     @Column(name = "password", length = 374, nullable = false)
     private String password;
 
+    @Setter
+    @Getter
     @Column(name = "created_at", updatable = false, nullable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    @Getter
     @Column(name = "enabled", nullable = false)
     private boolean enabled = true;
 
+    @Setter
+    @Getter
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Setter
+    @Getter
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
+    @Setter
+    @Getter
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
+    @Setter
+    @Getter
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<EmailEntity> emails;
 
+    @Setter
+    @Getter
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<MajorEntity> majors;
@@ -103,30 +123,6 @@ public class User implements UserDetails {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<RoleEntity> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<RoleEntity> roles) {
-        this.roles = roles;
-    }
-
-
-    public String getPassword() {
-        return password;
-    }
 
     @Override
     public String getUsername() {
@@ -148,64 +144,8 @@ public class User implements UserDetails {
         return true;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public List<EmailEntity> getEmails() {
-        return emails;
-    }
-
-    public void setEmails(List<EmailEntity> emails) {
-        this.emails = emails;
-    }
-
-    public List<MajorEntity> getMajors() {
-        return majors;
-    }
-
-    public void setMajors(List<MajorEntity> majors) {
-        this.majors = majors;
     }
 
 }

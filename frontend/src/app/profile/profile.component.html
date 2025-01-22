@@ -8,12 +8,15 @@
         <label for="name">Full Name:</label>
         <p id="name">{{ userDetails?.firstName }} {{ userDetails?.lastName }}</p>
       </div>
-  
+
       <div class="profile-info">
         <label for="username">Username:</label>
         <p id="username">{{ userDetails?.name }}</p>
+        <button mat-icon-button color="primary" (click)="navigateToChangeUsername()">
+          <img src="../../assets/icons/edit.png" alt="edit">
+        </button>
       </div>
-  
+
       <div class="profile-info">
         <label for="roles">Roles:</label>
         <p id="roles">{{ userDetails?.roles?.join(', ') }}</p>
@@ -49,5 +52,14 @@
         <p id="updatedAt">{{ userDetails?.updatedAt }}</p>
       </div>
     </div>
+
   </div>
+  
+  <mat-card class="change-password-card">
+    <mat-card-title>Change Password</mat-card-title>
+    <mat-card-content>
+      <p>If you'd like to update your password, click the button below:</p>
+      <button mat-raised-button color="accent" (click)="navigateToChangePassword()">Change Password</button>
+    </mat-card-content>
+  </mat-card>
   

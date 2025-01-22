@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +54,7 @@ public class UserService {
         String randomPassword = PasswordGenerator.generateRandomPassword(12);
         user.setPassword(passwordEncoder.encode(randomPassword));
         user.setLastName(input.getLastName());
+        user.setFirstLogIn(true);
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());
         if (input.getEmails().isEmpty()) {
@@ -140,5 +142,40 @@ public class UserService {
     }
     public boolean verifyPassword(String rawPassword, String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword);
+    }
+    public void changePassword(String userId, String newPassword) {
+        User user = userRepository.findById(userId).orElseThrow(() ->
+                new IllegalArgumentException("User not found"));
+
+        // Encrypt and update the password
+        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setUpdatedAt(LocalDateTime.now());
+        user.setFirstLogIn(false);
+        userRepository.save(user);
+    }
+    public void changeUsername(String userId, String newUsername) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        // Check if the username is already taken
+        if (userRepository.existsByName(newUsername)) {
+            throw new IllegalArgumentException("Username already exists");
+        }
+        if (!isValidUsername(newUsername)) {
+            throw new IllegalArgumentException("Invalid username. It should not contain spaces, @, quotes, or special characters.");
+        }
+        user.setName(newUsername);
+        user.setUpdatedAt(LocalDateTime.now());
+        userRepository.save(user);
+    }
+    /**
+     * Validates the username to ensure it does not contain prohibited characters.
+     *
+     * @param username The username to validate
+     * @return true if the username is valid, false otherwise
+     */
+    private boolean isValidUsername(String username) {
+        String regex = "^[a-zA-Z0-9._-]{3,30}$"; // Allow alphanumeric, ., _, -, length 3-30
+        return username.matches(regex);
     }
 }
