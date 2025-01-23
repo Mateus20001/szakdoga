@@ -2,10 +2,12 @@ package com.szakdoga.backend.auth.services;
 import com.szakdoga.backend.auth.PasswordGenerator;
 import com.szakdoga.backend.auth.dtos.LoginUserDto;
 import com.szakdoga.backend.auth.dtos.RegisterUserDto;
+import com.szakdoga.backend.auth.dtos.UserListingDTO;
 import com.szakdoga.backend.auth.model.*;
 import com.szakdoga.backend.auth.repositories.*;
 import com.szakdoga.backend.exceptions.InvalidCredentialsException;
 import com.szakdoga.backend.exceptions.UserNotFoundException;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -177,5 +179,11 @@ public class UserService {
     private boolean isValidUsername(String username) {
         String regex = "^[a-zA-Z0-9._-]{3,30}$"; // Allow alphanumeric, ., _, -, length 3-30
         return username.matches(regex);
+    }
+
+    @Transactional
+    public List<UserListingDTO> getAllTeacherDTOs() {
+        log.info("Fetching all teachers...");
+        return userRepository.findAllTeacherDTOs();
     }
 }

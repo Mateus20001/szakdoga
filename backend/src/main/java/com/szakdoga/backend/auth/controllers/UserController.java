@@ -330,4 +330,11 @@ public class UserController {
         userService.changeUsername(userId, changeUsernameDTO.getNewUsername());
         return ResponseEntity.ok().build();
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/teachers")
+    public ResponseEntity<List<UserListingDTO>> getTeachers() {
+        List<UserListingDTO> teachers = userService.getAllTeacherDTOs();
+        return ResponseEntity.ok(teachers);
+    }
 }

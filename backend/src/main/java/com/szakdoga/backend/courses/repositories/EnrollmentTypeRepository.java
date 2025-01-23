@@ -6,9 +6,12 @@ import com.szakdoga.backend.courses.models.EnrollmentTypeEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EnrollmentTypeRepository extends JpaRepository<EnrollmentTypeEntity, Long> {
     List<EnrollmentTypeEntity> findAllByCourseDetail(CourseDetailEntity courseDetail);
 
     List<EnrollmentTypeEntity> findAllByMajor(MajorEntity major);
+
+    Optional<EnrollmentTypeEntity> findByCourseDetailAndMajor(CourseDetailEntity course, MajorEntity major);
 }

@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -54,6 +55,9 @@ public class CourseDetailEntity {
 
     @OneToMany(mappedBy = "courseDetail", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<EnrollmentTypeEntity> enrollmentTypes;
+
+    @OneToMany(mappedBy = "courseDetail", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<CourseTeacherEntity> courseTeachers = new ArrayList<>();
 
     public CourseDetailEntity() { }
 }

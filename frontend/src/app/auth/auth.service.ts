@@ -167,4 +167,11 @@ export class AuthService {
       })
     );
   }
+  getTeachers(authToken: string): Observable<any[]> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${authToken}`,
+    });
+    return this.http.get<any[]>(`${this.baseUrl}/teachers`, { headers });
+  }
 }

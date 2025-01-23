@@ -8,9 +8,11 @@ export interface CourseDetailDTO {
   name: string;
   description: string;
   credits: number;
+  recommendedHalfYear: number;
   requirementType: string;
   requiredCourses: number[];
   enrollmentTypes: EnrollmentTypeDTO[];
+  teachers: string[];
 }
 export interface EnrollmentTypeDTO {
     majorId: number;

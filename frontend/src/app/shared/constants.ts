@@ -98,11 +98,6 @@ export const MenuDropdownMenuObjects: MenuDropdown[] = [
             roles: ["TEACHER"] 
           },
           { 
-            name: "Kurzus meghirdetése",
-            link: "/addCourse",
-            roles: ["TEACHER"]
-          },
-          { 
             name: "Tanított kurzusok",
             link: "/courses",
             roles: ["TEACHER"]
@@ -136,7 +131,17 @@ export const MenuDropdownMenuObjects: MenuDropdown[] = [
             name: "Karok hozzáadása",
             link: "/addFaculties",
             roles: ["ADMIN"]
-          }
+          },
+          { 
+            name: "Kurzus meghirdetése",
+            link: "/addCourse",
+            roles: ["ADMIN"]
+          },
+          { 
+            name: "Kurzusok",
+            link: "/courses",
+            roles: ["TEACHER"]
+          },
         ]
       }
     ];

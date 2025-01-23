@@ -15,6 +15,11 @@
         <label>Credits:</label>
         <input formControlName="credits" type="number" />
       </div>
+
+      <div>
+        <label>Recommended Half Year:</label>
+        <input formControlName="recommendedHalfYear" type="number" />
+      </div>
   
       <div>
         <label>Requirement Type:</label>
@@ -33,7 +38,25 @@
           </option>
         </select>
       </div>
-  
+      <div formArrayName="teachers">
+        <h3>Teachers</h3>
+        <div *ngFor="let teacher of teacherArray.controls; let i = index" [formGroupName]="i">
+          <mat-form-field appearance="outline">
+            <mat-label>Teacher</mat-label>
+            <select matNativeControl formControlName="teacherId" required>
+              <option value="">Select Teacher</option>
+              <option *ngFor="let teacher of teachers" [value]="teacher.identifier">{{ teacher.firstName }} {{ teacher.lastName }}({{ teacher.name }})</option>
+            </select>
+          </mat-form-field>
+      
+          <mat-checkbox formControlName="responsible">Responsible</mat-checkbox>
+      
+          <button type="button" (click)="removeTeacher(i)">Remove</button>
+        </div>
+        <button type="button" (click)="addTeacher()">Add Teacher</button>
+      </div>
+      
+
       <div>
         <h3>Enrollment Types</h3>
         <button type="button" (click)="addEnrollmentType()">Add Enrollment Type</button>
