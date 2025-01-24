@@ -1,5 +1,10 @@
 package com.szakdoga.backend.courses.dtos;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class CourseDetailListingDTO {
     private long id;
     private String name;
@@ -13,35 +18,4 @@ public class CourseDetailListingDTO {
         this.credits = credits;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public int getCredits() {
-        return credits;
-    }
-
-    public void setCredits(int credits) {
-        this.credits = credits;
-    }
 }

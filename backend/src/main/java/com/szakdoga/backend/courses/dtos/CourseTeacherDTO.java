@@ -8,4 +8,12 @@ import lombok.Setter;
 public class CourseTeacherDTO {
     private String teacherId;
     private boolean responsible;
+
+    public CourseTeacherDTO(String id, boolean responsible) {
+        teacherId = id;
+        this.responsible = responsible;
+    }
+
+    public CourseTeacherDTO() {
+    }
 }

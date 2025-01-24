@@ -1,0 +1,22 @@
+<div class="container">
+    <h2>Teachers Assigned to This Course</h2>
+  
+    <div *ngIf="teachers.length > 0">
+      <ul>
+        <li *ngFor="let teacher of teachers">
+          <strong>{{ teacher.teacherId }}</strong>
+          <span *ngIf="teacher.responsible">(Responsible)</span>
+        </li>
+      </ul>
+    </div>
+  
+    <div *ngIf="teachers.length === 0">
+      <p>No teachers assigned to this course.</p>
+    </div>
+  
+    <!-- Add New Teacher Button (visible only if the user is responsible) -->
+    <div *ngIf="isUserResponsible">
+      <button class="add-teacher-btn">Add New Teacher</button>
+    </div>
+  </div>
+  

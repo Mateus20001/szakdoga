@@ -1,8 +1,6 @@
 package com.szakdoga.backend.auth.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.szakdoga.backend.courses.models.CourseApplicationEntity;
-import com.szakdoga.backend.courses.models.CourseDateEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

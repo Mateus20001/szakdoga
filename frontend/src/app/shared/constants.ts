@@ -99,7 +99,7 @@ export const MenuDropdownMenuObjects: MenuDropdown[] = [
           },
           { 
             name: "Tanított kurzusok",
-            link: "/courses",
+            link: "/teachedCourses",
             roles: ["TEACHER"]
           },
           { 
