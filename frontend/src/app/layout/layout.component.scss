@@ -66,32 +66,89 @@ nav > div {
     font-size: 16px;
     color: #666;
   }
-.back-to-top {
+  .back-to-top {
     position: fixed;
-    bottom: 20px; 
-    right: 20px; 
-    width: 60px;
-    height: 60px;
-    border-radius: 50%; 
-    background-color: black;
-    color: white;
-    font-size: 30px; 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    bottom: 50px;
+    right: 30px;
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 15px;
     border: none;
+    border-radius: 50%;
+    font-size: 18px;
     cursor: pointer;
-    transition: opacity 0.3s ease-in-out;
-    z-index: 1000; 
+    transition: opacity 0.4s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0; /* Initially hidden */
+    transform: translateY(20px); /* Slide up on appearance */
   }
   
   .back-to-top:hover {
-    background-color: #333;
+    background-color: #0056b3;
+    transform: scale(1.2);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
   }
   
-  .back-to-top:focus {
-    outline: none; 
+  .back-to-top.show {
+    opacity: 1; /* Fades in */
+    transform: translateY(0); /* Slides into view */
   }
 #dropdownnav {
   display:grid;
+}
+@media screen and (max-width: 768px) {
+  nav {
+      flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+      padding: 8px;
+  }
+
+  #brandlogo {
+      width: 60px; /* Smaller logo for narrow screens */
+  }
+
+  nav > div {
+      flex-direction: column;
+      margin-left: 0;
+      align-items: flex-start; /* Align items to the left */
+      width: 100%; /* Full width for buttons */
+  }
+
+  #logoutButton,
+  #profileButton {
+      width: 100%; /* Full width for better usability */
+      margin: 5px 0; /* Add spacing between buttons */
+      padding: 10px; /* Increase padding for touch targets */
+      font-size: 16px;
+  }
+
+  .welcome-overlay {
+      width: 95%; /* Take almost the full width on smaller screens */
+      max-width: 95%;
+  }
+
+  .welcome-overlay h1 {
+      font-size: 24px; /* Further reduce font size */
+  }
+
+  .welcome-overlay p {
+      font-size: 13px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  nav {
+      padding: 5px;
+  }
+
+  #brandlogo {
+      width: 50px; /* Even smaller logo */
+  }
+
+  .welcome-overlay h1 {
+      font-size: 20px;
+  }
+
+  .welcome-overlay p {
+      font-size: 12px;
+  }
 }

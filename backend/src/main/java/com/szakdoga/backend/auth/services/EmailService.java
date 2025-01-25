@@ -6,6 +6,7 @@ import com.szakdoga.backend.auth.repositories.EmailRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -16,7 +17,8 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class EmailService {
-    private String apiKey = "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";
+    @Value("${brevo.api.key}")
+    private String apiKey;
 
     private static final Logger log = LoggerFactory.getLogger(EmailService.class);
 

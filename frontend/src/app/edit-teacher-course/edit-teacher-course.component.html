@@ -1,22 +1,151 @@
-<div class="container">
-    <h2>Teachers Assigned to This Course</h2>
-  
-    <div *ngIf="teachers.length > 0">
-      <ul>
-        <li *ngFor="let teacher of teachers">
-          <strong>{{ teacher.teacherId }}</strong>
-          <span *ngIf="teacher.responsible">(Responsible)</span>
-        </li>
-      </ul>
-    </div>
-  
-    <div *ngIf="teachers.length === 0">
-      <p>No teachers assigned to this course.</p>
-    </div>
-  
-    <!-- Add New Teacher Button (visible only if the user is responsible) -->
-    <div *ngIf="isUserResponsible">
-      <button class="add-teacher-btn">Add New Teacher</button>
-    </div>
+<div>
+  <h1>Course Dates</h1>
+  <div *ngFor="let courseDate of courseDates" class="course-date-card">
+    <h3>{{ courseDate.name }}</h3>
+    <p>
+      <strong>Day:</strong> {{ courseDate.dayOfWeek }}<br />
+      <strong>Start Time:</strong> {{ courseDate.startTime }}<br />
+      <strong>End Time:</strong> {{ courseDate.endTime }}
+    </p>
+    <p><strong>Teachers:</strong> {{ courseDate.teacherIds.join(', ') }}</p>
+    <button (click)="editCourseDate(courseDate)">Edit</button>
+    <button type="button" (click)="removeCourseDate(courseDate.id)">Remove</button>
   </div>
-  
+</div>
+
+
+<div class="container mx-auto max-w-lg p-4" *ngIf="isUserResponsible">
+  <h2 class="text-2xl font-bold mb-4">{{ isEditingCourse ? 'Edit Course Date' : 'Add Course Date' }}</h2>
+  <form [formGroup]="addCourseDateForm" (ngSubmit)="onSubmit()">
+    <!-- Form fields for Name, Day, Start Time, End Time, Teachers -->
+    <div class="mb-4">
+      <label class="block text-gray-700 font-semibold mb-2" for="name">Name</label>
+      <input
+        id="name"
+        type="text"
+        formControlName="name"
+        class="w-full p-2 border rounded-lg"
+        placeholder="Enter the course date name"
+      />
+    </div>
+    
+    <div class="mb-4">
+      <label class="block text-gray-700 font-semibold mb-2" for="dayOfWeek">Day of Week</label>
+      <select
+        id="dayOfWeek"
+        formControlName="dayOfWeek"
+        class="w-full p-2 border rounded-lg"
+      >
+        <option value="" disabled selected>Select a day</option>
+        <option *ngFor="let day of ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']" [value]="day">
+          {{ day }}
+        </option>
+      </select>
+      <div *ngIf="addCourseDateForm.get('dayOfWeek')?.invalid && addCourseDateForm.get('dayOfWeek')?.touched" class="text-red-500">
+        Day of week is required.
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <label class="block text-gray-700 font-semibold mb-2" for="startTime">Start Time</label>
+      <input
+        id="startTime"
+        type="time"
+        formControlName="startTime"
+        class="w-full p-2 border rounded-lg"
+      />
+      <div *ngIf="addCourseDateForm.get('startTime')?.invalid && addCourseDateForm.get('startTime')?.touched" class="text-red-500">
+        Start time is required.
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <label class="block text-gray-700 font-semibold mb-2" for="endTime">End Time</label>
+      <input
+        id="endTime"
+        type="time"
+        formControlName="endTime"
+        class="w-full p-2 border rounded-lg"
+      />
+      <div *ngIf="addCourseDateForm.get('endTime')?.invalid && addCourseDateForm.get('endTime')?.touched" class="text-red-500">
+        End time is required.
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <label class="block text-gray-700 font-semibold mb-2" for="teacherIds">Select Teachers</label>
+      <select
+        id="teacherIds"
+        formControlName="teacherIds"
+        class="w-full p-2 border rounded-lg"
+        multiple
+      >
+        <option *ngFor="let teacher of teachers" [value]="teacher.teacherId">
+          {{ teacher.teacherId }}
+        </option>
+      </select>
+      <div *ngIf="addCourseDateForm.get('teacherIds')?.invalid && addCourseDateForm.get('teacherIds')?.touched" class="text-red-500">
+        At least one teacher must be selected.
+      </div>
+    </div>
+
+    
+    <button
+      type="submit"
+      class="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600"
+    >
+      {{ isEditing ? 'Update Course Date' : 'Add Course Date' }}
+    </button>
+    <button type="button" (click)="resetCourseDateForm()">Cancel</button>
+  </form>
+
+  <p *ngIf="successMessage" class="text-green-500 mt-4">{{ successMessage }}</p>
+  <p *ngIf="errorMessage" class="text-red-500 mt-4">{{ errorMessage }}</p>
+</div>
+
+
+<div>
+  <h1>Teachers for Course ID: {{ courseId }}</h1>
+
+  <!-- Show teacher list -->
+  <div *ngIf="teachers.length > 0; else noTeachers">
+    <h3>Teachers</h3>
+    <ul>
+      <li *ngFor="let teacher of teachers">
+        <span>ID: {{ teacher.teacherId }}</span>
+        <span *ngIf="teacher.responsible"> (Responsible)</span>
+        <button *ngIf="isUserResponsible" (click)="startEditing(teacher.teacherId, teacher.responsible)">Edit</button>
+        <button *ngIf="isUserResponsible" type="button" (click)="deleteTeacher(teacher.teacherId)">Remove</button>
+      </li>
+    </ul>
+  </div>
+  <ng-template #noTeachers>
+    <p>No teachers found for this course.</p>
+  </ng-template>
+
+  <!-- Add/Edit teacher form -->
+  <div *ngIf="isUserResponsible">
+    <h3>{{ isEditing ? 'Edit Teacher' : 'Add New Teacher' }}</h3>
+    <form (ngSubmit)="saveTeacher()">
+      <div>
+        <label for="teacherId">Teacher ID:</label>
+        <input
+          type="text"
+          id="teacherId"
+          [(ngModel)]="newTeacherId"
+          name="teacherId"
+          [readonly]="isEditing"
+          required
+        />
+      </div>
+      <div>
+        <label>
+          <input type="checkbox" [(ngModel)]="isResponsible" name="responsible" />
+          Responsible
+        </label>
+      </div>
+      <button type="submit">{{ isEditing ? 'Update Teacher' : 'Add Teacher' }}</button>
+      <button type="button" (click)="resetForm()">Cancel</button>
+    </form>
+  </div>
+</div>

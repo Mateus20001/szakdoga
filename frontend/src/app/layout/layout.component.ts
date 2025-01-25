@@ -26,7 +26,7 @@ export class LayoutComponent {
   constructor(public router: Router, private authService: AuthService, private renderer: Renderer2) {}
 
   ngOnInit() {
-    this.adjustBackgroundHeight();
+    /*this.adjustBackgroundHeight();*/
     if (localStorage.getItem("loggedInUser") !== null) {
       this.authService.getUserNameAndRoles(localStorage.getItem("loggedInUser")).subscribe(
         data => {
@@ -89,7 +89,7 @@ export class LayoutComponent {
   navigateToMain() {
     this.router.navigate(['/main']);
   }
-  adjustBackgroundHeight() {
+  /*adjustBackgroundHeight() {
     const contentHeight = document.documentElement.scrollHeight;
     const backgroundContainer = document.querySelector('.background-container') as HTMLElement;
 
@@ -100,5 +100,5 @@ export class LayoutComponent {
   ngAfterViewInit() {
     this.adjustBackgroundHeight();
     window.addEventListener('resize', () => this.adjustBackgroundHeight());
-  } 
+  } */
 }

@@ -35,4 +35,51 @@ export class CourseTeacherService {
 
     return this.http.get<any[]>(`${this.apiUrl}/teachers/${courseId}`, { headers });
   }
+  addTeacherToCourse(courseId: number, teacher: { teacherId: string, responsible: boolean }): Observable<void> {
+    const token = localStorage.getItem('loggedInUser'); 
+    if (!token) {
+      throw new Error('No authentication token found');
+    }
+  
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+  
+    return this.http.post<void>(`${this.apiUrl}/teachers/${courseId}`, teacher, { headers });
+  }
+  updateTeacherInCourse(courseId: number, teacher: { teacherId: string, responsible: boolean }): Observable<void> {
+    const token = localStorage.getItem('loggedInUser');
+    if (!token) {
+      throw new Error('No authentication token found');
+    }
+  
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+  
+    return this.http.put<void>(`${this.apiUrl}/teachers/${courseId}`, teacher, { headers });
+  }
+  
+  removeTeacherFromCourse(courseId: number, teacherId: string): Observable<void> {
+    const token = localStorage.getItem('loggedInUser');
+    if (!token) {
+      throw new Error('No authentication token found');
+    }
+  
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+  
+    return this.http.delete<void>(`${this.apiUrl}/teachers/${courseId}/${teacherId}`, { headers });
+  }
+  
+  getCurrentTeacherByCourseId(courseId: number): Observable<any> {
+    const token = localStorage.getItem('loggedInUser');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+  
+    return this.http.get<any>(`${this.apiUrl}/current-teacher/${courseId}`, { headers });
+  }
 }

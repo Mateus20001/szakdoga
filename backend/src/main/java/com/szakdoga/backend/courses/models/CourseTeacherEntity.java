@@ -15,14 +15,14 @@ public class CourseTeacherEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "course_detail_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "course_detail_id")
     private CourseDetailEntity courseDetail;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "teacher_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "teacher_id")
     private User teacher;
 
-    @Column(name = "responsible", nullable = false)
+    @Column(name = "responsible")
     private boolean responsible;
 }

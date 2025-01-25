@@ -6,8 +6,13 @@ mat-card {
   padding: 0 0 15px 0;
   margin-bottom: 16px;
   background-color: #e0e0db; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
+mat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+}
 img {
   width: 150px; 
   height: 150px;

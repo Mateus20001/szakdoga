@@ -53,7 +53,7 @@ public class CourseDetailEntity {
     @OneToMany(mappedBy = "courseDetailEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<CourseDateEntity> courseDates;
 
-    @OneToMany(mappedBy = "courseDetail", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "courseDetail", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<EnrollmentTypeEntity> enrollmentTypes;
 
     @OneToMany(mappedBy = "courseDetail", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
