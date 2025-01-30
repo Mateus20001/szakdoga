@@ -1,6 +1,7 @@
 package com.szakdoga.backend.courses.dtos;
 
 import com.szakdoga.backend.courses.models.DayOfWeekEnum;
+import com.szakdoga.backend.courses.models.LocationEnum;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,4 +19,6 @@ public class CourseDateRequest {
     private DayOfWeekEnum dayOfWeek;
     private LocalTime startTime;
     private LocalTime endTime;
+    private int maxLimit;
+    private String location;
 }

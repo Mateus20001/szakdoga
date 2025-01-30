@@ -19,4 +19,6 @@ public class EditCourseDateRequest {
     private DayOfWeekEnum dayOfWeek;
     private LocalTime startTime;
     private LocalTime endTime;
+    private int maxLimit;
+    private String location;
 }

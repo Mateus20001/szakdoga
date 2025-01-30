@@ -6,6 +6,7 @@ import com.szakdoga.backend.auth.repositories.MajorRepository;
 import com.szakdoga.backend.auth.repositories.UserRepository;
 import com.szakdoga.backend.courses.controllers.CourseDetailController;
 import com.szakdoga.backend.courses.dtos.CourseDetailListingDTO;
+import com.szakdoga.backend.courses.dtos.CourseDetailStudentListingDTO;
 import com.szakdoga.backend.courses.dtos.CourseTeacherDTO;
 import com.szakdoga.backend.courses.dtos.EnrollmentTypeDTO;
 import com.szakdoga.backend.courses.models.*;
@@ -189,4 +190,50 @@ public class CourseDetailService {
         // Save the updated course
         courseDetailRepository.save(course);
     }
+
+    @Transactional
+    public List<CourseDetailStudentListingDTO> getAllStudentCourses(String userId) {
+        // Fetch the major entity for the user
+        MajorEntity majorEntity = majorRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("Major not found for user"));
+
+        // Fetch only course IDs associated with this major
+        List<Long> courseIds = courseDetailRepository.findCourseIds();
+        if (courseIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // Fetch enrollments related to those course IDs and major
+        List<EnrollmentTypeEntity> enrollments = enrollmentTypeRepository.findByCourseDetailIdsAndMajor(courseIds, majorEntity);
+        if (enrollments.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+
+        // Convert to DTOs
+        // Avoid NullPointerException
+        // Remove null DTOs
+
+
+        return enrollments.stream()
+                .map(enrollment -> {
+                    CourseDetailEntity course = enrollment.getCourseDetail();
+                    if (course == null) {
+                        log.warn("Null CourseDetail for Enrollment ID: {}", enrollment.getId());
+                        return null; // Avoid NullPointerException
+                    }
+                    return new CourseDetailStudentListingDTO(
+                            course.getId(),
+                            course.getName(),
+                            course.getCredits(),
+                            course.getRequirementType(),
+                            enrollment.getEnrollmentType().name(),
+                            course.getRecommended_half_year(),
+                            course.getCourseDates().size()
+                    );
+                })
+                .filter(Objects::nonNull) // Remove null DTOs
+                .collect(Collectors.toList());
+    }
+
 }

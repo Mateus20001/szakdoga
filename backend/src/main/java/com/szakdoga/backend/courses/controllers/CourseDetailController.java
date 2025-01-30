@@ -4,21 +4,24 @@ import com.szakdoga.backend.auth.model.User;
 import com.szakdoga.backend.auth.model.MajorEntity;
 import com.szakdoga.backend.auth.repositories.MajorRepository;
 import com.szakdoga.backend.auth.repositories.UserRepository;
-import com.szakdoga.backend.courses.dtos.CourseDetailListingDTO;
-import com.szakdoga.backend.courses.dtos.CourseDetailsRequest;
-import com.szakdoga.backend.courses.dtos.CourseTeacherDTO;
-import com.szakdoga.backend.courses.dtos.EnrollmentTypeDTO;
+import com.szakdoga.backend.courses.dtos.*;
 import com.szakdoga.backend.courses.models.CourseDetailEntity;
 import com.szakdoga.backend.courses.models.CourseTeacherEntity;
 import com.szakdoga.backend.courses.models.EnrollmentType;
 import com.szakdoga.backend.courses.models.EnrollmentTypeEntity;
 import com.szakdoga.backend.courses.repositories.CourseDetailRepository;
+import com.szakdoga.backend.courses.repositories.EnrollmentTypeRepository;
 import com.szakdoga.backend.courses.services.CourseDetailService;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -42,6 +45,7 @@ public class CourseDetailController {
 
     @Autowired
     private CourseDetailRepository courseDetailRepository;
+
 
     @PostMapping("/add")
     public CourseDetailEntity addCourse(@RequestBody CourseDetailsRequest request) {
@@ -149,4 +153,24 @@ public class CourseDetailController {
         return ResponseEntity.ok().build();
     }
 
+    @Transactional
+    @GetMapping("/student-courses")
+    public ResponseEntity<List<CourseDetailStudentListingDTO>> getAllStudentCourses() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Return 401 if not authenticated
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // Return 403 if unauthorized
+        }
+
+        UserDetails userDetails = (UserDetails) principal;
+        String userId = userDetails.getUsername();
+        List<CourseDetailStudentListingDTO> courses = courseDetailService.getAllStudentCourses(userId);
+        log.info("courses: {}", courses.getFirst().getName());
+        return ResponseEntity.ok(courses);
+    }
 }

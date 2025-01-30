@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CourseDetailDTO, CourseDetailListingDTO } from '../models/CourseDetailListingDTO';
+import { CourseDetailDTO, CourseDetailListingDTO, CourseDetailStudentListingDTO } from '../models/CourseDetailListingDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -33,5 +33,12 @@ export class CourseService {
   getCourseById(id: number): Observable<CourseDetailDTO> {
     return this.http.get<CourseDetailDTO>(`${this.apiUrl}/${id}`);
   }
-  
+  getAllStudentCourses(): Observable<CourseDetailStudentListingDTO[]> {
+    const token = localStorage.getItem('loggedInUser');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+    return this.http.get<CourseDetailStudentListingDTO[]>(`${this.apiUrl}/student-courses`, { headers });
+  }
 }

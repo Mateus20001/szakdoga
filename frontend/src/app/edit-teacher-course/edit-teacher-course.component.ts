@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CourseTeacherService } from '../services/course-teacher.service';
@@ -28,14 +27,30 @@ export class EditTeacherCourseComponent {
     startTime: string;
     endTime: string;
     teacherIds: string[];
+    maxLimit: number;
+    currentlyApplied: number;
+    location: string; // Now includes location
   }[] = [];
-  // Form for adding/editing a teacher
+
   newTeacherId: string = '';
   isResponsible: boolean = false;
   isEditingCourse: boolean = false;
   isEditing: boolean = false;
   editingTeacherId: string | null = null;
   selectedCourseDate: any;
+  availableLocations = [
+    'Bolyai Amphitheater',
+    'Auditorium Maximum',
+    'József Attila Study Room',
+    'TIK Room 1',
+    'TIK Room 2',
+    'Aradi Vértanúk Room',
+    'Dóm Tér Room 1',
+    'Dóm Tér Room 2',
+    'Kálvária sgt. Room 1',
+    'Kálvária sgt. Room 2',
+    'Online'
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -49,6 +64,8 @@ export class EditTeacherCourseComponent {
       startTime: ['', Validators.required],
       endTime: ['', Validators.required],
       teacherIds: [[], Validators.required],
+      maxLimit: ['', Validators.required],
+      location: ['', Validators.required] // Added location field
     });
   }
 
@@ -59,17 +76,6 @@ export class EditTeacherCourseComponent {
     this.checkUserResponsibility(this.courseId);
   }
 
-  fetchCourseDates(): void {
-    this.courseDateService.getCourseDatesByCourseId(this.courseId).subscribe(
-      (courseDates) => {
-        this.courseDates = courseDates;
-      },
-      (error) => {
-        console.error('Error fetching course dates:', error);
-      }
-    );
-  }
-  
   fetchTeachers(): void {
     this.courseTeacherService.getTeachersByCourse(this.courseId).subscribe(
       (teachers) => {
@@ -86,6 +92,102 @@ export class EditTeacherCourseComponent {
     );
   }
 
+  fetchCourseDates(): void {
+    this.courseDateService.getCourseDatesByCourseId(this.courseId).subscribe(
+      (courseDates) => {
+        this.courseDates = courseDates.map(cd => ({
+          id: cd.id,
+          name: cd.name,
+          dayOfWeek: cd.dayOfWeek,
+          startTime: cd.startTime,
+          endTime: cd.endTime,
+          teacherIds: cd.teacherIds,
+          maxLimit: cd.maxLimit,
+          currentlyApplied: cd.currentlyApplied, // Added
+          location: cd.location // Added
+        }));
+      },
+      (error) => {
+        console.error('Error fetching course dates:', error);
+      }
+    );
+  }
+
+  editCourseDate(courseDate: any): void {
+    this.isEditingCourse = true;
+    this.selectedCourseDate = courseDate;
+    this.addCourseDateForm.setValue({
+      name: courseDate.name,
+      dayOfWeek: courseDate.dayOfWeek,
+      startTime: courseDate.startTime,
+      endTime: courseDate.endTime,
+      teacherIds: courseDate.teacherIds,
+      maxLimit: courseDate.maxLimit,
+      location: courseDate.location // Added location
+    });
+  }
+
+  onSubmit(): void {
+    if (this.addCourseDateForm.invalid) {
+      return;
+    }
+
+    if (this.isEditingCourse) {
+      // Update course date
+      this.courseDateService.updateCourseDate(this.selectedCourseDate.id, this.addCourseDateForm.value, this.courseId).subscribe(
+        () => {
+          this.successMessage = 'Course date updated successfully';
+          this.errorMessage = '';
+          this.fetchCourseDates();
+        },
+        () => {
+          this.errorMessage = 'Error updating course date';
+          this.successMessage = '';
+        }
+      );
+    } else {
+      // Add new course date
+      console.log(this.addCourseDateForm.value)
+      this.courseDateService.addCourseDate(this.addCourseDateForm.value, this.courseId).subscribe(
+        () => {
+          this.successMessage = 'Course date added successfully';
+          this.errorMessage = '';
+          this.fetchCourseDates();
+        },
+        () => {
+          this.errorMessage = 'Error adding course date';
+          this.successMessage = '';
+        }
+      );
+    }
+  }
+
+  removeCourseDate(courseDateId: number): void {
+    if (confirm('Are you sure you want to remove this course date?')) {
+      this.courseDateService.deleteCourseDate(courseDateId).subscribe({
+        next: () => {
+          this.courseDates = this.courseDates.filter(cd => cd.id !== courseDateId);
+          alert('Course date removed successfully.');
+        },
+        error: (err) => {
+          console.error('Error removing course date:', err);
+          alert('Failed to remove course date.');
+        }
+      });
+    }
+  }
+  checkUserResponsibility(courseId: number): void {
+    this.courseTeacherService.getCurrentTeacherByCourseId(courseId).subscribe(
+      (response) => {
+        this.isUserResponsible = response.responsible; // Set based on API response
+      },
+      (error) => {
+        console.error('Error checking responsibility:', error);
+        this.isUserResponsible = false; // Set to false if the call fails
+      }
+    );
+  }
+  
   startEditing(teacherId: string, responsible: boolean): void {
     this.isEditing = true;
     this.editingTeacherId = teacherId;
@@ -155,6 +257,7 @@ export class EditTeacherCourseComponent {
       startTime: ['', Validators.required],
       endTime: ['', Validators.required],
       teacherIds: [[], Validators.required],
+      maxLimit: [0]
     });
   }
   resetForm(): void {
@@ -163,75 +266,4 @@ export class EditTeacherCourseComponent {
     this.newTeacherId = '';
     this.isResponsible = false;
   }  
-  editCourseDate(courseDate: any): void {
-    this.isEditingCourse = true;
-    this.selectedCourseDate = courseDate;
-    this.addCourseDateForm.setValue({
-      name: courseDate.name,
-      dayOfWeek: courseDate.dayOfWeek,
-      startTime: courseDate.startTime,
-      endTime: courseDate.endTime,
-      teacherIds: courseDate.teacherIds,
-    });
-  }
-
-  onSubmit(): void {
-    if (this.addCourseDateForm.invalid) {
-      return;
-    }
-
-    if (this.isEditingCourse) {
-      // Update course date
-      this.courseDateService.updateCourseDate(this.selectedCourseDate.id, this.addCourseDateForm.value, this.courseId).subscribe(
-        (response) => {
-          this.successMessage = 'Course date updated successfully';
-          this.errorMessage = '';
-          this.fetchCourseDates();
-        },
-        (error) => {
-          this.errorMessage = 'Error updating course date';
-          this.successMessage = '';
-        }
-      );
-    } else {
-      // Add new course date
-      this.courseDateService.addCourseDate(this.addCourseDateForm.value, this.courseId).subscribe(
-        (response) => {
-          this.successMessage = 'Course date added successfully';
-          this.errorMessage = '';
-          this.fetchCourseDates();
-        },
-        (error) => {
-          this.errorMessage = 'Error adding course date';
-          this.successMessage = '';
-        }
-      );
-    }
-  }
-  removeCourseDate(courseDateId: number): void {
-    if (confirm('Are you sure you want to remove this course date?')) {
-      this.courseDateService.deleteCourseDate(courseDateId).subscribe({
-        next: () => {
-          // Remove the course date from the local list
-          this.courseDates = this.courseDates.filter(cd => cd.id !== courseDateId);
-          alert('Course date removed successfully.');
-        },
-        error: (err) => {
-          console.error('Error removing course date:', err);
-          alert('Failed to remove course date.');
-        }
-      });
-    }
-  }
-  checkUserResponsibility(courseId: number): void {
-    this.courseTeacherService.getCurrentTeacherByCourseId(courseId).subscribe(
-      (response) => {
-        this.isUserResponsible = response.responsible; // Set based on API response
-      },
-      (error) => {
-        console.error('Error checking responsibility:', error);
-        this.isUserResponsible = false; // Set to false if the call fails
-      }
-    );
-  }
 }

@@ -19,6 +19,9 @@ import { ChangeUsernameComponent } from '../profile/change-username/change-usern
 import { ChangePasswordComponent } from '../profile/change-password/change-password.component';
 import { TeachedCoursesComponent } from '../teached-courses/teached-courses.component';
 import { EditTeacherCourseComponent } from '../edit-teacher-course/edit-teacher-course.component';
+import { CourseApplicationComponent } from '../course-application/course-application.component';
+import { AppliedCoursesComponent } from '../applied-courses/applied-courses.component';
+import { StudentStatisticComponent } from '../student-statistic/student-statistic.component';
 
 
 export const routes: Route[] = [
@@ -40,5 +43,8 @@ export const routes: Route[] = [
   { path: 'edit-teacher-course/:id', component: EditTeacherCourseComponent, canActivate: [authGuard]},
   { path: 'changeUsername', component: ChangeUsernameComponent, canActivate: [authGuard]},
   { path: 'changePassword', component: ChangePasswordComponent, canActivate: [authGuard]},
+  { path: 'courseApplication', component: CourseApplicationComponent, canActivate: [authGuard]},
+  { path: 'appliedCourses', component: AppliedCoursesComponent, canActivate: [authGuard]},
+  { path: 'studentStatistic', component: StudentStatisticComponent, canActivate: [authGuard]},
   { path: '**', redirectTo: 'login' }
 ];

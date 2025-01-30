@@ -1,0 +1,48 @@
+<div class="bg-gray-100 p-4 rounded shadow-md">
+  </div>
+  <div *ngIf="courseDates.length === 0; else courseTable">
+    <p class="text-gray-600">Ehhez a kurzushoz nincsenek meghirdetve időpontok</p>
+  </div>
+  <ng-template #courseTable>
+    <h3 class="mt-4 text-lg font-semibold">Course Dates</h3>
+    <table class="min-w-full mt-2 border-collapse border border-gray-300">
+      <thead>
+        <tr>
+          <th class="border border-gray-300 p-2">Name</th>
+          <th class="border border-gray-300 p-2">Day of Week</th>
+          <th class="border border-gray-300 p-2">Start Time</th>
+          <th class="border border-gray-300 p-2">End Time</th>
+          <th class="border border-gray-300 p-2">Teachers</th>
+          <th class="border border-gray-300 p-2">Max Limit</th>
+          <th class="border border-gray-300 p-2">Currently Applied</th>
+          <th class="border border-gray-300 p-2">Location</th>
+          <th class="border border-gray-300 p-2">Action</th> <!-- Add Action column -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let courseDate of courseDates">
+          <td class="border border-gray-300 p-2">{{ courseDate.name }}</td>
+          <td class="border border-gray-300 p-2">{{ courseDate.dayOfWeek }}</td>
+          <td class="border border-gray-300 p-2">{{ courseDate.startTime }}</td>
+          <td class="border border-gray-300 p-2">{{ courseDate.endTime }}</td>
+          <td class="border border-gray-300 p-2">
+            <ng-container *ngFor="let teacherId of courseDate.teacherIds">
+              <span matTooltip="{{ getTeacherDetails(teacherId) }}" class="cursor-pointer">
+                {{ teacherId }}
+              </span>
+              <span *ngIf="teacherId !== courseDate.teacherIds[courseDate.teacherIds.length - 1]">, </span> <!-- Add comma between teacher names -->
+            </ng-container>
+          </td>
+          <td class="border border-gray-300 p-2">{{ courseDate.maxLimit }}</td>
+          <td class="border border-gray-300 p-2">{{ courseDate.currentlyApplied }}</td>
+          <td class="border border-gray-300 p-2">{{ courseDate.location }}</td>
+          <td class="border border-gray-300 p-2">
+            <button mat-button (click)="onApplyRemoveClick(courseDate.id)">
+              {{ userApplications.has(courseDate.id) ? 'Leadás' : 'Felvétel' }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+  </ng-template>

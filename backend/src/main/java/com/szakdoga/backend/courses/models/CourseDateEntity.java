@@ -26,8 +26,16 @@ public class CourseDateEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "location")
+    private LocationEnum location;
+
+    @Column(name = "max_limit")
+    private int maxLimit;
+
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "course_detail_id", nullable = false)
+    @JoinColumn(name = "course_detail_id")
     @Fetch(FetchMode.JOIN)
     private CourseDetailEntity courseDetailEntity;
 

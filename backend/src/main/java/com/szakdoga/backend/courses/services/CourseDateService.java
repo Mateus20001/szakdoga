@@ -3,11 +3,11 @@ package com.szakdoga.backend.courses.services;
 
 import com.szakdoga.backend.auth.model.User;
 import com.szakdoga.backend.auth.repositories.UserRepository;
-import com.szakdoga.backend.courses.dtos.CourseDateRequest;
 import com.szakdoga.backend.courses.dtos.CourseDateResponse;
 import com.szakdoga.backend.courses.dtos.EditCourseDateRequest;
 import com.szakdoga.backend.courses.models.CourseDateEntity;
 import com.szakdoga.backend.courses.models.CourseDetailEntity;
+import com.szakdoga.backend.courses.models.LocationEnum;
 import com.szakdoga.backend.courses.repositories.CourseDateRepository;
 import com.szakdoga.backend.courses.repositories.CourseDetailRepository;
 import jakarta.transaction.Transactional;
@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +36,7 @@ public class CourseDateService {
 
     public CourseDateEntity addCourseDate(CourseDateEntity courseDateEntity, Long courseId, List<String> teacherIds) {
         // Validate CourseDetail
+        log.info(String.valueOf(courseDateEntity.getLocation()));
         CourseDetailEntity courseDetail = courseDetailRepository.findById(courseId)
                 .orElseThrow(() -> new IllegalArgumentException("Course not found with ID: " + courseId));
         courseDateEntity.setCourseDetailEntity(courseDetail);
@@ -55,22 +55,25 @@ public class CourseDateService {
         return courseDateRepository.findByCourseDetailEntityId(courseId);
     }
     @Transactional
-    public List<CourseDateResponse> getCourseDatesAsRequestObjects(Long courseId) {
+    public List<CourseDateResponse> getCourseDatesAsResponseObjects(Long courseId) {
         log.info("getCourseDatesAsRequestObjects courseDates: ");
         List<CourseDateEntity> courseDates = courseDateRepository.findByCourseDetailEntityId(courseId);
 
         return courseDates.stream().map(courseDate -> {
-            CourseDateResponse request = new CourseDateResponse();
-            request.setId(courseDate.getId());
-            request.setName(courseDate.getName());
-            request.setCourseId(courseDate.getCourseDetailEntity().getId());
-            request.setTeacherIds(courseDate.getTeachers().stream()
+            CourseDateResponse response = new CourseDateResponse();
+            response.setId(courseDate.getId());
+            response.setName(courseDate.getName());
+            response.setCourseId(courseDate.getCourseDetailEntity().getId());
+            response.setTeacherIds(courseDate.getTeachers().stream()
                     .map(User::getId)
                     .toList());
-            request.setDayOfWeek(courseDate.getDayOfWeek());
-            request.setStartTime(courseDate.getStartTime());
-            request.setEndTime(courseDate.getEndTime());
-            return request;
+            response.setDayOfWeek(courseDate.getDayOfWeek());
+            response.setStartTime(courseDate.getStartTime());
+            response.setEndTime(courseDate.getEndTime());
+            response.setMaxLimit(courseDate.getMaxLimit());
+            response.setLocation(courseDate.getLocation());
+            response.setCurrentlyApplied(courseDate.getApplications() != null ? courseDate.getApplications().size() : 0);
+            return response;
         }).toList();
     }
 
@@ -105,7 +108,13 @@ public class CourseDateService {
         courseDateEntity.setDayOfWeek(request.getDayOfWeek());
         courseDateEntity.setStartTime(request.getStartTime());
         courseDateEntity.setEndTime(request.getEndTime());
-
+        courseDateEntity.setMaxLimit(request.getMaxLimit());
+        try {
+            LocationEnum locationEnum = LocationEnum.fromString(request.getLocation());
+            courseDateEntity.setLocation(locationEnum);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid location: " + request.getLocation());
+        }
         // Save the updated entity back to the database
         return courseDateRepository.save(courseDateEntity);
     }

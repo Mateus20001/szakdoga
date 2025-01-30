@@ -4,8 +4,11 @@ import com.szakdoga.backend.courses.dtos.CourseDateRequest;
 import com.szakdoga.backend.courses.dtos.CourseDateResponse;
 import com.szakdoga.backend.courses.dtos.EditCourseDateRequest;
 import com.szakdoga.backend.courses.models.CourseDateEntity;
+import com.szakdoga.backend.courses.models.LocationEnum;
 import com.szakdoga.backend.courses.services.CourseDateService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,18 +19,26 @@ import java.util.List;
 @RequestMapping("/api/course-dates")
 @RequiredArgsConstructor
 public class CourseDateController {
+    private static final Logger log = LoggerFactory.getLogger(CourseDateController.class);
 
     private final CourseDateService courseDateService;
 
     @PostMapping
     public ResponseEntity<CourseDateRequest> addCourseDate(
             @RequestBody CourseDateRequest request) {
+        log.info("addCourseDate: {}", request);
         CourseDateEntity courseDateEntity = new CourseDateEntity();
         courseDateEntity.setName(request.getName());
         courseDateEntity.setDayOfWeek(request.getDayOfWeek());
         courseDateEntity.setStartTime(request.getStartTime());
         courseDateEntity.setEndTime(request.getEndTime());
-
+        try {
+            LocationEnum locationEnum = LocationEnum.fromString(request.getLocation());
+            courseDateEntity.setLocation(locationEnum);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid location: " + request.getLocation());
+        }
+        courseDateEntity.setMaxLimit(request.getMaxLimit());
         CourseDateEntity savedCourseDate = courseDateService.addCourseDate(
                 courseDateEntity,
                 request.getCourseId(),
@@ -41,7 +52,7 @@ public class CourseDateController {
 
     @GetMapping("/{courseId}/all")
     public ResponseEntity<List<CourseDateResponse>> getCourseDatesByCourseId(@PathVariable Long courseId) {
-        List<CourseDateResponse> courseDates = courseDateService.getCourseDatesAsRequestObjects(courseId);
+        List<CourseDateResponse> courseDates = courseDateService.getCourseDatesAsResponseObjects(courseId);
 
         if (courseDates.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

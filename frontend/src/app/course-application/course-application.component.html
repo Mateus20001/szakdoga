@@ -1,1 +1,25 @@
-<p>course-application works!</p>
+<mat-accordion>
+    <mat-expansion-panel *ngFor="let course of courses" (opened)="loadCourseDetails(course.id)">
+      <mat-expansion-panel-header>
+        <mat-panel-title>{{ course.name }}</mat-panel-title>
+        <mat-panel-description>
+            <span class="text-gray-600" style="padding-right: 10px;">{{ course.credits }} credits</span>
+            <span class="text-gray-600" style="padding-right: 10px;">{{ translateEnrollmentType(course.enrollmentType) }}</span>
+            <span class="text-gray-600" style="padding-right: 10px;">{{ translateRequirementType(course.requirementType) }}</span>
+            <span class="text-gray-600" style="padding-right: 10px;">Ajánlott félév: {{ course.recommendedHalfYear }}</span>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+  
+      <div *ngIf="expandedCourseId === course.id">
+        <div *ngIf="course.course_dates_size > 0; else noCourseDates">
+            <app-course-details [courseId]="expandedCourseId"></app-course-details>
+          </div>
+          
+          <!-- Message for courses with no available course dates -->
+          <ng-template #noCourseDates>
+            <p class="text-gray-500">Ehhez a kurzushoz nincsenek meghirdetve időpontok</p>
+          </ng-template>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+  
