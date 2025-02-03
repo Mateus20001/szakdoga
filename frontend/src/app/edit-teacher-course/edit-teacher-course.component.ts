@@ -5,6 +5,8 @@ import { NgFor, NgIf } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CourseDateService } from '../services/course-date.service';
+import { LocationEnum } from '../models/LocationEnum';
+import { DayOfWeek } from '../models/DayOfWeek';
 
 @Component({
   selector: 'app-edit-teacher-course',
@@ -38,19 +40,7 @@ export class EditTeacherCourseComponent {
   isEditing: boolean = false;
   editingTeacherId: string | null = null;
   selectedCourseDate: any;
-  availableLocations = [
-    'Bolyai Amphitheater',
-    'Auditorium Maximum',
-    'József Attila Study Room',
-    'TIK Room 1',
-    'TIK Room 2',
-    'Aradi Vértanúk Room',
-    'Dóm Tér Room 1',
-    'Dóm Tér Room 2',
-    'Kálvária sgt. Room 1',
-    'Kálvária sgt. Room 2',
-    'Online'
-  ];
+  availableLocations = Object.values(LocationEnum);
 
   constructor(
     private fb: FormBuilder,
@@ -65,7 +55,7 @@ export class EditTeacherCourseComponent {
       endTime: ['', Validators.required],
       teacherIds: [[], Validators.required],
       maxLimit: ['', Validators.required],
-      location: ['', Validators.required] // Added location field
+      location: [this.availableLocations[0], Validators.required]
     });
   }
 
@@ -116,6 +106,7 @@ export class EditTeacherCourseComponent {
   editCourseDate(courseDate: any): void {
     this.isEditingCourse = true;
     this.selectedCourseDate = courseDate;
+    const locationValue = LocationEnum[courseDate.location as keyof typeof LocationEnum]; 
     this.addCourseDateForm.setValue({
       name: courseDate.name,
       dayOfWeek: courseDate.dayOfWeek,
@@ -123,7 +114,7 @@ export class EditTeacherCourseComponent {
       endTime: courseDate.endTime,
       teacherIds: courseDate.teacherIds,
       maxLimit: courseDate.maxLimit,
-      location: courseDate.location // Added location
+      location: locationValue// Added location
     });
   }
 
@@ -266,4 +257,10 @@ export class EditTeacherCourseComponent {
     this.newTeacherId = '';
     this.isResponsible = false;
   }  
+  getLocationString(locationKey: string): string {
+    return LocationEnum[locationKey as keyof typeof LocationEnum] || 'Unknown Location';
+  }
+  getDayString(dayKey: string): string {
+    return DayOfWeek[dayKey as keyof typeof DayOfWeek] || 'Unknown Day';
+  }
 }

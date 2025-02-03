@@ -196,7 +196,7 @@ public class CourseDetailService {
         // Fetch the major entity for the user
         MajorEntity majorEntity = majorRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("Major not found for user"));
-
+        log.info(String.valueOf(majorEntity.getId()));
         // Fetch only course IDs associated with this major
         List<Long> courseIds = courseDetailRepository.findCourseIds();
         if (courseIds.isEmpty()) {
@@ -204,7 +204,7 @@ public class CourseDetailService {
         }
 
         // Fetch enrollments related to those course IDs and major
-        List<EnrollmentTypeEntity> enrollments = enrollmentTypeRepository.findByCourseDetailIdsAndMajor(courseIds, majorEntity);
+        List<EnrollmentTypeEntity> enrollments = enrollmentTypeRepository.findByCourseDetailIdsAndMajorDetailsId(courseIds, majorEntity.getMajor().getId());
         if (enrollments.isEmpty()) {
             return Collections.emptyList();
         }

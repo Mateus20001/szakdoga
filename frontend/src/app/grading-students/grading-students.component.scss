@@ -1,0 +1,58 @@
+.container {
+    width: 70%;
+    margin: auto;
+    padding: 20px;
+  }
+  
+  .course-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 10px 50px;
+  }
+  
+  mat-expansion-panel {
+    margin-bottom: 10px;
+  }
+  
+  .grade-input {
+    width: 150px;
+    margin-left: 15px;
+  }
+  
+  button {
+    margin-left: 10px;
+  }
+  /* Increase the height of the mat-list-item */
+  mat-list-item {
+    height: 100% !important; /* Ensure the list item takes the full height */
+    display: flex !important;
+    align-items: flex-end !important; /* Align the content to the bottom */
+    padding: 0 !important; /* Remove padding */
+  }
+  
+  /* Remove padding and increase height of mat-expansion-panel-header */
+  mat-expansion-panel-header {
+    min-height: 54px !important;  /* Set the desired height for the header */
+    display: flex;
+    align-items: center;
+    padding: 10px, 10px, 0, 10px !important;  /* Remove header padding */
+  }
+  
+  /* Ensure the panel title text aligns at the bottom of the header */
+  mat-panel-title {
+    font-size: 18px !important;
+    line-height: 1.5 !important; /* Adjust for readability */
+    white-space: normal !important;
+    overflow: visible !important;
+    margin-top: auto !important; /* Align to the bottom */
+  }
+  
+  /* Ensure the body of the expansion panel takes full height */
+  .mat-expansion-panel-body {
+    padding: 0 !important; /* Remove padding from the body */
+    height: 100% !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end !important; /* Align content to the bottom */
+  }
+  

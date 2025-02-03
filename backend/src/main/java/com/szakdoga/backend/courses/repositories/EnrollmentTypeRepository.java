@@ -20,4 +20,6 @@ public interface EnrollmentTypeRepository extends JpaRepository<EnrollmentTypeEn
     @Query("SELECT e FROM EnrollmentTypeEntity e WHERE e.courseDetail.id IN :courseIds AND e.major = :major")
     List<EnrollmentTypeEntity> findByCourseDetailIdsAndMajor(@Param("courseIds") List<Long> courseIds, @Param("major") MajorEntity major);
 
+    @Query("SELECT e FROM EnrollmentTypeEntity e WHERE e.courseDetail.id IN :courseIds AND e.major.major.id = :major")
+    List<EnrollmentTypeEntity> findByCourseDetailIdsAndMajorDetailsId(@Param("courseIds") List<Long> courseIds, @Param("major") int majorEntity);
 }

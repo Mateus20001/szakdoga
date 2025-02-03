@@ -22,7 +22,7 @@
       <tbody>
         <tr *ngFor="let courseDate of courseDates">
           <td class="border border-gray-300 p-2">{{ courseDate.name }}</td>
-          <td class="border border-gray-300 p-2">{{ courseDate.dayOfWeek }}</td>
+          <td class="border border-gray-300 p-2">{{ getDayString(courseDate.dayOfWeek) }}</td>
           <td class="border border-gray-300 p-2">{{ courseDate.startTime }}</td>
           <td class="border border-gray-300 p-2">{{ courseDate.endTime }}</td>
           <td class="border border-gray-300 p-2">
@@ -35,7 +35,7 @@
           </td>
           <td class="border border-gray-300 p-2">{{ courseDate.maxLimit }}</td>
           <td class="border border-gray-300 p-2">{{ courseDate.currentlyApplied }}</td>
-          <td class="border border-gray-300 p-2">{{ courseDate.location }}</td>
+          <td class="border border-gray-300 p-2">{{ getLocationString(courseDate.location) }}</td>
           <td class="border border-gray-300 p-2">
             <button mat-button (click)="onApplyRemoveClick(courseDate.id)">
               {{ userApplications.has(courseDate.id) ? 'Leadás' : 'Felvétel' }}

@@ -7,6 +7,8 @@ import { MatButton } from '@angular/material/button';
 import { CourseApplicationService } from '../../services/course-application.service';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { LocationEnum } from '../../models/LocationEnum';
+import { DayOfWeek } from '../../models/DayOfWeek';
 
 @Component({
   selector: 'app-course-details',
@@ -37,6 +39,7 @@ export class CourseDetailsComponent {
   ngOnInit(): void {
     this.fetchCourseDates();
     this.loadUserApplications();
+    console.log(this.userApplications)
   }
 
 
@@ -72,43 +75,6 @@ export class CourseDetailsComponent {
   getTeacherDetails(teacherId: string): string {
     return this.teacherDetails[teacherId] || 'No details available for this teacher.';
   }
-  toggleApplication(courseDateId: number): void {
-
-    if (this.userApplications.has(courseDateId)) {
-      // Remove application
-      this.courseApplicationService.removeApplication(courseDateId).subscribe(
-        () => {
-          const courseDate = this.courseDates.find(date => date.id === courseDateId);
-          if (courseDate) {
-            courseDate.currentlyApplied -= 1;
-          }
-          this.userApplications.delete(courseDateId);
-          this.snackBar.open('Sikeresen leadtad a kurzust!', 'Bezárás', { duration: 3000 });
-        },
-        (error) => console.error('Error removing application:', error)
-      );
-    } else {
-      // Apply to course
-      this.courseApplicationService.applyToCourse(courseDateId).subscribe(
-        (response) => {
-          const courseDate = this.courseDates.find(date => date.id === courseDateId);
-          if (courseDate) {
-            courseDate.currentlyApplied += 1;
-          }
-          const successMessage = response.message;  
-          this.userApplications.add(courseDateId);
-      
-          this.snackBar.open(successMessage, 'Bezárás', { duration: 3000 });
-        },
-        (error) => {
-          const errorMessage = error.error?.message || 'Hiba történt a kurzus felvételekor!';
-          console.error('Error applying to course:', error);
-      
-          this.snackBar.open(errorMessage, 'Bezárás', { duration: 3000 });
-        }
-      );
-    }
-  }
   loadUserApplications(): void {
     this.courseApplicationService.getUserApplications(this.courseId).subscribe(
       (applications) => {
@@ -139,6 +105,16 @@ export class CourseDetailsComponent {
   applyToCourse(courseDateId: number): void {
     this.courseApplicationService.applyToCourse(courseDateId).subscribe(
       (response) => {
+        const userApplicationsList = [...this.userApplications];
+          if (userApplicationsList.length > 0) {
+            const firstAppliedCourseDateId = userApplicationsList[0];
+            console.log(firstAppliedCourseDateId);
+            const courseDate = this.courseDates.find(date => date.id === firstAppliedCourseDateId);
+            if (courseDate) {
+              courseDate.currentlyApplied -= 1;
+            }
+            this.userApplications.delete(firstAppliedCourseDateId);
+          }
         const successMessage = response.message;
         const courseDate = this.courseDates.find(date => date.id === courseDateId);
         if (courseDate) {
@@ -178,5 +154,11 @@ export class CourseDetailsComponent {
     } else {
       this.openConfirmationDialog(courseDateId, false); // Confirm apply
     }
+  }
+  getLocationString(locationKey: string): string {
+      return LocationEnum[locationKey as keyof typeof LocationEnum] || 'Unknown Location';
+  }
+  getDayString(dayKey: string): string {
+    return DayOfWeek[dayKey as keyof typeof DayOfWeek] || 'Unknown Day';
   }
 }

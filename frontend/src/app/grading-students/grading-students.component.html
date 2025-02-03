@@ -1,0 +1,41 @@
+<div class="container">
+    <h2>Grading Overview</h2>
+  
+    <mat-accordion multi="true">
+      <!-- Grouped Courses by courseDetailName -->
+      <mat-expansion-panel *ngFor="let courseDetail of groupedCourses | keyvalue">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ courseDetail.key }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+  
+        <mat-list>
+          <!-- Iterate through courses under the same courseDetailName -->
+          <div *ngFor="let course of courseDetail.value">
+            <h4 class="course-title">{{ course.courseDateName }}</h4>
+  
+            <mat-list-item *ngFor="let student of course.students">
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title class="asd">
+                    {{ student.firstName }} {{ student.lastName }} {{ student.identifier }}
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+  
+                <mat-list dense>
+                  <mat-list-item *ngFor="let grade of course.grades">
+                    <mat-icon color="primary">grade</mat-icon>
+                    Grade: {{ grade.gradeValue }}
+                  </mat-list-item>
+                </mat-list>
+              </mat-expansion-panel>
+  
+              
+            </mat-list-item>
+          </div>
+        </mat-list>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+  

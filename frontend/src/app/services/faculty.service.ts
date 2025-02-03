@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,7 @@ import { Observable } from 'rxjs';
 export class FacultyService {
 
   constructor(private http: HttpClient) { }
-  private baseUrl = 'http://localhost:8080/api/faculties';
+  private baseUrl = `${environment.apiUrl}faculties`;
   
   addFaculty(name: string, description: string, image: File): Observable<any> {
     const authToken = localStorage.getItem("loggedInUser");

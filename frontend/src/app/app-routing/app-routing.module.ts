@@ -22,6 +22,7 @@ import { EditTeacherCourseComponent } from '../edit-teacher-course/edit-teacher-
 import { CourseApplicationComponent } from '../course-application/course-application.component';
 import { AppliedCoursesComponent } from '../applied-courses/applied-courses.component';
 import { StudentStatisticComponent } from '../student-statistic/student-statistic.component';
+import { GradingStudentsComponent } from '../grading-students/grading-students.component';
 
 
 export const routes: Route[] = [
@@ -46,5 +47,6 @@ export const routes: Route[] = [
   { path: 'courseApplication', component: CourseApplicationComponent, canActivate: [authGuard]},
   { path: 'appliedCourses', component: AppliedCoursesComponent, canActivate: [authGuard]},
   { path: 'studentStatistic', component: StudentStatisticComponent, canActivate: [authGuard]},
+  { path: 'gradingStudents', component: GradingStudentsComponent, canActivate: [authGuard]},
   { path: '**', redirectTo: 'login' }
 ];

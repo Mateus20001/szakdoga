@@ -169,8 +169,10 @@ public class CourseDetailController {
 
         UserDetails userDetails = (UserDetails) principal;
         String userId = userDetails.getUsername();
+        log.info("userId: {}", userId);
         List<CourseDetailStudentListingDTO> courses = courseDetailService.getAllStudentCourses(userId);
         log.info("courses: {}", courses.getFirst().getName());
+        log.info("userid. {}", userId);
         return ResponseEntity.ok(courses);
     }
 }

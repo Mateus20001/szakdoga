@@ -1,6 +1,7 @@
 package com.szakdoga.backend.courses.controllers;
 
 import com.szakdoga.backend.courses.dtos.CourseApplicationDTO;
+import com.szakdoga.backend.courses.dtos.UserAppliedCourseDto;
 import com.szakdoga.backend.courses.models.CourseApplicationEntity;
 import com.szakdoga.backend.courses.services.CourseApplicationService;
 import org.slf4j.Logger;
@@ -112,5 +113,26 @@ public class CourseApplicationController {
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(applicationDTOs);
+    }
+
+    @GetMapping("/applied-courses")
+    public ResponseEntity<List<UserAppliedCourseDto>> getUserAppliedCourses() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Return 401 if not authenticated
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // Return 403 if unauthorized
+        }
+
+        UserDetails userDetails = (UserDetails) principal;
+        String userId = userDetails.getUsername();
+
+        List<UserAppliedCourseDto> appliedCourses = courseApplicationService.getUserAppliedCourses(userId);
+        log.info("appliedCourses: {}",appliedCourses.getFirst().getCourseDetailName());
+        return ResponseEntity.ok(appliedCourses);
     }
 }

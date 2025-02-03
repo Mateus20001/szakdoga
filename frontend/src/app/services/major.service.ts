@@ -3,12 +3,13 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { MajorWithFacultyDTO } from '../models/majorWithFacultyDTO';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MajorService {
-  private baseUrl = 'http://localhost:8080/api/majors';
+  private baseUrl = `${environment.apiUrl}majors`;
 
   constructor(private router: Router, private http: HttpClient) {}
 

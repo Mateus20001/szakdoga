@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CourseDetailDTO, CourseDetailListingDTO, CourseDetailStudentListingDTO } from '../models/CourseDetailListingDTO';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ import { CourseDetailDTO, CourseDetailListingDTO, CourseDetailStudentListingDTO 
 export class CourseService {
   
 
-  private apiUrl = 'http://localhost:8080/api/course-details'; // Backend API endpoint
+  private apiUrl = `${environment.apiUrl}course-details`; // Backend API endpoint
 
   constructor(private http: HttpClient) { }
 
