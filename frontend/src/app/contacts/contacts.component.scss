@@ -1,0 +1,98 @@
+/* Container for the entire component */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  /* Loading spinner container */
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  /* Center spinner while data is loading */
+  mat-spinner {
+    margin-top: 20px;
+  }
+  
+  /* Card container for each contact */
+  mat-card {
+    width: 100%;
+    max-width: 600px;
+    margin: 20px 0;
+    padding: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Styling for the title and description inside the card */
+  mat-card mat-card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  mat-card mat-card-subtitle {
+    font-size: 1.2rem;
+    color: gray;
+  }
+  
+  /* Styling for the contact list */
+  mat-list {
+    width: 100%;
+    max-width: 600px;
+    margin-top: 20px;
+  }
+  
+  /* Styling each list item for contacts */
+  mat-list-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+  }
+  
+  h4{
+    color: black;
+  }
+  /* Change the background color on hover */
+  mat-list-item:hover {
+    background-color: #847ed9;
+  }
+  
+  /* Show error message when something goes wrong */
+  .error-message {
+    color: red;
+    font-size: 1rem;
+    text-align: center;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
+  /* Style for the expanded contact info section (grades) */
+  mat-card.expanded-card {
+    margin-top: 10px;
+  }
+  
+  mat-card.expanded-card ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  
+  mat-card.expanded-card li {
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  mat-card.expanded-card li:last-child {
+    border-bottom: none;
+  }
+  

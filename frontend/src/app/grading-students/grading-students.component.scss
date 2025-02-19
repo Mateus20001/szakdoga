@@ -1,58 +1,70 @@
-.container {
-    width: 70%;
-    margin: auto;
-    padding: 20px;
-  }
-  
-  .course-title {
-    font-size: 18px;
-    font-weight: bold;
-    margin: 10px 50px;
-  }
-  
-  mat-expansion-panel {
-    margin-bottom: 10px;
-  }
-  
-  .grade-input {
-    width: 150px;
-    margin-left: 15px;
-  }
-  
-  button {
-    margin-left: 10px;
-  }
-  /* Increase the height of the mat-list-item */
-  mat-list-item {
-    height: 100% !important; /* Ensure the list item takes the full height */
-    display: flex !important;
-    align-items: flex-end !important; /* Align the content to the bottom */
-    padding: 0 !important; /* Remove padding */
-  }
-  
-  /* Remove padding and increase height of mat-expansion-panel-header */
-  mat-expansion-panel-header {
-    min-height: 54px !important;  /* Set the desired height for the header */
-    display: flex;
-    align-items: center;
-    padding: 10px, 10px, 0, 10px !important;  /* Remove header padding */
-  }
-  
-  /* Ensure the panel title text aligns at the bottom of the header */
-  mat-panel-title {
-    font-size: 18px !important;
-    line-height: 1.5 !important; /* Adjust for readability */
-    white-space: normal !important;
-    overflow: visible !important;
-    margin-top: auto !important; /* Align to the bottom */
-  }
-  
-  /* Ensure the body of the expansion panel takes full height */
-  .mat-expansion-panel-body {
-    padding: 0 !important; /* Remove padding from the body */
-    height: 100% !important;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end !important; /* Align content to the bottom */
-  }
-  
+/* CSS for the mat-expansion-panel-header */
+mat-expansion-panel-header {
+  display: flex;
+  justify-content: space-between;  /* Space between the title and the input */
+  align-items: center;
+  padding: 12px 16px;
+  background-color: #123909;  /* Light background for the header */
+  border-radius: 4px;
+}
+
+.asd {
+  font-size: 16px;  /* Adjust font size */
+  font-weight: bold;  /* Make the student info stand out */
+}
+
+/* Style for the input field inside mat-form-field */
+.grade-input {
+  margin-left: 16px;
+  flex: 1;  /* Allow the input field to take up available space */
+}
+
+mat-form-field {
+  width: 200px;  /* Adjust width */
+  display: inline-block;  /* Ensure it is on the same line with the panel title */
+  margin-bottom: 0;  /* Remove extra space below the input */
+}
+
+input.mat-input-element {
+  font-size: 14px;  /* Set font size for input text */
+  padding: 10px;  /* Padding inside the input field */
+}
+
+/* Additional styling for the input spinner */
+.no-spinner::-webkit-outer-spin-button,
+.no-spinner::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.no-spinner[type="number"] {
+  appearance: textfield; /* Remove the default number spinner */
+}
+
+/* Styling for the mat-autocomplete dropdown */
+mat-autocomplete {
+  max-height: 200px;  /* Limit height for the dropdown */
+  overflow-y: auto;  /* Enable scrolling if the dropdown is too long */
+  background-color: #172e17;
+}
+
+mat-option {
+  font-size: 14px;  /* Font size for autocomplete options */
+  padding: 8px;
+}
+
+/* Hover effect on mat-option */
+mat-option:hover {
+  background-color: #f0f0f0;  /* Light hover effect */
+}
+
+.red-row {
+  background-color: #721c24 !important;  /* Light red background */
+  color: #721c24 !important;  /* Dark red text */
+}
+
+/* Green row for any other grade */
+.green-row {
+  background-color: #155724 !important;  /* Light green background */
+  color: #155724 !important;  /* Dark green text */
+}

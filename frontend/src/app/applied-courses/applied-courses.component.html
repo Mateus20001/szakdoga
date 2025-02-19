@@ -1,46 +1,34 @@
 <div *ngFor="let course of appliedCourses" class="course-container">
-    <h2>{{ course.courseDetailName }}</h2>
-    <table mat-table [dataSource]="[course]" class="mat-elevation-z8">
-      
-      <ng-container matColumnDef="courseDateName">
-        <th mat-header-cell *matHeaderCellDef> Course Date </th>
-        <td mat-cell *matCellDef="let element"> {{ element.courseDateName }} </td>
-      </ng-container>
-      
-      <ng-container matColumnDef="location">
-        <th mat-header-cell *matHeaderCellDef> Location </th>
-        <td mat-cell *matCellDef="let element"> {{ element.location }} </td>
-      </ng-container>
-      
-      <ng-container matColumnDef="teacherIds">
-        <th mat-header-cell *matHeaderCellDef> Teachers </th>
-        <td mat-cell *matCellDef="let element"> {{ element.teacherIds.join(', ') }} </td>
-      </ng-container>
-      
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef> Actions </th>
-        <td mat-cell *matCellDef="let element">
-          <button mat-icon-button *ngIf="element.grades.length > 0" (click)="expandedElement = expandedElement === element ? null : element">
-            <mat-icon>{{ expandedElement === element ? 'expand_less' : 'expand_more' }}</mat-icon>
-          </button>
-          <span *ngIf="element.grades.length === 0">Nincsenek értékelések</span>
-        </td>
-      </ng-container>
-      
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="expandedElement = expandedElement === row ? null : row"></tr>
-      
-      <tr *ngIf="expandedElement === course" class="expanded-row">
-        <td colspan="4">
-          <mat-card>
-            <h3>Grades</h3>
-            <ul>
-              <li *ngFor="let grade of expandedElement?.grades">Érdemjegy: {{ grade.gradeValue }}</li>
-              <li *ngFor="let grade of expandedElement?.grades">Értékelte: {{ grade.gradedBy }}</li>
-              <li *ngFor="let grade of expandedElement?.grades">Ekkor: {{ grade.creationDate }}</li>
-            </ul>
-          </mat-card>
-        </td>
-      </tr>
-    </table>
-  </div>
+  <h2>{{ course.courseDetailName }}</h2>
+  
+  <mat-expansion-panel *ngFor="let element of [course]" [expanded]="expandedElement === element" (opened)="expandedElement = element" (closed)="expandedElement = null"
+  [ngClass]="{ 'good-grade': highestGrade(element.grades) > 1, 'no-grade': element.grades.length == 0, 'bad-grade': highestGrade(element.grades) <= 1,  }">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{ element.courseDateName }}
+      </mat-panel-title>
+      <mat-panel-description>
+        {{ getLocationString(element.location) }}
+      </mat-panel-description>
+      <mat-panel-description>
+        {{ element.teacherIds.join(', ') }}
+      </mat-panel-description>
+      <!-- Display the highest grade on the right -->
+      <div *ngIf="element.grades.length > 0">
+        Highest Grade: {{ highestGrade(element.grades) }}
+      </div>
+    </mat-expansion-panel-header>
+
+    <!-- Expansion Panel Content -->
+    <div *ngIf="(expandedElement === element) && (element.grades.length > 0)">
+      <mat-card class="expanded-card">
+        <h3>Grades</h3>
+        <ul>
+          <li *ngFor="let grade of element?.grades">Érdemjegy: {{ grade.gradeValue }}</li>
+          <li *ngFor="let grade of element?.grades">Értékelte: {{ grade.gradedBy }}</li>
+          <li *ngFor="let grade of element?.grades">Ekkor: {{ grade.creationDate }}</li>
+        </ul>
+      </mat-card>
+    </div>
+  </mat-expansion-panel>
+</div>

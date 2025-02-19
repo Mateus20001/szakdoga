@@ -13,6 +13,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LocationEnum } from '../models/LocationEnum';
 
 @Component({
   selector: 'app-applied-courses',
@@ -22,7 +23,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatButtonModule, 
     MatIconModule,
     MatCardModule,
-    MatExpansionModule ],
+    MatExpansionModule,
+    CommonModule ],
   templateUrl: './applied-courses.component.html',
   styleUrl: './applied-courses.component.scss'
 })
@@ -36,7 +38,14 @@ export class AppliedCoursesComponent {
     ngOnInit(): void {
       this.fetchAppliedCourses();
     }
-  
+
+    highestGrade(grades: { gradeValue: number }[]): number {
+      return Math.max(...grades.map(grade => grade.gradeValue));
+    }
+    getLocationString(locationKey: string): string {
+      return LocationEnum[locationKey as keyof typeof LocationEnum] || 'Unknown Location';
+    }
+
     fetchAppliedCourses(): void {
       this.courseApplicationService.getUserAppliedCourses().subscribe(
         (courses) => {

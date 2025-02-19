@@ -34,7 +34,7 @@ export const MenuDropdownMenuObjects: MenuDropdown[] = [
         menuDropdownList: [
           {
             name: "Személyes adatok",
-            link: "/personaldata",
+            link: "/profile",
             roles: [] 
           },
           {

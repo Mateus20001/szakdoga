@@ -1,5 +1,6 @@
 package com.szakdoga.backend.auth.services;
 import com.szakdoga.backend.auth.PasswordGenerator;
+import com.szakdoga.backend.auth.dtos.ContactDTO;
 import com.szakdoga.backend.auth.dtos.LoginUserDto;
 import com.szakdoga.backend.auth.dtos.RegisterUserDto;
 import com.szakdoga.backend.auth.dtos.UserListingDTO;
@@ -185,5 +186,21 @@ public class UserService {
     public List<UserListingDTO> getAllTeacherDTOs() {
         log.info("Fetching all teachers...");
         return userRepository.findAllTeacherDTOs();
+    }
+
+    public List<ContactDTO> getEmails(String userId) {
+        // Fetch all emails associated with the given user ID
+        List<EmailEntity> emailEntities = emailRepository.findAllByUserId(userId);
+
+        // Convert the list of EmailEntity objects to a list of ContactDTO objects
+        List<ContactDTO> contactDTOs = emailEntities.stream()
+                .map(emailEntity -> new ContactDTO(
+                        emailEntity.getId(),  // Set the email ID
+                        emailEntity.getEmail(),  // Set the email address
+                        emailEntity.is_public()  // Set whether the email is public
+                ))
+                .collect(Collectors.toList());
+
+        return contactDTOs;
     }
 }

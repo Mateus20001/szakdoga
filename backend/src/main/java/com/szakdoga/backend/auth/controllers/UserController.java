@@ -337,4 +337,29 @@ public class UserController {
         List<UserListingDTO> teachers = userService.getAllTeacherDTOs();
         return ResponseEntity.ok(teachers);
     }
+
+    @GetMapping(path = "/me/emails")
+    public ResponseEntity<List<ContactDTO>> getEmails() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Return 401 if not authenticated
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // Return 403 if unauthorized
+        }
+
+        UserDetails userDetails = (UserDetails) principal;
+        String userId = userDetails.getUsername();
+
+        // Fetch the user entity from the database
+        User user = userService.findUserById(userId);
+        if (user == null) {
+            return ResponseEntity.notFound().build(); // Return 404 if user not found
+        }
+        List<ContactDTO> emails = userService.getEmails(userId);
+        return ResponseEntity.ok(emails);
+    }
 }

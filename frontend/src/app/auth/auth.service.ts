@@ -174,4 +174,13 @@ export class AuthService {
     });
     return this.http.get<any[]>(`${this.baseUrl}/teachers`, { headers });
   }
+
+  getEmails(): Observable<any[]> {
+    const authToken = localStorage.getItem("loggedInUser");
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${authToken}`,
+    });
+    return this.http.get<any[]>(`${this.baseUrl}/me/emails`, { headers });
+  }
 }

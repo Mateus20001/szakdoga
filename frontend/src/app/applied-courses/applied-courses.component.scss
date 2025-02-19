@@ -1,21 +1,60 @@
+/* Container for each course */
 .course-container {
-    margin-bottom: 16px;
-  }
-  
-  table {
-    width: 100%;
-  }
-  
-  .mat-icon-button {
-    display: flex;
-    justify-content: center;
-  }
-  
-  .expanded-row td {
-    padding: 0;
-  }
-  
-  mat-card {
-    padding: 16px;
-    margin: 8px;
-  }
+  margin-bottom: 20px; /* Space between courses */
+}
+
+/* Optional: Highlight expanded panel */
+mat-expansion-panel[expanded] {
+  background-color: #f1f1f1;
+}
+mat-expansion-panel-header {
+  font-size: 18px;
+  font-weight: bold;
+  padding: 16px;
+}
+
+/* Styling for the panel description */
+mat-panel-description {
+  font-style: italic;
+  color: #757575;
+}
+
+/* Style for the list items inside the card */
+mat-card ul {
+  padding-left: 20px;
+}
+
+mat-card li {
+  padding: 8px 0;
+  font-size: 16px;
+}
+
+.good-grade {
+  background-color: #155724 !important; 
+}
+
+.bad-grade {
+  background-color: #721c24 !important; 
+}
+.no-grade {
+  background-color: #2f2829 !important; 
+}
+/* Remove default padding and margin */
+ul, ol {
+  padding: 0;
+  margin: 0;
+}
+
+/* Remove bullets and list style */
+ul li {
+  list-style: none;
+}
+
+/* Optional: Custom styles for <li> */
+ul li {
+  padding: 8px 16px;
+  font-size: 16px;
+  color: #ffffff;
+}
+
+

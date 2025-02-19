@@ -1,8 +1,27 @@
-<div *ngIf="loading">Loading contacts...</div>
-<div *ngIf="error">{{ error }}</div>
-<ul *ngIf="!loading && contacts.length > 0">
-  <li *ngFor="let contact of contacts">
-    {{ contact }} <!-- Adjust according to your Email model -->
-  </li>
-</ul>
-<div *ngIf="!loading && contacts.length === 0">No contacts found.</div>
+<mat-card class="contacts-card">
+  <mat-card-header>
+    <mat-card-title>Contacts</mat-card-title>
+  </mat-card-header>
+  
+  <mat-card-content>
+    <!-- Loading Spinner -->
+    <div *ngIf="loading" class="loading-container">
+      <mat-spinner diameter="50"></mat-spinner>
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="error" class="error-message">
+      <mat-icon color="warn">error</mat-icon>
+      <span>{{ error }}</span>
+    </div>
+
+    <!-- Contact List -->
+    <div *ngIf="!loading && !error">
+      <mat-list>
+        <mat-list-item *ngFor="let contact of contacts">
+          <h4 matLine>{{ contact.email }} {{ contact._public ? 'Public' : 'Private' }}</h4>
+        </mat-list-item>
+      </mat-list>
+    </div>
+  </mat-card-content>
+</mat-card>
