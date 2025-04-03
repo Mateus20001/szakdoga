@@ -15,18 +15,20 @@
       </mat-panel-description>
       <!-- Display the highest grade on the right -->
       <div *ngIf="element.grades.length > 0">
-        Highest Grade: {{ highestGrade(element.grades) }}
+        Legjobb jegy: {{ getGradeDisplay(highestGrade(element.grades)) }}
       </div>
     </mat-expansion-panel-header>
 
     <!-- Expansion Panel Content -->
     <div *ngIf="(expandedElement === element) && (element.grades.length > 0)">
       <mat-card class="expanded-card">
-        <h3>Grades</h3>
+        <h3>Jegyek</h3>
         <ul>
-          <li *ngFor="let grade of element?.grades">Érdemjegy: {{ grade.gradeValue }}</li>
-          <li *ngFor="let grade of element?.grades">Értékelte: {{ grade.gradedBy }}</li>
-          <li *ngFor="let grade of element?.grades">Ekkor: {{ grade.creationDate }}</li>
+          <div *ngFor="let grade of course.grades">
+            <li><strong>Jegy:</strong> {{ getGradeDisplay(grade.gradeValue) }}</li>
+            <li><strong>Értékelte:</strong> {{ grade.gradedBy }}</li>
+            <li><strong>Dátum:</strong> {{ formatDate(grade.creationDate) }}</li>
+          </div>
         </ul>
       </mat-card>
     </div>

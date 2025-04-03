@@ -58,4 +58,28 @@ export class AppliedCoursesComponent {
         }
       );
     }
+    getGradeDisplay(value: number): string {
+      const grade = this.gradeOptions.find(option => option.value === value);
+      return grade ? grade.display : 'N/A';
+    }
+    gradeOptions = [
+      { value: -1, display: 'nem értékelhető' },
+      { value: 0, display: 'nem jelent meg' },
+      { value: 1, display: '1' },
+      { value: 2, display: '2' },
+      { value: 3, display: '3' },
+      { value: 4, display: '4' },
+      { value: 5, display: '5' }
+    ];
+    formatDate(isoString: string): string {
+      const date = new Date(isoString);
+      return date.toLocaleString('hu-HU', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+    
 }

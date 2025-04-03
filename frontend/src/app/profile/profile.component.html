@@ -44,12 +44,12 @@
   
       <div class="profile-info">
         <label for="createdAt">Created At:</label>
-        <p id="createdAt">{{ userDetails?.createdAt }}</p>
+        <p id="createdAt">{{ formatDate(userDetails?.createdAt) }}</p>
       </div>
   
       <div class="profile-info">
         <label for="updatedAt">Last Updated:</label>
-        <p id="updatedAt">{{ userDetails?.updatedAt }}</p>
+        <p id="updatedAt">{{ formatDate(userDetails?.updatedAt) }}</p>
       </div>
     </div>
 

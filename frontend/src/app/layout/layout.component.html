@@ -1,5 +1,5 @@
 <nav *ngIf="router.url !== '/login'">
-    <a (click)="navigateToMain()"><img id="brandlogo" src="../../favicon.ico"></a>
+    <a (click)="navigateToMain()"><img id="brandlogo" src="../../assets/neptun_logo-removebg-preview.png"></a>
     <span id="dropdownnav" *ngFor="let menuCategory of menuDropdownItems">
         <ng-container *ngIf="shouldDisplayMenuCategory(menuCategory)">
           <app-dropdown-menu

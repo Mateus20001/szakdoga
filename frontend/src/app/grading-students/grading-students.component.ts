@@ -39,8 +39,11 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 export class GradingStudentsComponent {
   gradingData: TeacherStudentGradingDTO[] = [];
   groupedCourses: { [key: string]: TeacherStudentGradingDTO[] } = {}; // Grouped by courseDetailName
-  grades: { [identifier: string]: number } = {};
+  grades: { [key: string]: number } = {};
   constructor(private gradingService: GradingService) {}
+  generateKey(courseDateId: number, identifier: string): string {
+    return `${courseDateId}-${identifier}`;
+  }
   gradeOptions = [
     { value: -1, display: 'nem értékelhető' },
     { value: 0, display: 'nem jelent meg' },
@@ -69,11 +72,29 @@ export class GradingStudentsComponent {
 
   
   saveGrades(): void {
-    const gradesToSave = Object.keys(this.grades).map(identifier => ({
-      identifier,
-      gradeValue: this.grades[identifier]
-    }));
-
-    console.log("Saving grades:", gradesToSave);
+    const gradesToSave = this.gradingData.flatMap(course =>
+      course.students
+        .filter(student => this.grades[this.generateKey(course.courseDateId, student.identifier)] !== undefined)
+        .map(student => ({
+          identifier: student.identifier,
+          courseDateId: course.courseDateId,
+          gradeValue: this.grades[this.generateKey(course.courseDateId, student.identifier)]
+        }))
+    );
+  
+    console.log('Saving grades:', gradesToSave);
+  
+    this.gradingService.saveGrades(gradesToSave).subscribe(
+      response => {
+        console.log('Grades saved successfully:', response);
+      },
+      error => {
+        console.error('Error saving grades:', error);
+      }
+    );
+  }
+  getGradeDisplay(value: number): string {
+    const grade = this.gradeOptions.find(option => option.value === value);
+    return grade ? grade.display : 'N/A';
   }
 }

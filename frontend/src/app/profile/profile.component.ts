@@ -41,5 +41,17 @@ export class ProfileComponent {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
-  
+  formatDate(isoString: string  | undefined): string {
+    if (isoString == undefined) {
+      return "";
+    }
+    const date = new Date(isoString);
+    return date.toLocaleString('hu-HU', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
 }

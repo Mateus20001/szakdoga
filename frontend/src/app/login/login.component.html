@@ -1,27 +1,27 @@
 <header>
-  <img id="brandlogo" src="../../assets/neptun1_1170x216.png" alt="Brand Logo" />
+  <img id="brandlogo" src="../../assets/Flux_Schnell_Create_a_logo_for_a_university_grading_manager_we_1.jpeg" alt="Brand Logo" />
 </header>
 
 <div class="paper" [style.backgroundColor]="backgroundColor"><img class="buildingsimage" src="../../assets/mainbulding.jpg" alt=""></div>
 <div class="paper2" [style.backgroundColor]="paper2Color"><img class="buildingsimage" src="../../assets/tik.jpg" alt=""></div>
 <div class="container">
-  <h2>Login</h2>
+  <h2>Bejelentkezés</h2>
   <div id="error">{{ errorMessage }}</div>
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <mat-form-field appearance="fill">
-      <mat-label>Identifier</mat-label>
-      <input matInput formControlName="id" placeholder="Enter your identifier" />
+      <mat-label>Azonosító</mat-label>
+      <input matInput formControlName="id" placeholder="Azonosító" />
       <mat-error *ngIf="form.get('id')?.invalid && form.get('id')?.touched">
-        Identifier must be 6 characters long.
+        Az azonosító 6 karakter hosszú.
       </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="fill">
-      <mat-label>Password</mat-label>
+      <mat-label>Jelszó</mat-label>
       <input matInput 
          [type]="passwordVisible ? 'text' : 'password'" 
          formControlName="password" 
-         placeholder="Enter your password">
+         placeholder="Jelszó">
          <button mat-icon-button matSuffix 
          *ngIf="passwordControl.value && passwordControl.value.length > 0" 
           (click)="togglePasswordVisibility()" type="button">
@@ -29,11 +29,11 @@
         <img *ngIf="!passwordVisible" src="../../assets/icons/hide.png" alt="Hide Password">
       </button>
       <mat-error *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
-        Password is required.
+        Jelszó szükséges.
       </mat-error>
     </mat-form-field>
 
-    <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Login</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Bejelentkezés</button>
   </form>
 </div>
 <div class="container" id="versionControl">

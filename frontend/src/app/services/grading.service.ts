@@ -19,4 +19,11 @@ export class GradingService {
         });
     return this.http.get<TeacherStudentGradingDTO[]>(`${this.apiUrl}/grades`, { headers });
   }
+  saveGrades(grades: { identifier: string; courseDateId: number; gradeValue: number }[]): Observable<any> {
+    const authToken = localStorage.getItem("loggedInUser");
+        const headers = new HttpHeaders({
+              Authorization: `Bearer ${authToken}`,
+        });
+    return this.http.post(`${this.apiUrl}/save`, grades, { headers });
+  }
 }

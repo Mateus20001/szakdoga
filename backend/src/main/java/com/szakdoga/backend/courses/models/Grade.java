@@ -35,4 +35,10 @@ public class Grade {
     public Grade() {
         this.creationDate = LocalDateTime.now();
     }
+    public Grade(CourseApplicationEntity courseApplicationEntity, int gradeValue, User gradedBy) {
+        this.courseApplicationEntity = courseApplicationEntity;
+        this.gradeValue = gradeValue;
+        this.gradedBy = gradedBy;
+        this.creationDate = LocalDateTime.now();
+    }
 }

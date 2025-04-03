@@ -1,70 +1,40 @@
-/* CSS for the mat-expansion-panel-header */
-mat-expansion-panel-header {
-  display: flex;
-  justify-content: space-between;  /* Space between the title and the input */
-  align-items: center;
-  padding: 12px 16px;
-  background-color: #123909;  /* Light background for the header */
-  border-radius: 4px;
+/* General Table Styles */
+.course-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 16px;
 }
 
-.asd {
-  font-size: 16px;  /* Adjust font size */
-  font-weight: bold;  /* Make the student info stand out */
-}
-
-/* Style for the input field inside mat-form-field */
-.grade-input {
-  margin-left: 16px;
-  flex: 1;  /* Allow the input field to take up available space */
-}
-
-mat-form-field {
-  width: 200px;  /* Adjust width */
-  display: inline-block;  /* Ensure it is on the same line with the panel title */
-  margin-bottom: 0;  /* Remove extra space below the input */
-}
-
-input.mat-input-element {
-  font-size: 14px;  /* Set font size for input text */
-  padding: 10px;  /* Padding inside the input field */
-}
-
-/* Additional styling for the input spinner */
-.no-spinner::-webkit-outer-spin-button,
-.no-spinner::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.no-spinner[type="number"] {
-  appearance: textfield; /* Remove the default number spinner */
-}
-
-/* Styling for the mat-autocomplete dropdown */
-mat-autocomplete {
-  max-height: 200px;  /* Limit height for the dropdown */
-  overflow-y: auto;  /* Enable scrolling if the dropdown is too long */
-  background-color: #172e17;
-}
-
-mat-option {
-  font-size: 14px;  /* Font size for autocomplete options */
+.course-table th, .course-table td {
+  border: 1px solid #ddd;
   padding: 8px;
+  text-align: left;
 }
 
-/* Hover effect on mat-option */
-mat-option:hover {
-  background-color: #f0f0f0;  /* Light hover effect */
+.course-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
 }
 
-.red-row {
-  background-color: #721c24 !important;  /* Light red background */
-  color: #721c24 !important;  /* Dark red text */
+/* Student Table (inside each course) */
+.student-table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-/* Green row for any other grade */
-.green-row {
-  background-color: #155724 !important;  /* Light green background */
-  color: #155724 !important;  /* Dark green text */
+.student-table td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Grade Select Field */
+.grade-input {
+  width: 100%;
+  margin-top: 8px;
+}
+
+/* Expansion Panel Adjustments */
+mat-expansion-panel {
+  width: 100%;
+  margin-bottom: 8px;
 }

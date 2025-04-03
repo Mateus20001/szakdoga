@@ -25,10 +25,13 @@ header {
     margin-left: 600px;
     z-index: -50;
     box-shadow: 5px 5px 4px #1e1e1e;
+    border-radius: 5px;
   }
 #brandlogo {
-    height: 100px;
-  }
+  width: 500px;
+  border-radius: 5px;
+  border: solid black 1px;
+}
 .paper {
   border-radius: 2px;
   border: 1px solid black;
@@ -127,9 +130,10 @@ button {
   padding:5px;
   border-radius: 15px 0 0 0;
   border: 2px solid black;
-  top: 25%;
-  left: 40%;
-  width: 59%;
+  bottom: 0%;
+  right: 0%;
+  width: 60%;
+  height: 70%;
   background-color: white;
   z-index: -1;
   transition: opacity 0.3s ease-in-out;
@@ -159,8 +163,8 @@ mat-card {
 /* Style for the scrollable box container */
 .scrollable-box {
   width: 100%;               /* Full width */
-  max-width: 800px;          /* Optional: limit the width of the box */
-  height: 300px;             /* Fixed height to enable scrolling */
+  max-width: 80%;          /* Optional: limit the width of the box */
+  height: 75%;             /* Fixed height to enable scrolling */
   overflow-y: auto;          /* Vertical scroll if content overflows */
   padding: 10px;
   margin: 20px auto;         /* Center horizontally if needed */

@@ -1,6 +1,5 @@
 package com.szakdoga.backend.courses.repositories;
 
-import com.szakdoga.backend.auth.model.User;
 import com.szakdoga.backend.courses.models.CourseApplicationEntity;
 import com.szakdoga.backend.courses.models.CourseDateEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,4 +24,6 @@ public interface CourseApplicationRepository extends JpaRepository<CourseApplica
             "AND ca.courseDateEntity.courseDetailEntity.id = :courseDetailId")
     Optional<CourseApplicationEntity> findByUserIdAndCourseDetailId(@Param("userId") String userId,
                                                                     @Param("courseDetailId") Long courseDetailId);
+
+    CourseApplicationEntity findByUserIdAndCourseDateEntityId(String userId, Long attr0);
 }
