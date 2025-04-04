@@ -41,4 +41,7 @@ public class EmailEntity {
 
     }
 
+    public boolean isPublic() {
+        return _public;
+    }
 }

@@ -10,6 +10,7 @@ export interface GradeDTO {
     gradeValue: number;
     gradedBy: string;
     creationDate: string;
+    studentId: string;
 }
 
 export interface TeacherStudentGradingDTO {

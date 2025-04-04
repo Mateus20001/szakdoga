@@ -8,4 +8,8 @@ export interface Email {
     email: string;
     _public: boolean;
   }
-  
+  export interface MessageDto {
+    text: string;
+    from: string;
+    dateTime: string;
+  }

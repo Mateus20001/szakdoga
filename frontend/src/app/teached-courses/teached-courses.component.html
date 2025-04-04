@@ -3,18 +3,18 @@
   </div>
   
   <div *ngIf="!errorMessage && courses.length === 0" class="no-courses">
-    No courses found for the authenticated teacher.
+    Nem tartasz kurzust...
   </div>
   
   <div *ngIf="courses.length > 0">
-    <h2>Courses Assigned to You</h2>
+    <h2>Kurzusaid</h2>
     <table>
       <thead>
         <tr>
-          <th>Course Name</th>
-          <th>Description</th>
-          <th>Credits</th>
-          <th>Edit</th>
+          <th>Kurzus neve</th>
+          <th>Leírása</th>
+          <th>Kreditek</th>
+          <th>Szerkesztés</th>
         </tr>
       </thead>
       <tbody>
@@ -23,7 +23,7 @@
           <td>{{ course.description }}</td>
           <td>{{ course.credits }}</td>
           <td>
-            <button (click)="editCourse(course.id)">Edit</button>
+            <button (click)="editCourse(course.id)">Szerkesztés</button>
           </td>
         </tr>
       </tbody>

@@ -16,5 +16,13 @@ public class GradeDTO{
     int gradeValue;
     String gradedBy;
     LocalDateTime creationDate;
+    String studentId;
 
+    public GradeDTO(Long id, int gradeValue, String id1, LocalDateTime creationDate) {
+        this.id = id;
+        this.gradeValue = gradeValue;
+        this.studentId = id1;
+        this.creationDate = creationDate;
+
+    }
 }

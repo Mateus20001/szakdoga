@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { GradingService } from '../services/grading.service';
-import { TeacherStudentGradingDTO } from '../models/TeacherStudentGradingDTO';
+import { TeacherStudentGradingDTO, GradeDTO } from '../models/TeacherStudentGradingDTO';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -38,12 +38,9 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 })
 export class GradingStudentsComponent {
   gradingData: TeacherStudentGradingDTO[] = [];
-  groupedCourses: { [key: string]: TeacherStudentGradingDTO[] } = {}; // Grouped by courseDetailName
-  grades: { [key: string]: number } = {};
-  constructor(private gradingService: GradingService) {}
-  generateKey(courseDateId: number, identifier: string): string {
-    return `${courseDateId}-${identifier}`;
-  }
+  groupedCourses: { [key: string]: TeacherStudentGradingDTO[] } = {};
+  grades: { [key: string]: number } = {}; // Key: courseDateId-studentId -> grade value
+
   gradeOptions = [
     { value: -1, display: 'nem értékelhető' },
     { value: 0, display: 'nem jelent meg' },
@@ -51,8 +48,11 @@ export class GradingStudentsComponent {
     { value: 2, display: '2' },
     { value: 3, display: '3' },
     { value: 4, display: '4' },
-    { value: 5, display: '5' }
+    { value: 5, display: '5' },
   ];
+
+  constructor(private gradingService: GradingService) {}
+
   ngOnInit(): void {
     this.gradingService.getGradingData().subscribe(data => {
       this.gradingData = data;
@@ -70,7 +70,19 @@ export class GradingStudentsComponent {
     }, {} as { [key: string]: TeacherStudentGradingDTO[] });
   }
 
-  
+  generateKey(courseDateId: number, studentId: string): string {
+    return `${courseDateId}-${studentId}`;
+  }
+
+  getGradeDisplay(value: number): string {
+    const found = this.gradeOptions.find(opt => opt.value === value);
+    return found ? found.display : 'N/A';
+  }
+
+  getGradesForStudent(course: TeacherStudentGradingDTO, studentId: string): GradeDTO[] {
+    return course.grades.filter(g => g.studentId === studentId);
+  }
+
   saveGrades(): void {
     const gradesToSave = this.gradingData.flatMap(course =>
       course.students
@@ -78,23 +90,13 @@ export class GradingStudentsComponent {
         .map(student => ({
           identifier: student.identifier,
           courseDateId: course.courseDateId,
-          gradeValue: this.grades[this.generateKey(course.courseDateId, student.identifier)]
+          gradeValue: this.grades[this.generateKey(course.courseDateId, student.identifier)],
         }))
     );
-  
-    console.log('Saving grades:', gradesToSave);
-  
-    this.gradingService.saveGrades(gradesToSave).subscribe(
-      response => {
-        console.log('Grades saved successfully:', response);
-      },
-      error => {
-        console.error('Error saving grades:', error);
-      }
-    );
-  }
-  getGradeDisplay(value: number): string {
-    const grade = this.gradeOptions.find(option => option.value === value);
-    return grade ? grade.display : 'N/A';
+
+    this.gradingService.saveGrades(gradesToSave).subscribe({
+      next: res => console.log('Saved:', res),
+      error: err => console.error('Error:', err),
+    });
   }
 }

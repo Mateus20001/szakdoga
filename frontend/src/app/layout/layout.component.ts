@@ -27,6 +27,7 @@ export class LayoutComponent {
 
   ngOnInit() {
     /*this.adjustBackgroundHeight();*/
+    this.setSeasonalBackground();
     if (localStorage.getItem("loggedInUser") !== null) {
       this.authService.getUserNameAndRoles(localStorage.getItem("loggedInUser")).subscribe(
         data => {
@@ -54,7 +55,11 @@ export class LayoutComponent {
       this.remainingTime = Math.max(0, parseInt(expirationTime) - Date.now());
     }
   }
-
+ngAfterViewInit() {
+  setTimeout(() => {
+    this.setSeasonalBackground();
+  });
+}
   formatTime(milliseconds: number): string {
     const totalSeconds = Math.floor(milliseconds / 1000);
     const minutes = Math.floor(totalSeconds / 60);
@@ -101,4 +106,28 @@ export class LayoutComponent {
     this.adjustBackgroundHeight();
     window.addEventListener('resize', () => this.adjustBackgroundHeight());
   } */
+    setSeasonalBackground(): void {
+      const month = new Date().getMonth(); // 0 = Jan, 11 = Dec
+      let imageUrl = 'url("../../assets/mainbuilding3.jpg")'; // Default background
+    
+      if (month === 11 || month === 0 || month === 1) {
+        // Winter: December, January, February
+        imageUrl = 'url("../../assets/mainbuilding-winter.jpg")';
+      } else if (month >= 2 && month <= 4) {
+        // Spring
+        imageUrl = 'url("../../assets/mainbuilding-spring.jpg")';
+      } else if (month >= 5 && month <= 7) {
+        // Summer
+        imageUrl = 'url("../../assets/mainbuilding3.jpg")';
+      } else if (month >= 8 && month <= 10) {
+        // Autumn
+        imageUrl = 'url("../../assets/mainbuilding3.jpg")';
+      }
+    
+      const bgElement = document.querySelector('.background-container') as HTMLElement;
+      console.log(bgElement)
+      if (bgElement) {
+        this.renderer.setStyle(bgElement, 'backgroundImage', imageUrl);
+      }
+    }
 }

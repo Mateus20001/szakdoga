@@ -4,7 +4,8 @@ nav {
     align-items: center;
     border-bottom: 1px solid black;
     box-shadow: 5px 5px 4px #353535;
-    z-index: 500;
+    z-index: 5000000;
+    position: relative; 
 }
 #brandlogo {
     width: 100px;
@@ -30,31 +31,50 @@ nav > div {
     cursor: pointer;
 }
 .background-container {
-    background: url('../../assets/mainbuilding3.jpg') no-repeat center center fixed;
-    background-size: cover;
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    width: 100%; 
-    z-index: -555;
-    min-height: 100vh;
-  }
+  position: fixed; /* Keep it in the viewport */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('../../assets/mainbuilding3.jpg'); // your image path
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  align-items: center;
+  display:flex;
+  z-index: -1; // drop it *way* behind
+  pointer-events: none; // allow interactions through
+}
+
+body, html {
+  margin: 0;
+  height: 100%;
+  overflow-x: hidden;
+}
+.welcome-overlay {
+  display: flex;
+  justify-content: center;    /* center horizontally */
+  align-items: flex-start;    /* align to top */
+  min-height: 100vh;
+  padding: 2rem, 2rem, 2rem, 0;
+  box-sizing: border-box;
+  z-index: 500;
   
-  
-  .welcome-overlay {
-    background-color: rgba(255, 255, 255, 0.9); 
-    padding: 20px;
-    border-radius: 0 0 10px 10px; 
-    border: 2px solid black;
-    border-top: none;
-    text-align: center;
-    width: 80%;
-    max-width: 80%; 
-    min-height: 80%;
-    position: absolute; 
-    z-index: 11110;
-  }
-  
+}
+
+.welcome-box {
+  background-color: white;
+  border-left: 2px solid black;
+  border-right: 2px solid black;
+  border-bottom: 2px solid black;
+  border-top: none; /* no top border */
+  border-radius: 0 0 8px 8px; /* rounded only on bottom corners */
+  padding: 2rem;
+  width: 80%;
+  max-width: 1200px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 500;
+}
   .welcome-overlay h1 {
     font-size: 36px;
     font-family: 'Arial', sans-serif;

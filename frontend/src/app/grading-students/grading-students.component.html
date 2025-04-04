@@ -2,18 +2,16 @@
   <h2>Hallgatók értékelése:</h2>
 
   <mat-accordion multi="true">
-    <!-- Grouped Courses by courseDetailName -->
-    <mat-expansion-panel *ngFor="let courseDetail of groupedCourses | keyvalue">
+    <mat-expansion-panel *ngFor="let courseGroup of groupedCourses | keyvalue">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          {{ courseDetail.key }}
+          {{ courseGroup.key }}
         </mat-panel-title>
       </mat-expansion-panel-header>
 
-      <!-- Table for course details -->
       <table class="course-table">
         <tbody>
-          <tr *ngFor="let course of courseDetail.value">
+          <tr *ngFor="let course of courseGroup.value">
             <td class="course-title">{{ course.courseDateName }}</td>
             <td colspan="3">
               <table class="student-table">
@@ -23,38 +21,49 @@
                     <td>{{ student.identifier }}</td>
                     <td>
                       <mat-expansion-panel>
-                        <mat-expansion-panel-header [ngClass]="{
-                          'red-row': grades[generateKey(course.courseDateId, student.identifier)] <= 1,
-                          'green-row': grades[generateKey(course.courseDateId, student.identifier)] > 1
-                        }">
+                        <mat-expansion-panel-header
+                          [ngClass]="{
+                            'red-row': grades[generateKey(course.courseDateId, student.identifier)] <= 1,
+                            'green-row': grades[generateKey(course.courseDateId, student.identifier)] > 1
+                          }"
+                        >
                           <mat-panel-title>
-                            <span>Jegy: {{ getGradeDisplay(grades[generateKey(course.courseDateId, student.identifier)]) || 'N/A' }}</span>
-                            <mat-form-field appearance="outline" class="grade-input"  (click)="$event.stopPropagation()">
-                              <input 
-                                matInput 
-                                [matAutocomplete]="auto"
-                                [(ngModel)]="grades[generateKey(course.courseDateId, student.identifier)]"
-                                placeholder="Enter grade" 
-                                type="number" 
-                                min="-1" 
-                                max="5" 
-                                class="no-spinner"
-                              />
-                              <mat-autocomplete #auto="matAutocomplete">
-                                <mat-option *ngFor="let option of gradeOptions" [value]="option.value">
-                                  {{ option.display }}
-                                </mat-option>
-                              </mat-autocomplete>
-                            </mat-form-field>
+                            Jegy:
+                            {{
+                              getGradeDisplay(grades[generateKey(course.courseDateId, student.identifier)])
+                                || 'N/A'
+                            }}
                           </mat-panel-title>
+
+                          <mat-form-field appearance="outline" class="grade-input" (click)="$event.stopPropagation()">
+                            <input
+                              matInput
+                              [matAutocomplete]="auto"
+                              [(ngModel)]="grades[generateKey(course.courseDateId, student.identifier)]"
+                              placeholder="Enter grade"
+                              type="number"
+                              min="-1"
+                              max="5"
+                              class="no-spinner"
+                            />
+                            <mat-autocomplete #auto="matAutocomplete">
+                              <mat-option
+                                *ngFor="let option of gradeOptions"
+                                [value]="option.value"
+                              >
+                                {{ option.display }}
+                              </mat-option>
+                            </mat-autocomplete>
+                          </mat-form-field>
                         </mat-expansion-panel-header>
 
-                        
-
                         <mat-list dense>
-                          <mat-list-item *ngFor="let grade of course.grades">
+                          <mat-list-item
+                            *ngFor="let grade of getGradesForStudent(course, student.identifier)"
+                          >
                             <mat-icon color="primary">grade</mat-icon>
-                            Jegy: {{ getGradeDisplay(grade.gradeValue) }}
+                            Jegy: {{ getGradeDisplay(grade.gradeValue) }} -
+                            <span class="date">{{ grade.creationDate | date: 'short' }}</span>
                           </mat-list-item>
                         </mat-list>
                       </mat-expansion-panel>

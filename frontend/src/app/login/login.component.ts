@@ -41,6 +41,7 @@ export class LoginComponent {
     this.initializeForms();
     this.resetBackground();
     this.paper2Color= this.getRandomColor();
+    
   }
 
   initializeForms(): void {

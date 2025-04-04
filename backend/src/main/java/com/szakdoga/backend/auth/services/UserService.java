@@ -1,9 +1,6 @@
 package com.szakdoga.backend.auth.services;
 import com.szakdoga.backend.auth.PasswordGenerator;
-import com.szakdoga.backend.auth.dtos.ContactDTO;
-import com.szakdoga.backend.auth.dtos.LoginUserDto;
-import com.szakdoga.backend.auth.dtos.RegisterUserDto;
-import com.szakdoga.backend.auth.dtos.UserListingDTO;
+import com.szakdoga.backend.auth.dtos.*;
 import com.szakdoga.backend.auth.model.*;
 import com.szakdoga.backend.auth.repositories.*;
 import com.szakdoga.backend.exceptions.InvalidCredentialsException;
@@ -202,5 +199,22 @@ public class UserService {
                 .collect(Collectors.toList());
 
         return contactDTOs;
+    }
+    public UserShowDTO findUserShowById(String id) {
+        log.info("Fetching user with ID: {}", id);
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with ID " + id + " not found."));
+        List<String> publicEmails = user.getEmails().stream()
+                .filter(EmailEntity::isPublic)  // Assuming isPublic is a method in EmailEntity that returns a boolean
+                .map(EmailEntity::getEmail)    // Assuming getEmail() retrieves the email address as a string
+                .collect(Collectors.toList());
+
+        // Get phone numbers and map them to a list of strings
+        List<String> phoneNumbers = user.getPhone_numbers().stream()
+                .map(PhoneEntity::getPhone_number)  // Assuming getPhoneNumber() retrieves the phone number as a string
+                .collect(Collectors.toList());
+
+        // Create the DTO with the filtered list of public emails and phone numbers
+
+        return new UserShowDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getName(), publicEmails, phoneNumbers);
     }
 }

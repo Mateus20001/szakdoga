@@ -1,16 +1,16 @@
 <div class="profile-container">
     <div class="profile-header">
-      <h2>Profile Details</h2>
+      <h2>Profilod részletei</h2>
     </div>
   
     <div class="profile-details">
       <div class="profile-info">
-        <label for="name">Full Name:</label>
+        <label for="name">Teljes Név:</label>
         <p id="name">{{ userDetails?.firstName }} {{ userDetails?.lastName }}</p>
       </div>
 
       <div class="profile-info">
-        <label for="username">Username:</label>
+        <label for="username">Felhasználónév:</label>
         <p id="username">{{ userDetails?.name }}</p>
         <button mat-icon-button color="primary" (click)="navigateToChangeUsername()">
           <img src="../../assets/icons/edit.png" alt="edit">
@@ -18,37 +18,37 @@
       </div>
 
       <div class="profile-info">
-        <label for="roles">Roles:</label>
+        <label for="roles">Jogosultságok:</label>
         <p id="roles">{{ userDetails?.roles?.join(', ') }}</p>
       </div>
   
       <div class="profile-info">
-        <label for="emails">Emails:</label>
+        <label for="emails">Emailek:</label>
         <p id="emails">{{ userDetails?.emails?.join(', ') }}</p>
       </div>
 
       <div class="profile-info">
-        <label for="phone_numbers">Phone numbers:</label>
+        <label for="phone_numbers">Telefonszámok:</label>
         <p id="phone_numbers">{{ userDetails?.phone_numbers?.join(', ') }}</p>
       </div>
   
       <div class="profile-info">
-        <label for="majors">Majors:</label>
+        <label for="majors">Szakok:</label>
         <p id="majors">{{ userDetails?.majors?.join(', ') }}</p>
       </div>
   
       <div class="profile-info">
-        <label for="faculties">Faculties:</label>
+        <label for="faculties">Karok:</label>
         <p id="faculties">{{ userDetails?.faculties?.join(', ') }}</p>
       </div>
   
       <div class="profile-info">
-        <label for="createdAt">Created At:</label>
+        <label for="createdAt">Létrehozva:</label>
         <p id="createdAt">{{ formatDate(userDetails?.createdAt) }}</p>
       </div>
   
       <div class="profile-info">
-        <label for="updatedAt">Last Updated:</label>
+        <label for="updatedAt">Utoljára módosítva:</label>
         <p id="updatedAt">{{ formatDate(userDetails?.updatedAt) }}</p>
       </div>
     </div>
@@ -56,10 +56,10 @@
   </div>
   
   <mat-card class="change-password-card">
-    <mat-card-title>Change Password</mat-card-title>
+    <mat-card-title>Jelszó megváltoztatása</mat-card-title>
     <mat-card-content>
-      <p>If you'd like to update your password, click the button below:</p>
-      <button mat-raised-button color="accent" (click)="navigateToChangePassword()">Change Password</button>
+      <p>Ha meg szeretnéd változtatni a jelszavad, az alábbi gombra kattintva teheted meg:</p>
+      <button mat-raised-button color="accent" (click)="navigateToChangePassword()">Jelszó megváltoztatása</button>
     </mat-card-content>
   </mat-card>
   

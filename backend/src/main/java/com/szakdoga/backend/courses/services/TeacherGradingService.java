@@ -3,6 +3,7 @@ package com.szakdoga.backend.courses.services;
 import com.szakdoga.backend.auth.dtos.UserListingDTO;
 import com.szakdoga.backend.auth.model.User;
 import com.szakdoga.backend.auth.repositories.UserRepository;
+import com.szakdoga.backend.auth.services.UserMessageService;
 import com.szakdoga.backend.courses.controllers.CourseDetailController;
 import com.szakdoga.backend.courses.dtos.GradeDTO;
 import com.szakdoga.backend.courses.dtos.GradingDTO;
@@ -32,7 +33,10 @@ public class TeacherGradingService {
     @Autowired
     private CourseApplicationRepository courseApplicationRepository;
     @Autowired
+    private UserMessageService userMessageService;
+    @Autowired
     private UserRepository userRepository;
+    @Transactional
     public List<TeacherStudentGradingDTO> getTeacherStudentGrades(String teacherId) {
         return courseDateRepository.findAll().stream()
                 .filter(courseDate -> courseDate.getTeachers().stream().anyMatch(teacher -> teacher.getId().equals(teacherId)))
@@ -46,21 +50,28 @@ public class TeacherGradingService {
                                         .collect(Collectors.toList()),
                                 courseDate.getApplications().stream()
                                         .flatMap(app -> app.getGrades().stream())
-                                        .map(grade -> new GradeDTO(grade.getId(), grade.getGradeValue(), grade.getGradedBy().getId(), grade.getCreationDate()))
+                                        .map(grade -> new GradeDTO(grade.getId(), grade.getGradeValue(), grade.getGradedBy().getId(), grade.getCreationDate(), grade.getCourseApplicationEntity().getUser().getId()))
                                         .collect(Collectors.toList())
                         )
                 ).collect(Collectors.toList());
     }
     @Transactional
     public void saveGrades(List<GradingDTO> grades, String userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+
         List<Grade> gradeEntities = grades.stream().map(gradeDTO -> {
-            CourseApplicationEntity courseApplicationEntity = courseApplicationRepository.findByUserIdAndCourseDateEntityId(gradeDTO.getIdentifier(), gradeDTO.getCourseDateId());
-            log.info("Saved gradings for courseApl {}", courseApplicationEntity);
-            User user = userRepository.findById(userId).orElseThrow();
-            log.info("Saved gradings for user {}", user);
-            log.info("Saved gradings for coursevalue {}", gradeDTO.getGradeValue());
-            return new Grade(courseApplicationEntity, gradeDTO.getGradeValue(), user);
+            CourseApplicationEntity courseApplicationEntity =
+                    courseApplicationRepository.findByUserIdAndCourseDateEntityId(
+                            gradeDTO.getIdentifier(), gradeDTO.getCourseDateId());
+
+            Grade grade = new Grade(courseApplicationEntity, gradeDTO.getGradeValue(), user);
+
+            // 🔔 Send notification for this grade
+            userMessageService.createGradeNotification(grade);
+
+            return grade;
         }).collect(Collectors.toList());
+
         gradeRepository.saveAll(gradeEntities);
     }
 }

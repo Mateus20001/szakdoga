@@ -1,28 +1,28 @@
 <div class="container">
-    <h2>Add Course</h2>
+    <h2>Kurzus hozzáadása</h2>
     <form [formGroup]="courseForm" (ngSubmit)="submit()">
       <div>
-        <label>Name:</label>
+        <label>Neve:</label>
         <input formControlName="name" type="text" />
       </div>
   
       <div>
-        <label>Description:</label>
+        <label>Leírás:</label>
         <textarea formControlName="description"></textarea>
       </div>
   
       <div>
-        <label>Credits:</label>
+        <label>Kreditek:</label>
         <input formControlName="credits" type="number" />
       </div>
 
       <div>
-        <label>Recommended Half Year:</label>
+        <label>Ajánlott félév:</label>
         <input formControlName="recommendedHalfYear" type="number" />
       </div>
   
       <div>
-        <label>Requirement Type:</label>
+        <label>Fajta:</label>
         <select formControlName="requirementType">
           <option value="COLLOQUIUM">Colloquium</option>
           <option value="PRACTICE">Practice</option>
@@ -31,7 +31,7 @@
       </div>
   
       <div>
-        <label>Required Courses:</label>
+        <label>Szükséges előkövetelmények:</label>
         <select formControlName="requiredCourses" multiple>
           <option *ngFor="let course of courses" [value]="course.id">
             {{ course.name }}
@@ -39,12 +39,12 @@
         </select>
       </div>
       <div formArrayName="teachers">
-        <h3>Teachers</h3>
+        <h3>Tanárok</h3>
         <div *ngFor="let teacher of teacherArray.controls; let i = index" [formGroupName]="i">
           <mat-form-field appearance="outline">
-            <mat-label>Teacher</mat-label>
+            <mat-label>Tanár</mat-label>
             <select matNativeControl formControlName="teacherId" required>
-              <option value="">Select Teacher</option>
+              <option value="">Tanár választása</option>
               <option *ngFor="let teacher of teachers" [value]="teacher.identifier">{{ teacher.firstName }} {{ teacher.lastName }}({{ teacher.name }})</option>
             </select>
           </mat-form-field>
@@ -58,15 +58,15 @@
       
 
       <div>
-        <h3>Enrollment Types</h3>
-        <button type="button" (click)="addEnrollmentType()">Add Enrollment Type</button>
+        <h3>Szükségesség beállítása</h3>
+        <button type="button" (click)="addEnrollmentType()">Új szükségesség beállítása</button>
         <div formArrayName="enrollmentTypes">
           <div
             *ngFor="let enrollmentType of enrollmentTypes.controls; let i = index"
             [formGroupName]="i"
           >
             <div>
-              <label>Major:</label>
+              <label>Szak:</label>
               <select formControlName="majorId">
                 <option *ngFor="let major of majors" [value]="major.id">
                   {{ major.name }}
@@ -74,7 +74,7 @@
               </select>
             </div>
             <div>
-              <label>Enrollment Type:</label>
+              <label>Szükségesség típusa:</label>
               <select formControlName="enrollmentType">
                 <option value="MANDATORY">Mandatory</option>
                 <option value="MANDATORY_OPTIONAL">Mandatory Optional</option>
@@ -86,7 +86,7 @@
         </div>
       </div>
   
-      <button type="submit" [disabled]="courseForm.invalid">Add Course</button>
+      <button type="submit" [disabled]="courseForm.invalid">Kurzus hozzáadása</button>
     </form>
   </div>
   

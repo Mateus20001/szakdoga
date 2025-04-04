@@ -1,5 +1,53 @@
-div {
-    border-top: 1px solid #ddd;
-    margin-top: 5px;
+/* Styling for the teacher's ID */
+.teacher-id {
+  cursor: pointer;
+  color: #007bff;
+  font-weight: bold;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+/* Tooltip styling for the teacher details */
+.teacher-tooltip {
+  position: absolute; /* Position it above other elements */
+  top: -10px; /* Adjust this value to move it up or down */
+  left: 0;
+  z-index: 9999; /* Ensure it's above everything else */
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 300px;
+  width: auto;
+  display: none; /* Initially hidden */
+  opacity: 0; /* Start hidden with opacity */
+  transition: opacity 0.3s ease-in-out; /* Smooth transition for fading in/out */
+}
+
+/* Show tooltip when hovering over teacher ID */
+.teacher-id:hover + .teacher-tooltip {
+  display: block; /* Make tooltip visible when hovering over the teacher ID */
+  opacity: 1; /* Fade in */
+}
+
+/* Tooltip content styling */
+.teacher-tooltip-content {
+  font-size: 14px;
+}
+
+.teacher-tooltip-content h3 {
+  font-size: 16px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.teacher-tooltip-content p {
+  margin: 5px 0;
+}
+
+/* Additional responsive styling for mobile */
+@media (max-width: 600px) {
+  .teacher-tooltip {
+    width: 200px; /* Adjust width on smaller screens */
   }
-  
+}

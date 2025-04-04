@@ -9,6 +9,8 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
 import { MatDialog } from '@angular/material/dialog';
 import { LocationEnum } from '../../models/LocationEnum';
 import { DayOfWeek } from '../../models/DayOfWeek';
+import { AuthService } from '../../auth/auth.service';
+import { UserShowDTO } from '../../models/user';
 
 @Component({
   selector: 'app-course-details',
@@ -19,9 +21,9 @@ import { DayOfWeek } from '../../models/DayOfWeek';
 })
 export class CourseDetailsComponent {
   @Input() courseId!: number;
-  
+  teacherDetails: UserShowDTO | null = null;
   constructor(private courseDateService: CourseDateService, private snackBar: MatSnackBar, private courseApplicationService: CourseApplicationService,
-    private dialog: MatDialog
+    private dialog: MatDialog, private authService: AuthService
   ) {}
   courseDates: {
     id: number;
@@ -67,13 +69,16 @@ export class CourseDetailsComponent {
       }
     );
   }
-  private teacherDetails: { [key: string]: string } = {
-    "2CDRIC": "John Doe - Math Department, 5 years of experience.",
-    "2": "Jane Smith - Science Department, 10 years of experience.",
-    // Add more teacher details as needed
-  };
-  getTeacherDetails(teacherId: string): string {
-    return this.teacherDetails[teacherId] || 'No details available for this teacher.';
+  getTeacherDetails(teacherId: string): void {
+    this.authService.getUserPublicDetails(teacherId).subscribe(
+      (teacher: UserShowDTO) => {
+        this.teacherDetails = teacher;
+        console.log(teacher)
+      },
+      (error) => {
+        console.error('Error fetching user:', error);
+      }
+    );
   }
   loadUserApplications(): void {
     this.courseApplicationService.getUserApplications(this.courseId).subscribe(

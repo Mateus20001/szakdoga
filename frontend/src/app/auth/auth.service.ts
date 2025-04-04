@@ -3,16 +3,18 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { User } from '../models/user';
+import { User, UserShowDTO } from '../models/user';
 import { SignupDTO } from '../models/signupDTO';
 import { UserSessionEntity } from '../models/userSessionEntity';
 import { UserDetailsDTO } from '../models/userDetailsDTO';
+import { MessageDto } from '../models/email';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private baseUrl = 'http://localhost:8080/api/users';
+  private baseUrl = `${environment.apiUrl}users`;
 
   constructor(private router: Router, private http: HttpClient) {}
 
@@ -182,5 +184,19 @@ export class AuthService {
       Authorization: `Bearer ${authToken}`,
     });
     return this.http.get<any[]>(`${this.baseUrl}/me/emails`, { headers });
+  }
+  getUserMessages(): Observable<MessageDto[]> {
+    const token = localStorage.getItem('loggedInUser');  // Assuming the token is saved in localStorage
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`  // Include token in Authorization header
+    });
+    return this.http.get<MessageDto[]>(`${environment.apiUrl}user-messages/me/notifications`, { headers });
+  }
+  getUserPublicDetails(teacherId: string): Observable<UserShowDTO> {
+    const token = localStorage.getItem('loggedInUser');  // Assuming the token is saved in localStorage
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`  // Include token in Authorization header
+    });
+    return this.http.get<UserShowDTO>(`${this.baseUrl}/${teacherId}`, { headers });
   }
 }

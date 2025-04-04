@@ -1,34 +1,48 @@
+<!-- 🌌 Background stays outside the scrollable content -->
+<div class="background-container" *ngIf="!isLoginPage()"></div>
+
+<!-- 🌐 App Shell -->
 <nav *ngIf="router.url !== '/login'">
-    <a (click)="navigateToMain()"><img id="brandlogo" src="../../assets/neptun_logo-removebg-preview.png"></a>
-    <span id="dropdownnav" *ngFor="let menuCategory of menuDropdownItems">
-        <ng-container *ngIf="shouldDisplayMenuCategory(menuCategory)">
-          <app-dropdown-menu
-            [menuName]="menuCategory.menuName"
-            [menuDropdownList]="menuCategory.menuDropdownList">
-          </app-dropdown-menu>
-        </ng-container>
-    </span>
-    <div style="display: flex; align-items: center;">
-        <button id="profileButton" mat-icon-button color="welcome" (click)="navigateToProfile()">
-          <img src="../../assets/icons/pngwing.com.png" alt="Profile">
-        </button>
-      
-        <p id="profileName" (click)="navigateToProfile()">{{ profileName}}</p>
-        <div class="countdown-timer" *ngIf="remainingTime > 0">
-          {{" "}}{{ formatTime(remainingTime) }}
-        </div>
-        <button id="logoutButton" mat-icon-button color="warn" (click)="logout()"><img src="../../assets/icons/logout-512.png"></button>
-    </div> 
-</nav>
-<div class="background-container" *ngIf="!isLoginPage()">
-    <div class="welcome-overlay">
-        <router-outlet></router-outlet>
+  <a (click)="navigateToMain()">
+    <img id="brandlogo" src="../../assets/neptun_logo-removebg-preview.png" />
+  </a>
+  <span id="dropdownnav" *ngFor="let menuCategory of menuDropdownItems">
+    <ng-container *ngIf="shouldDisplayMenuCategory(menuCategory)">
+      <app-dropdown-menu
+        [menuName]="menuCategory.menuName"
+        [menuDropdownList]="menuCategory.menuDropdownList">
+      </app-dropdown-menu>
+    </ng-container>
+  </span>
+
+  <div style="display: flex; align-items: center;">
+    <button id="profileButton" mat-icon-button (click)="navigateToProfile()">
+      <img src="../../assets/icons/pngwing.com.png" alt="Profile">
+    </button>
+
+    <p id="profileName" (click)="navigateToProfile()">{{ profileName }}</p>
+    <div class="countdown-timer" *ngIf="remainingTime > 0">
+      {{ " " }}{{ formatTime(remainingTime) }}
     </div>
+
+    <button id="logoutButton" mat-icon-button color="warn" (click)="logout()">
+      <img src="../../assets/icons/logout-512.png">
+    </button>
+  </div>
+</nav>
+
+<!-- 📦 Content Wrapper -->
+<div class="welcome-overlay">
+  <div class="welcome-box">
+    <router-outlet></router-outlet>
+  </div>
 </div>
+
+<!-- ⬆️ Back to top -->
 <button 
   *ngIf="showBackToTop" 
   (click)="scrollToTop()" 
   class="back-to-top" 
   [ngStyle]="{ opacity: showBackToTop }">
-  &#8593; <!-- Unicode character for upwards arrow -->
+  &#8593;
 </button>

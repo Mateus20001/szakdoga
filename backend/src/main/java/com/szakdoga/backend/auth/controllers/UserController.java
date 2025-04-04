@@ -72,13 +72,16 @@ public class UserController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.findAllUsers();
         return ResponseEntity.ok(users);  // Return the list of users with HTTP status 200 OK
     }
 
     // Get a single user by ID
-    @GetMapping("/{id}")
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/admin/{id}")
     public ResponseEntity<User> getUserById(@PathVariable String id) {
         User user = userService.findUserById(id);
         if (user == null) {
@@ -90,6 +93,7 @@ public class UserController {
 
     // Update an existing user
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> updateUser(@RequestBody User user) {
         User updatedUser = userService.updateUser(user);
         if (updatedUser == null) {
@@ -100,6 +104,7 @@ public class UserController {
 
     // Delete a user by ID
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteUser(@PathVariable String id) {
         boolean deleted = userService.deleteUserById(id);
         if (!deleted) {
@@ -361,5 +366,14 @@ public class UserController {
         }
         List<ContactDTO> emails = userService.getEmails(userId);
         return ResponseEntity.ok(emails);
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<UserShowDTO> getUserShowDTOById(@PathVariable String id) {
+        UserShowDTO user = userService.findUserShowById(id);
+        log.info(user.getName().toString());
+        if (user == null) {
+            return ResponseEntity.notFound().build();  // Return 404 if user not found
+        }
+        return ResponseEntity.ok(user);  // Return the user with HTTP status 200 OK
     }
 }

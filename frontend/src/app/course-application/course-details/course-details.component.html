@@ -4,19 +4,19 @@
     <p class="text-gray-600">Ehhez a kurzushoz nincsenek meghirdetve időpontok</p>
   </div>
   <ng-template #courseTable>
-    <h3 class="mt-4 text-lg font-semibold">Course Dates</h3>
+    <h3 class="mt-4 text-lg font-semibold">Kurzus időpontok:</h3>
     <table class="min-w-full mt-2 border-collapse border border-gray-300">
       <thead>
         <tr>
-          <th class="border border-gray-300 p-2">Name</th>
-          <th class="border border-gray-300 p-2">Day of Week</th>
-          <th class="border border-gray-300 p-2">Start Time</th>
-          <th class="border border-gray-300 p-2">End Time</th>
-          <th class="border border-gray-300 p-2">Teachers</th>
+          <th class="border border-gray-300 p-2">Név</th>
+          <th class="border border-gray-300 p-2">Nap</th>
+          <th class="border border-gray-300 p-2">Kezdés</th>
+          <th class="border border-gray-300 p-2">Vége</th>
+          <th class="border border-gray-300 p-2">Tanárok</th>
           <th class="border border-gray-300 p-2">Max Limit</th>
-          <th class="border border-gray-300 p-2">Currently Applied</th>
-          <th class="border border-gray-300 p-2">Location</th>
-          <th class="border border-gray-300 p-2">Action</th> <!-- Add Action column -->
+          <th class="border border-gray-300 p-2">Jelenlegi hallgatók</th>
+          <th class="border border-gray-300 p-2">Helyszín</th>
+          <th class="border border-gray-300 p-2">Akciók</th> <!-- Add Action column -->
         </tr>
       </thead>
       <tbody>
@@ -27,10 +27,24 @@
           <td class="border border-gray-300 p-2">{{ courseDate.endTime }}</td>
           <td class="border border-gray-300 p-2">
             <ng-container *ngFor="let teacherId of courseDate.teacherIds">
-              <span matTooltip="{{ getTeacherDetails(teacherId) }}" class="cursor-pointer">
+              <!-- Tooltip that shows teacher details on hover -->
+              <div *ngIf="teacherDetails" class="teacher-tooltip">
+                <div class="teacher-tooltip-content">
+                  <h3>{{ teacherDetails.firstName }} {{ teacherDetails.lastName }}</h3>
+                  <p><strong>Name:</strong> {{ teacherDetails.name }}</p>
+                  <p><strong>Emails:</strong> {{ teacherDetails.emails.join(', ') }}</p>
+                  <p><strong>Phone Numbers:</strong> {{ teacherDetails.phoneNumbers.join(', ') }}</p>
+                </div>
+              </div>
+            
+              <!-- Teacher ID with hover effect to show teacher details -->
+              <div 
+                class="teacher-id" 
+                (mouseenter)="getTeacherDetails(teacherId)" 
+                (mouseleave)="teacherDetails = null">
+                <span *ngIf="teacherId !== courseDate.teacherIds[courseDate.teacherIds.length - 1]">, </span>
                 {{ teacherId }}
-              </span>
-              <span *ngIf="teacherId !== courseDate.teacherIds[courseDate.teacherIds.length - 1]">, </span> <!-- Add comma between teacher names -->
+              </div>
             </ng-container>
           </td>
           <td class="border border-gray-300 p-2">{{ courseDate.maxLimit }}</td>

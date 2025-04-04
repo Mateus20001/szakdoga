@@ -1,6 +1,5 @@
 /* Make the background container full-screen and fixed */
 .background-container {
-  background: url('../../assets/mainbuilding3.jpg') no-repeat center center fixed;
   background-size: cover;
   min-height: 100vh; /* Make sure it covers the entire viewport */
   display: flex;
