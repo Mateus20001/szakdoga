@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CourseDateService } from '../../services/course-date.service';
-import { NgFor, NgIf } from '@angular/common';
+import { NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatButton } from '@angular/material/button';
@@ -11,19 +11,25 @@ import { LocationEnum } from '../../models/LocationEnum';
 import { DayOfWeek } from '../../models/DayOfWeek';
 import { AuthService } from '../../auth/auth.service';
 import { UserShowDTO } from '../../models/user';
+import { MessageWritingComponent } from '../../message-writing/message-writing.component';
+import { MessageService } from '../../services/message.service';
 
 @Component({
   selector: 'app-course-details',
   standalone: true,
-  imports: [NgFor, NgIf, MatTooltipModule, MatButton],
+  imports: [NgFor, NgIf, MatTooltipModule, MatButton, NgStyle],
   templateUrl: './course-details.component.html',
   styleUrl: './course-details.component.scss'
 })
 export class CourseDetailsComponent {
   @Input() courseId!: number;
   teacherDetails: UserShowDTO | null = null;
+  selectedTeacherId: string | null = null;
+  hoveringTooltip = false;
+  tooltipPosition = { top: 0, left: 0 };
+  allUsers: any[] = [];
   constructor(private courseDateService: CourseDateService, private snackBar: MatSnackBar, private courseApplicationService: CourseApplicationService,
-    private dialog: MatDialog, private authService: AuthService
+    private dialog: MatDialog, private authService: AuthService, private messageService: MessageService
   ) {}
   courseDates: {
     id: number;
@@ -69,10 +75,17 @@ export class CourseDetailsComponent {
       }
     );
   }
-  getTeacherDetails(teacherId: string): void {
+  getTeacherDetails(teacherId: string, event: MouseEvent): void {
     this.authService.getUserPublicDetails(teacherId).subscribe(
       (teacher: UserShowDTO) => {
         this.teacherDetails = teacher;
+        this.selectedTeacherId = teacher.identifier;
+        this.hoveringTooltip = true;
+        const rect = (event?.target as HTMLElement).getBoundingClientRect();
+        this.tooltipPosition = {
+          top: rect.top - 10,  // or adjust to your liking
+          left: rect.left,
+        };
         console.log(teacher)
       },
       (error) => {
@@ -165,5 +178,40 @@ export class CourseDetailsComponent {
   }
   getDayString(dayKey: string): string {
     return DayOfWeek[dayKey as keyof typeof DayOfWeek] || 'Unknown Day';
+  }
+  onMouseLeave() {
+    setTimeout(() => {
+      if (!this.hoveringTooltip) {
+        this.teacherDetails = null;
+        this.selectedTeacherId = null;
+      }
+      this.hoveringTooltip = false;
+    }, 200);
+  }
+  fetchUsers() {
+    this.authService.getUserListing().subscribe(
+      users => {
+        this.allUsers = users;
+      },
+      error => {
+        console.error('Error fetching user listing', error);
+      }
+    );
+  }
+  openMessageWritingDialog() {
+    this.fetchUsers();
+    const dialogRef = this.dialog.open(MessageWritingComponent, {
+      width: '1000px',  // You can customize the width and other properties
+      data: {
+        teacherId: this.selectedTeacherId,
+        users: this.allUsers,
+        messageService: this.messageService
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      // You can access the result here if needed
+    });
   }
 }

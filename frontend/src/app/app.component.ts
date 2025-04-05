@@ -12,13 +12,14 @@ import { CourseTeacherService } from './services/course-teacher.service';
 import { CourseDateService } from './services/course-date.service';
 import { CourseApplicationService } from './services/course-application.service';
 import { GradingService } from './services/grading.service';
+import { MessageService } from './services/message.service';
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, LayoutComponent, HttpClientModule, CommonModule], 
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  providers: [AuthService, MajorService, NewsService, FacultyService, CourseService, CourseTeacherService, CourseDateService, CourseApplicationService, GradingService]
+  providers: [AuthService, MessageService, MajorService, NewsService, FacultyService, CourseService, CourseTeacherService, CourseDateService, CourseApplicationService, GradingService]
 })
 export class AppComponent {
   title = 'frontend';

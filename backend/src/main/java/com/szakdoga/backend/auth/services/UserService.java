@@ -217,4 +217,19 @@ public class UserService {
 
         return new UserShowDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getName(), publicEmails, phoneNumbers);
     }
+    public List<UserAutocompleteDTO> findAllUsersAutocomplete() {
+        List<User> users = userRepository.findAll();
+
+        // Map the list of users to a list of UserAutocompleteDTO objects
+        List<UserAutocompleteDTO> userDtos = users.stream()
+                .map(user -> new UserAutocompleteDTO(
+                        user.getId(),
+                        user.getFirstName(),
+                        user.getLastName(),
+                        user.getName()
+                ))
+                .collect(Collectors.toList());
+
+        return userDtos;
+    }
 }

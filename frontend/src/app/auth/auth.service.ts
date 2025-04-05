@@ -9,6 +9,7 @@ import { UserSessionEntity } from '../models/userSessionEntity';
 import { UserDetailsDTO } from '../models/userDetailsDTO';
 import { MessageDto } from '../models/email';
 import { environment } from '../../environments/environment';
+import { UserListingDTO } from '../models/TeacherStudentGradingDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -198,5 +199,12 @@ export class AuthService {
       'Authorization': `Bearer ${token}`  // Include token in Authorization header
     });
     return this.http.get<UserShowDTO>(`${this.baseUrl}/${teacherId}`, { headers });
+  }
+  getUserListing(): Observable<UserListingDTO[]> {
+    const token = localStorage.getItem('loggedInUser');  // Assuming the token is saved in localStorage
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`  // Include token in Authorization header
+    });
+    return this.http.get<UserListingDTO[]>(`${this.baseUrl}/all-users-listing`, { headers });
   }
 }

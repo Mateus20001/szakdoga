@@ -1,53 +1,71 @@
-/* Styling for the teacher's ID */
 .teacher-id {
-  cursor: pointer;
-  color: #007bff;
-  font-weight: bold;
+  position: relative; /* anchor for the tooltip */
   display: inline-block;
   margin-right: 5px;
+  cursor: pointer;
+  color: #007bff;
+  z-index: 10;
 }
 
-/* Tooltip styling for the teacher details */
+.teacher-id-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
 .teacher-tooltip {
-  position: absolute; /* Position it above other elements */
-  top: -10px; /* Adjust this value to move it up or down */
+  position: absolute;
+  bottom: 100%;
   left: 0;
-  z-index: 9999; /* Ensure it's above everything else */
   background-color: white;
-  border: 1px solid #ccc;
+  color: black;
+  border: 1px solid black;
+  border-radius: 8px;
   padding: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  max-width: 300px;
-  width: auto;
-  display: none; /* Initially hidden */
-  opacity: 0; /* Start hidden with opacity */
-  transition: opacity 0.3s ease-in-out; /* Smooth transition for fading in/out */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  min-width: 200px;
+  white-space: normal;
+
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
 }
 
-/* Show tooltip when hovering over teacher ID */
-.teacher-id:hover + .teacher-tooltip {
-  display: block; /* Make tooltip visible when hovering over the teacher ID */
-  opacity: 1; /* Fade in */
+.teacher-tooltip.visible {
+  opacity: 1;
+  visibility: visible;
 }
 
-/* Tooltip content styling */
-.teacher-tooltip-content {
-  font-size: 14px;
+.teacher-id-wrapper {
+  position: relative;
+  display: inline-block;
 }
+
 
 .teacher-tooltip-content h3 {
+  margin: 0 0 8px 0;
   font-size: 16px;
-  margin-bottom: 10px;
   font-weight: bold;
 }
 
 .teacher-tooltip-content p {
-  margin: 5px 0;
+  background-color: #fff;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
-
-/* Additional responsive styling for mobile */
-@media (max-width: 600px) {
-  .teacher-tooltip {
-    width: 200px; /* Adjust width on smaller screens */
-  }
+.teacher-tooltip-floating {
+  position: fixed;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  z-index: 9999;
+  max-width: 300px;
+  color: black;
+}
+.teacher-tooltip-content button {
+  margin-top: 12px;
+  background-color: greenyellow;
 }

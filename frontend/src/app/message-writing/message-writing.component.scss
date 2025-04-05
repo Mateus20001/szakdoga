@@ -1,0 +1,12 @@
+.message-writing {
+    display: flex;
+    flex-direction: column;
+    background-color: wheat;
+    padding: 20px;
+  }
+  
+  textarea {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 12px;
+  }

@@ -1,0 +1,30 @@
+<!-- message-writing.component.html -->
+<div class="message-writing">
+    <h2>Write a Message</h2>
+  
+    <!-- Receiver ID input -->
+    <mat-form-field appearance="fill">
+        <mat-label>Receiver's ID</mat-label>
+        <input 
+          matInput 
+          [(ngModel)]="receiverId" 
+          placeholder="Start typing Receiver's ID"
+          [matAutocomplete]="auto"
+        />
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onReceiverIdSelected($event)">
+          <mat-option *ngFor="let user of allUsers" [value]="user.id">
+            {{ user.id }} ({{ user.firstName }} {{ user.lastName }}) {{user.name}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+  
+    <!-- Message input -->
+    <mat-form-field appearance="fill">
+      <mat-label>Type your message here</mat-label>
+      <textarea matInput [(ngModel)]="messageText" placeholder="Message" rows="5"></textarea>
+    </mat-form-field>
+  
+    <!-- Send button -->
+    <button mat-raised-button color="primary" (click)="sendMessage()">Send</button>
+  </div>
+  

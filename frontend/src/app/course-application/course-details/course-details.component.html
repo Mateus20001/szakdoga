@@ -27,25 +27,34 @@
           <td class="border border-gray-300 p-2">{{ courseDate.endTime }}</td>
           <td class="border border-gray-300 p-2">
             <ng-container *ngFor="let teacherId of courseDate.teacherIds">
-              <!-- Tooltip that shows teacher details on hover -->
-              <div *ngIf="teacherDetails" class="teacher-tooltip">
-                <div class="teacher-tooltip-content">
-                  <h3>{{ teacherDetails.firstName }} {{ teacherDetails.lastName }}</h3>
-                  <p><strong>Name:</strong> {{ teacherDetails.name }}</p>
-                  <p><strong>Emails:</strong> {{ teacherDetails.emails.join(', ') }}</p>
-                  <p><strong>Phone Numbers:</strong> {{ teacherDetails.phoneNumbers.join(', ') }}</p>
-                </div>
-              </div>
-            
-              <!-- Teacher ID with hover effect to show teacher details -->
-              <div 
-                class="teacher-id" 
-                (mouseenter)="getTeacherDetails(teacherId)" 
-                (mouseleave)="teacherDetails = null">
+              <span 
+                class="teacher-id-wrapper" 
+                (click)="getTeacherDetails(teacherId, $event)"
+                (mouseenter)="hoveringTooltip = true"
+              >
+                <span class="teacher-id">
+                  {{ teacherId }}
+                </span>
                 <span *ngIf="teacherId !== courseDate.teacherIds[courseDate.teacherIds.length - 1]">, </span>
-                {{ teacherId }}
-              </div>
+              </span>
             </ng-container>
+            
+            <!-- Outside the table entirely, at the end of the component template -->
+            <div 
+              *ngIf="teacherDetails && hoveringTooltip" 
+              class="teacher-tooltip-floating"
+              [ngStyle]="{ top: tooltipPosition.top + 'px', left: tooltipPosition.left + 'px' }"
+              (mouseenter)="hoveringTooltip = true"
+              (mouseleave)="onMouseLeave()"
+            >
+              <div class="teacher-tooltip-content">
+                <h3>{{ teacherDetails.firstName }} {{ teacherDetails.lastName }}</h3>
+                <p><strong>Name:</strong> {{ teacherDetails.name }}</p>
+                <p><strong>Emails:</strong> {{ teacherDetails.emails.join(', ') }}</p>
+                <p><strong>Phone Numbers:</strong> {{ teacherDetails.phoneNumbers.join(', ') }}</p>
+                <button mat-button (click)="openMessageWritingDialog()">Write a Message</button>
+              </div>
+            </div>
           </td>
           <td class="border border-gray-300 p-2">{{ courseDate.maxLimit }}</td>
           <td class="border border-gray-300 p-2">{{ courseDate.currentlyApplied }}</td>

@@ -376,4 +376,12 @@ public class UserController {
         }
         return ResponseEntity.ok(user);  // Return the user with HTTP status 200 OK
     }
+    @GetMapping("/all-users-listing")
+    public ResponseEntity<List<UserAutocompleteDTO>> getUserShowDTOById() {
+        List<UserAutocompleteDTO> user = userService.findAllUsersAutocomplete();
+        if (user == null) {
+            return ResponseEntity.notFound().build();  // Return 404 if user not found
+        }
+        return ResponseEntity.ok(user);  // Return the user with HTTP status 200 OK
+    }
 }
