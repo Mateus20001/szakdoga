@@ -46,6 +46,7 @@ export class CourseDetailsComponent {
 
   ngOnInit(): void {
     this.fetchCourseDates();
+    this.fetchUsers();
     this.loadUserApplications();
     console.log(this.userApplications)
   }
@@ -199,7 +200,6 @@ export class CourseDetailsComponent {
     );
   }
   openMessageWritingDialog() {
-    this.fetchUsers();
     const dialogRef = this.dialog.open(MessageWritingComponent, {
       width: '1000px',  // You can customize the width and other properties
       data: {
@@ -212,6 +212,17 @@ export class CourseDetailsComponent {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       // You can access the result here if needed
+    });
+  }
+  addToTimetable(courseDateId: number): void {
+    this.courseApplicationService.addTimetableCourse(courseDateId).subscribe({
+      next: () => {
+        this.snackBar.open('Course added to timetable!', 'Close', { duration: 3000 });
+      },
+      error: (err) => {
+        console.error('Failed to add to timetable:', err);
+        this.snackBar.open('Failed to add course to timetable.', 'Close', { duration: 3000 });
+      }
     });
   }
 }

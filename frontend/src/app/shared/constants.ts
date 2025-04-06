@@ -69,7 +69,7 @@ export const MenuDropdownMenuObjects: MenuDropdown[] = [
           },
           { 
             name: "Órarendtervező",
-            link: "/timetablemaker",
+            link: "/timetable-planner",
             roles: ["STUDENT"]
           },
           { 

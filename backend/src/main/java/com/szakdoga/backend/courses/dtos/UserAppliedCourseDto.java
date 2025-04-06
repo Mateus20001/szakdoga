@@ -18,7 +18,7 @@ public class UserAppliedCourseDto {
     private String courseDateName;
     private List<String> teacherIds;
     private LocationEnum location;
-    private List<GradeDTO> grades;
+    private List<AppliedGradeDTO> grades;
 
     // Getters & Setters
 }

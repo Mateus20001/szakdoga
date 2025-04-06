@@ -19,8 +19,7 @@ import { UserListingDTO } from '../models/TeacherStudentGradingDTO';
       CommonModule,
       FormsModule,
       MatAutocompleteModule,
-      MatOption,
-      MatIconButton],
+      MatOption],
   templateUrl: './message-writing.component.html',
   styleUrl: './message-writing.component.scss'
 })

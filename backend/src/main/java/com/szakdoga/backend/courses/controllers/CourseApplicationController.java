@@ -1,9 +1,10 @@
 package com.szakdoga.backend.courses.controllers;
 
-import com.szakdoga.backend.courses.dtos.CourseApplicationDTO;
-import com.szakdoga.backend.courses.dtos.UserAppliedCourseDto;
+import com.szakdoga.backend.courses.dtos.*;
 import com.szakdoga.backend.courses.models.CourseApplicationEntity;
+import com.szakdoga.backend.courses.models.CourseTimetablePlannerEntity;
 import com.szakdoga.backend.courses.services.CourseApplicationService;
+import com.szakdoga.backend.courses.services.CourseDateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ public class CourseApplicationController {
     private static final Logger log = LoggerFactory.getLogger(CourseApplicationController.class);
     @Autowired
     private CourseApplicationService courseApplicationService;
+    @Autowired
+    private CourseDateService courseDateService;
 
 
     @PostMapping("/apply")
@@ -85,6 +88,7 @@ public class CourseApplicationController {
             return ResponseEntity.badRequest().body("{\"message\": \"Hiba történt a kurzus felvételekor!\"}");
         }
     }
+
     @GetMapping("/user-applications/{courseId}")
     public ResponseEntity<List<CourseApplicationDTO>> getUserApplicationsByCourse(@PathVariable Long courseId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -107,7 +111,7 @@ public class CourseApplicationController {
         log.info("User ID: {}, Course ID: {}", userId, courseId);
         // Retrieve the course applications based on courseId and userId
         List<CourseApplicationEntity> applications = courseApplicationService.getUserApplicationsForCourse(userId, courseId);
-        log.info("SIZE: {}",applications.size());
+        log.info("SIZE: {}", applications.size());
         List<CourseApplicationDTO> applicationDTOs = applications.stream()
                 .map(app -> new CourseApplicationDTO(app.getId(), app.getCourseDateEntity().getId()))
                 .collect(Collectors.toList());
@@ -132,7 +136,69 @@ public class CourseApplicationController {
         String userId = userDetails.getUsername();
 
         List<UserAppliedCourseDto> appliedCourses = courseApplicationService.getUserAppliedCourses(userId);
-        log.info("appliedCourses: {}",appliedCourses.getFirst().getCourseDetailName());
+        log.info("appliedCourses: {}", appliedCourses.getFirst().getCourseDetailName());
         return ResponseEntity.ok(appliedCourses);
+    }
+
+    @GetMapping("/timetable-courses")
+    public ResponseEntity<List<CourseDateResponse>> getUserTimetablePlanner() {
+        log.info("asd");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Return 401 if not authenticated
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // Return 403 if unauthorized
+        }
+
+        UserDetails userDetails = (UserDetails) principal;
+        String userId = userDetails.getUsername();
+        List<CourseTimetableEntityDto> timetableDTOs = courseApplicationService.getUserTimetable(userId);
+        List<Long> courseDateIds = timetableDTOs.stream()
+                .map(CourseTimetableEntityDto::getCourseDateId)
+                .collect(Collectors.toList());
+        List<CourseDateResponse> courseDateResponses = courseDateService.findAllById(courseDateIds);
+
+        return ResponseEntity.ok(courseDateResponses);
+    }
+
+    @PostMapping("/add-timetable")
+    public ResponseEntity<CourseTimetableEntityDto> addCourseToTimetable(@RequestBody AddTimetableRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Return 401 if not authenticated
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // Return 403 if unauthorized
+        }
+
+        UserDetails userDetails = (UserDetails) principal;
+        String userId = userDetails.getUsername();
+        courseApplicationService.addCourseToTimetable(userId, request.getCourseDateId());
+        return ResponseEntity.ok(new CourseTimetableEntityDto());
+    }
+    @DeleteMapping("/remove-timetable/{id}")
+    public ResponseEntity<CourseTimetableEntityDto> removeFromTimetable(@PathVariable long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Return 401 if not authenticated
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // Return 403 if unauthorized
+        }
+
+        UserDetails userDetails = (UserDetails) principal;
+        String userId = userDetails.getUsername();
+        courseApplicationService.removeTimetableEntity(id);
+        return ResponseEntity.ok(new CourseTimetableEntityDto());
     }
 }

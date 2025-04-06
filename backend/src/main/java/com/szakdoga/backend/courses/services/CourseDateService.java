@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -133,5 +134,29 @@ public class CourseDateService {
             return true;
         }
         return false;
+    }
+
+    public List<CourseDateResponse> findAllById(List<Long> ids) {
+        List<CourseDateEntity> courseDateEntities = courseDateRepository.findAllById(ids);
+        return courseDateEntities.stream()
+                .map(this::mapToResponse)  // Map each entity to CourseDateResponse
+                .collect(Collectors.toList());
+    }
+
+    private CourseDateResponse mapToResponse(CourseDateEntity entity) {
+        CourseDateResponse response = new CourseDateResponse();
+        response.setId(entity.getId());
+        response.setName(entity.getName());
+        response.setCourseId(entity.getCourseDetailEntity().getId());  // Assuming Course has `getId()`
+        response.setTeacherIds(entity.getTeachers().stream()
+                .map(User::getId)  // Assuming Teacher has `getId()`
+                .collect(Collectors.toList()));
+        response.setDayOfWeek(entity.getDayOfWeek());
+        response.setStartTime(entity.getStartTime());
+        response.setEndTime(entity.getEndTime());
+        response.setCurrentlyApplied(entity.getApplications() != null ? entity.getApplications().size() : 0);
+        response.setMaxLimit(entity.getMaxLimit());
+        response.setLocation(entity.getLocation());
+        return response;
     }
 }

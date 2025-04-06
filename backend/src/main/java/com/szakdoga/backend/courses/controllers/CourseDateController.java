@@ -1,5 +1,6 @@
 package com.szakdoga.backend.courses.controllers;
 
+import com.szakdoga.backend.courses.dtos.CourseDateIdRequest;
 import com.szakdoga.backend.courses.dtos.CourseDateRequest;
 import com.szakdoga.backend.courses.dtos.CourseDateResponse;
 import com.szakdoga.backend.courses.dtos.EditCourseDateRequest;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/course-dates")

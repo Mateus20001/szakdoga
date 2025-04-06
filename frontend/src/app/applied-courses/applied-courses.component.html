@@ -23,14 +23,14 @@
     <div *ngIf="(expandedElement === element) && (element.grades.length > 0)">
       <mat-card class="expanded-card">
         <h3>Jegyek</h3>
-        <ul>
-          <div *ngFor="let grade of course.grades">
-            <li><strong>Jegy:</strong> {{ getGradeDisplay(grade.gradeValue) }}</li>
-            <li><strong>Értékelte:</strong> {{ grade.gradedBy }}</li>
-            <li><strong>Dátum:</strong> {{ formatDate(grade.creationDate) }}</li>
-          </div>
+        <ul class="grades-list">
+          <li *ngFor="let grade of element.grades" class="grade-item">
+            <div><strong>Jegy:</strong> {{ getGradeDisplay(grade.gradeValue) }}</div>
+            <div><strong>Értékelte:</strong> {{ grade.gradedBy }}</div>
+            <div><strong>Dátum:</strong> {{ formatDate(grade.creationDate) }}</div>
+          </li>
         </ul>
       </mat-card>
-    </div>
+    </div>    
   </mat-expansion-panel>
 </div>

@@ -63,6 +63,9 @@
             <button mat-button (click)="onApplyRemoveClick(courseDate.id)">
               {{ userApplications.has(courseDate.id) ? 'Leadás' : 'Felvétel' }}
             </button>
+            <button mat-button (click)="addToTimetable(courseDate.id)">
+              Órarendtervező
+            </button>
           </td>
         </tr>
       </tbody>

@@ -23,6 +23,7 @@ import { CourseApplicationComponent } from '../course-application/course-applica
 import { AppliedCoursesComponent } from '../applied-courses/applied-courses.component';
 import { StudentStatisticComponent } from '../student-statistic/student-statistic.component';
 import { GradingStudentsComponent } from '../grading-students/grading-students.component';
+import { TimetablePlannerComponent } from '../timetable-planner/timetable-planner.component';
 
 
 export const routes: Route[] = [
@@ -48,5 +49,6 @@ export const routes: Route[] = [
   { path: 'appliedCourses', component: AppliedCoursesComponent, canActivate: [authGuard]},
   { path: 'studentStatistic', component: StudentStatisticComponent, canActivate: [authGuard]},
   { path: 'gradingStudents', component: GradingStudentsComponent, canActivate: [authGuard]},
+  { path: 'timetable-planner', component: TimetablePlannerComponent, canActivate: [authGuard]},
   { path: '**', redirectTo: 'login' }
 ];

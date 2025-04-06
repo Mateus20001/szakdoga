@@ -43,4 +43,21 @@ export class CourseApplicationService {
     });
     return this.http.get<AppliedCourse[]>(`${this.apiUrl}/applied-courses`, { headers });
   }
+
+  getTimetableCourses(): Observable<any[]> {
+    const token = localStorage.getItem('loggedInUser');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+    return this.http.get<any[]>(`${this.apiUrl}/timetable-courses`, { headers });
+  }
+
+  addTimetableCourse(courseDateId: number): Observable<any[]> {
+    const token = localStorage.getItem('loggedInUser');
+    const headers = new HttpHeaders({
+     'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    });
+    return this.http.post<any[]>(`${this.apiUrl}/add-timetable`, {courseDateId}, { headers });
+  }
 }

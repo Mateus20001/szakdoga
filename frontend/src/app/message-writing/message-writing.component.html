@@ -12,8 +12,8 @@
           [matAutocomplete]="auto"
         />
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onReceiverIdSelected($event)">
-          <mat-option *ngFor="let user of allUsers" [value]="user.id">
-            {{ user.id }} ({{ user.firstName }} {{ user.lastName }}) {{user.name}}
+          <mat-option *ngFor="let user of allUsers" [value]="user.identifier">
+            {{ user.identifier }} ({{ user.firstName }} {{ user.lastName }}) {{user.name}}
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
