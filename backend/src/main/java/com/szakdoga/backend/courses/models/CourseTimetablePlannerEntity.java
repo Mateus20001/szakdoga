@@ -15,10 +15,10 @@ public class CourseTimetablePlannerEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = true)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "course_date_id")
+    @JoinColumn(name = "course_date_id",  nullable = true)
     private CourseDateEntity courseDateEntity;
 }

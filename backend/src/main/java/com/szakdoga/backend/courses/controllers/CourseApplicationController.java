@@ -198,7 +198,8 @@ public class CourseApplicationController {
 
         UserDetails userDetails = (UserDetails) principal;
         String userId = userDetails.getUsername();
-        courseApplicationService.removeTimetableEntity(id);
+        log.info("aaaaaa");
+        courseApplicationService.removeTimetableEntity(id, userId);
         return ResponseEntity.ok(new CourseTimetableEntityDto());
     }
 }

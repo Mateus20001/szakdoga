@@ -2,7 +2,10 @@ import { Component } from '@angular/core';
 import { CourseApplicationService } from '../services/course-application.service';
 import { AppliedCourse } from '../models/AppliedCourseDTO';
 import { CommonModule } from '@angular/common';
-interface Lesson {
+import { CalendarView, CalendarEvent, CalendarModule } from 'angular-calendar';
+import { startOfWeek, addHours, parseISO, setHours, setMinutes } from 'date-fns';
+import { format } from 'date-fns'; 
+export interface Lesson {
   id: number;
   name: string;
   courseId: number;
@@ -17,31 +20,48 @@ interface Lesson {
 @Component({
   selector: 'app-timetable-planner',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CalendarModule],
   templateUrl: './timetable-planner.component.html',
   styleUrl: './timetable-planner.component.scss'
 })
 export class TimetablePlannerComponent {
+  hourFormat: string = "";
+  view: CalendarView = CalendarView.Week;
+  viewDate: Date = new Date(); // Your current view date
+  CalendarView = CalendarView;
   timetableCoursesIds: any[] = [];
   appliedCourses: AppliedCourse[] = [];
   timeTableCourses: Lesson[] = [];
   constructor(private courseApplicationService: CourseApplicationService) {}
-
+  events: CalendarEvent[] = [
+  ];
   ngOnInit(): void {
     this.loadTimetableCourses();
-    this.fetchAppliedCourses();
   }
 
+  convertLessonsToEvents(lessons: Lesson[]): CalendarEvent[] {
+    console.log(lessons);
+    return lessons.map((lesson) => ({
+      title: `${lesson.name}`,
+      start: this.getDateTime(lesson.dayOfWeek, lesson.startTime),
+      end: this.getDateTime(lesson.dayOfWeek, lesson.endTime),
+      meta: {
+        location: lesson.location,
+        teacherIds: lesson.teacherIds
+      }
+    }));
+  }
+  
   loadTimetableCourses(): void {
     this.courseApplicationService.getTimetableCourses().subscribe({
       next: (courses) => {
-        this.timetableCoursesIds = courses;
-        console.log('Timetable loaded:', this.timetableCoursesIds);
+        this.timeTableCourses = courses;
+        this.events = this.convertLessonsToEvents(courses); // 👈 map lessons to calendar
+        console.log(this.events)
       },
       error: (err) => {
         console.error('Failed to load timetable:', err);
       }
-
     });
   }
   fetchAppliedCourses(): void {
@@ -55,30 +75,13 @@ export class TimetablePlannerComponent {
       }
     );
   }
-  daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  getDateTime(day: string, time: string): Date {
+    const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
+    const base = startOfWeek(new Date(), { weekStartsOn: 1 });
+    const dayIndex = days.indexOf(day.toUpperCase());
 
-  getMinutesSinceMidnight(time: string): number {
     const [hour, minute] = time.split(':').map(Number);
-    return hour * 60 + minute;
-  }
-
-  getLessonStyle(lesson: Lesson) {
-    const start = this.getMinutesSinceMidnight(lesson.startTime);
-    const end = this.getMinutesSinceMidnight(lesson.endTime);
-    const top = (start / 60) * 60; // 1 hour = 60px
-    const height = ((end - start) / 60) * 60;
-    const dayIndex = this.daysOfWeek.findIndex(d => d.toUpperCase() === lesson.dayOfWeek);
-    const left = `${(dayIndex) * 100}% / 7`; // Even columns
-
-    return {
-      top: `${top}px`,
-      height: `${height}px`,
-      left: `${(dayIndex * 100) / 7}%`,
-      width: `${100 / 7}%`
-    };
-  }
-
-  getHourLabels(): string[] {
-    return Array.from({ length: 24 }, (_, i) => `${i.toString().padStart(2, '0')}:00`);
+    const date = addHours(base, dayIndex * 24);
+    return setMinutes(setHours(date, hour), minute);
   }
 }

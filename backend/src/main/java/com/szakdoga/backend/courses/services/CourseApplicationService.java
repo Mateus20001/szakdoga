@@ -68,7 +68,7 @@ public class CourseApplicationService {
         CourseApplicationEntity application = new CourseApplicationEntity();
         application.setUser(user);
         application.setCourseDateEntity(courseDate);
-
+        this.addCourseToTimetable(userId, courseDateId);
         courseApplicationRepository.save(application);
     }
 
@@ -86,6 +86,7 @@ public class CourseApplicationService {
         application.setUser(null);
         courseApplicationRepository.delete(application);
         courseApplicationRepository.deleteOrphanedCourseTeacherEntities();
+        this.removeTimetableEntity(courseDateId, userId);
     }
 
     @Transactional
@@ -143,8 +144,10 @@ public class CourseApplicationService {
         courseTimetablePlannerRepository.save(course);
     }
 
-    public void removeTimetableEntity(long id) {
-        CourseTimetablePlannerEntity course = courseTimetablePlannerRepository.findById(id).orElseThrow();
+    @Transactional
+    public void removeTimetableEntity(long id, String userId) {
+        log.info("aaaa");
+        CourseTimetablePlannerEntity course = courseTimetablePlannerRepository.findByCourseDateEntityIdAndUserId(id, userId).orElseThrow();
         course.setUser(null);
         course.setCourseDateEntity(null);
         courseTimetablePlannerRepository.save(course);

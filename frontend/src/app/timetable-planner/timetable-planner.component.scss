@@ -1,6 +1,58 @@
-:host {
-    display: block;
-    position: relative;
-    font-family: sans-serif;
+/* Ensure we have 7+1 columns, with the first row as day names */
+.mwl-calendar-week-view .cal-day {
+  width: calc(10% / 8); /* 7 days + 1 column for time slots */
+  display: inline-block;
+}
+
+/* Style for the header row (day names) */
+.mwl-calendar-week-view .cal-day-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Ensure the time column is separate from the day columns */
+.mwl-calendar-week-view .cal-hour-column {
+  display: none; /* Hide the default hour column */
+}
+
+/* Adjust the layout of the day names */
+.mwl-calendar-week-view .cal-day-header .cal-day-name {
+  text-align: center;
+  font-weight: bold;
+  padding: 10px 0;  /* Adjust for better spacing */
+  flex: 1;
+}
+
+/* Adjust the events layout */
+.mwl-calendar-week-view .cal-event {
+  height: auto; /* Adjust height based on event content */
+}
+
+/* Make sure event slots are displayed in the correct columns */
+.mwl-calendar-week-view .cal-event-container {
+  display: flex;
+  justify-content: space-between;
+}
+::ng-deep .custom-week-view {
+  .cal-hour-rows {
+    background-color: #f8f9fa;
   }
-  
+
+  .cal-event {
+    border: none;
+    padding: 0.2rem;
+    color: #fff;
+    font-size: 0.75rem;
+  }
+
+  .cal-day-headers {
+    background-color: #f1f3f5;
+    font-weight: 600;
+  }
+}
+.calendar-wrapper {
+  max-width: 1200px; // 👈 adjust as needed
+  margin: 0 auto;
+  padding: 1rem;
+}

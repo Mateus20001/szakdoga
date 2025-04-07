@@ -13,13 +13,16 @@ import { CourseDateService } from './services/course-date.service';
 import { CourseApplicationService } from './services/course-application.service';
 import { GradingService } from './services/grading.service';
 import { MessageService } from './services/message.service';
+import { CalendarModule, CalendarUtils, DateAdapter } from 'angular-calendar';
+
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, LayoutComponent, HttpClientModule, CommonModule], 
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  providers: [AuthService, MessageService, MajorService, NewsService, FacultyService, CourseService, CourseTeacherService, CourseDateService, CourseApplicationService, GradingService]
+  providers: [CalendarUtils, AuthService, MessageService, MajorService, NewsService, FacultyService, CourseService, CourseTeacherService, CourseDateService, CourseApplicationService, GradingService]
 })
 export class AppComponent {
   title = 'frontend';

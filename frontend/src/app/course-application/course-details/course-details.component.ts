@@ -13,6 +13,7 @@ import { AuthService } from '../../auth/auth.service';
 import { UserShowDTO } from '../../models/user';
 import { MessageWritingComponent } from '../../message-writing/message-writing.component';
 import { MessageService } from '../../services/message.service';
+import { Lesson } from '../../timetable-planner/timetable-planner.component';
 
 @Component({
   selector: 'app-course-details',
@@ -27,11 +28,9 @@ export class CourseDetailsComponent {
   selectedTeacherId: string | null = null;
   hoveringTooltip = false;
   tooltipPosition = { top: 0, left: 0 };
+  timetableCoursesLoaded = false;
   allUsers: any[] = [];
-  constructor(private courseDateService: CourseDateService, private snackBar: MatSnackBar, private courseApplicationService: CourseApplicationService,
-    private dialog: MatDialog, private authService: AuthService, private messageService: MessageService
-  ) {}
-  courseDates: {
+    courseDates: {
     id: number;
     name: string;
     dayOfWeek: string;
@@ -43,15 +42,20 @@ export class CourseDetailsComponent {
     location: string; // Now includes location
   }[] = [];
   userApplications: Set<number> = new Set();
-
+  timeTableCourses: Lesson[] = [];
+  constructor(private courseDateService: CourseDateService, private snackBar: MatSnackBar, private courseApplicationService: CourseApplicationService,
+    private dialog: MatDialog, private authService: AuthService, private messageService: MessageService
+  ) {}
   ngOnInit(): void {
     this.fetchCourseDates();
     this.fetchUsers();
     this.loadUserApplications();
-    console.log(this.userApplications)
+    this.loadTimetableCourses();
   }
 
-
+  isInTimetable(courseId: number): boolean {
+    return this.timeTableCourses.some(lesson => lesson.id === courseId);
+  }
   fetchCourseDates(): void {
     this.courseDateService.getCourseDatesByCourseId(this.courseId).subscribe(
       (courseDates) => {
@@ -222,6 +226,31 @@ export class CourseDetailsComponent {
       error: (err) => {
         console.error('Failed to add to timetable:', err);
         this.snackBar.open('Failed to add course to timetable.', 'Close', { duration: 3000 });
+      }
+    });
+  }
+  loadTimetableCourses(): void {
+    this.courseApplicationService.getTimetableCourses().subscribe({
+      next: (courses) => {
+        console.log(courses)
+        this.timeTableCourses = courses;
+        this.timetableCoursesLoaded = true;
+        console.log( this.timeTableCourses)
+      },
+      error: (err) => {
+        console.error('Failed to load timetable:', err);
+      }
+    });
+  }
+  removeFromTimetable(arg0: number) {
+    this.courseApplicationService.removeTimetableCourse(arg0).subscribe({
+      next: () => {
+        this.snackBar.open('Course removed from the timetable!', 'Close', { duration: 3000 });
+        this.timeTableCourses = this.timeTableCourses.filter(course => course.id !== arg0);
+      },
+      error: (err) => {
+        console.error('Failed to add to timetable:', err);
+        this.snackBar.open('Failed to remove course to timetable.', 'Close', { duration: 3000 });
       }
     });
   }

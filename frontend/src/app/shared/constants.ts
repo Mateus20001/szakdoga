@@ -59,7 +59,7 @@ export const MenuDropdownMenuObjects: MenuDropdown[] = [
         menuDropdownList: [
           {
             name: "Képzés adatok",
-            link: "/dashboard",
+            link: "/studentStatistic",
             roles: ["STUDENT"] 
           },
           { 
@@ -94,7 +94,7 @@ export const MenuDropdownMenuObjects: MenuDropdown[] = [
         menuDropdownList: [
           {
             name: "Tanított Hallgatók adatai",
-            link: "/studentStatistic",
+            link: "/teacherStatistics",
             roles: ["TEACHER"] 
           },
           { 

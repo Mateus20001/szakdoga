@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CourseTimetablePlannerRepository extends JpaRepository<CourseTimetablePlannerEntity, Long> {
 
@@ -14,4 +15,6 @@ public interface CourseTimetablePlannerRepository extends JpaRepository<CourseTi
     @Modifying
     @Query("DELETE FROM CourseTimetablePlannerEntity c WHERE c.courseDateEntity IS NULL OR c.user IS NULL")
     void deleteOrphanedCourseTimetableEntities();
+
+    Optional<CourseTimetablePlannerEntity> findByCourseDateEntityIdAndUserId(long id, String userId);
 }

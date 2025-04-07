@@ -60,4 +60,12 @@ export class CourseApplicationService {
     });
     return this.http.post<any[]>(`${this.apiUrl}/add-timetable`, {courseDateId}, { headers });
   }
+  removeTimetableCourse(courseDateId: number): Observable<any[]> {
+    const token = localStorage.getItem('loggedInUser');
+    const headers = new HttpHeaders({
+     'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    });
+    return this.http.delete<any[]>(`${this.apiUrl}/remove-timetable/${courseDateId}`, { headers });
+  }
 }

@@ -9,7 +9,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 @Component({
   selector: 'app-course-application',
   standalone: true,
-  imports: [NgIf, NgFor, CourseDetailsComponent, MatExpansionModule, MatButtonModule,],
+  imports: [NgIf, NgFor, CourseDetailsComponent, MatExpansionModule, MatButtonModule],
   templateUrl: './course-application.component.html',
   styleUrl: './course-application.component.scss'
 })
@@ -62,4 +62,5 @@ export class CourseApplicationComponent {
         return requirementType;
     }
   }
+  
 }
