@@ -68,4 +68,11 @@ export class CourseApplicationService {
     });
     return this.http.delete<any[]>(`${this.apiUrl}/remove-timetable/${courseDateId}`, { headers });
   }
+  getStudentStatistics(): Observable<any[]> {
+    const token = localStorage.getItem('loggedInUser');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+    return this.http.get<any[]>(`${this.apiUrl}/me/student_statistics`, { headers });
+  }
 }

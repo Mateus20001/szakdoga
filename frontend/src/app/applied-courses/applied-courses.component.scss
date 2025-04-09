@@ -30,14 +30,14 @@ mat-card li {
 }
 
 .good-grade {
-  background-color: #155724 !important; 
+  background-color: #17bc3e !important; 
 }
 
 .bad-grade {
-  background-color: #721c24 !important; 
+  background-color: #a21b29 !important; 
 }
 .no-grade {
-  background-color: #2f2829 !important; 
+  background-color: #eeeeee !important; 
 }
 /* Remove default padding and margin */
 ul, ol {
@@ -72,17 +72,18 @@ ul li {
     padding: 0;
 
     .grade-item {
-      background: #2f2829;
+      background: #eeeeee;
       border-radius: 8px;
       padding: 0.75rem;
       margin-bottom: 1rem;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-
+      color: black;
       div {
         margin-bottom: 0.25rem;
       }
     }
   }
+  
 }
 
 

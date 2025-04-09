@@ -202,4 +202,24 @@ public class CourseApplicationController {
         courseApplicationService.removeTimetableEntity(id, userId);
         return ResponseEntity.ok(new CourseTimetableEntityDto());
     }
+    @GetMapping("/me/student_statistics")
+    public ResponseEntity<List<StudentStatisticDTO>> getStudentStatistics() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Return 401 if not authenticated
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // Return 403 if unauthorized
+        }
+
+        UserDetails userDetails = (UserDetails) principal;
+        String userId = userDetails.getUsername();
+
+        List<StudentStatisticDTO> appliedCourses = courseApplicationService.getUserStatistics(userId);
+        log.info("appliedCourses: {}", appliedCourses.getFirst().getBestGradeValue());
+        return ResponseEntity.ok(appliedCourses);
+    }
 }

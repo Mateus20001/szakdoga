@@ -1,1 +1,27 @@
-<p>student-statistic works!</p>
+<div *ngIf="chartData.length > 0">
+    <ngx-charts-line-chart
+      [results]="chartData"
+      [scheme]="colorScheme"
+      [xAxis]="true"
+      [yAxis]="true"
+      [yScaleMin]="-1"
+      [yScaleMax]="5"
+      [gradient]="false"
+      [legend]="true"
+      [showXAxisLabel]="true"
+      [showYAxisLabel]="true"
+      [xAxisLabel]="'Félév'"
+      [yAxisLabel]="'Átlag érdemjegy'"
+      [tooltipDisabled]="false">
+    </ngx-charts-line-chart>
+  
+    <!-- Tooltip template to display additional data -->
+    <ng-template #customTooltip let-model="model">
+      <div class="p-2">
+        <strong>{{ model.name }}</strong><br>
+        Átlag: {{ model.value | number: '1.1-2' }}<br>
+        Jegyek száma: {{ model.extra?.count || 0 }}
+      </div>
+    </ng-template>
+  </div>
+  

@@ -8,3 +8,8 @@ export interface AppliedCourse {
     location: string;
     grades: Grade[];
   }
+  export interface StudentStatistic {
+    
+    bestGradeValue: number;
+    creationDate: string;
+  }

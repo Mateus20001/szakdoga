@@ -3,14 +3,8 @@ package com.szakdoga.backend.courses.services;
 import com.szakdoga.backend.auth.model.User;
 import com.szakdoga.backend.auth.repositories.UserRepository;
 import com.szakdoga.backend.courses.controllers.CourseController;
-import com.szakdoga.backend.courses.dtos.AppliedGradeDTO;
-import com.szakdoga.backend.courses.dtos.CourseTimetableEntityDto;
-import com.szakdoga.backend.courses.dtos.GradeDTO;
-import com.szakdoga.backend.courses.dtos.UserAppliedCourseDto;
-import com.szakdoga.backend.courses.models.CourseApplicationEntity;
-import com.szakdoga.backend.courses.models.CourseDateEntity;
-import com.szakdoga.backend.courses.models.CourseDetailEntity;
-import com.szakdoga.backend.courses.models.CourseTimetablePlannerEntity;
+import com.szakdoga.backend.courses.dtos.*;
+import com.szakdoga.backend.courses.models.*;
 import com.szakdoga.backend.courses.repositories.CourseApplicationRepository;
 import com.szakdoga.backend.courses.repositories.CourseDateRepository;
 import com.szakdoga.backend.courses.repositories.CourseTimetablePlannerRepository;
@@ -19,7 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -141,6 +137,11 @@ public class CourseApplicationService {
         CourseTimetablePlannerEntity course = new CourseTimetablePlannerEntity();
         course.setUser(userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found")));
         course.setCourseDateEntity(courseDateRepository.findById(courseDateId).get());
+        Optional<CourseTimetablePlannerEntity> existingCourse = courseTimetablePlannerRepository.findByCourseDateEntityIdAndUserId(courseDateId, userId);
+        if (existingCourse.isPresent()) {
+            log.info("Course already exists in the timetable for user {}", userId);
+            return;  // If the course already exists, exit the method
+        }
         courseTimetablePlannerRepository.save(course);
     }
 
@@ -154,4 +155,24 @@ public class CourseApplicationService {
         courseTimetablePlannerRepository.delete(course);
         courseTimetablePlannerRepository.deleteOrphanedCourseTimetableEntities();
     }
+
+    @Transactional
+    public List<StudentStatisticDTO> getUserStatistics(String userId) {
+        List<CourseApplicationEntity> applications = courseApplicationRepository.findByUserId(userId);
+
+        return applications.stream()
+                .map(application -> {
+                    return application.getGrades().stream()
+                            .max(Comparator.comparingInt(Grade::getGradeValue))
+                            .map(bestGrade -> {
+                                StudentStatisticDTO dto = new StudentStatisticDTO();
+                                dto.setBestGradeValue(bestGrade.getGradeValue());
+                                dto.setCreationDate(bestGrade.getCreationDate());
+                                return dto;
+                            }).orElse(null);
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
+
 }

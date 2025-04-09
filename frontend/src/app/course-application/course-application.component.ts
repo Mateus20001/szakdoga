@@ -5,6 +5,7 @@ import { NgFor, NgIf } from '@angular/common';
 import { CourseDetailsComponent } from "./course-details/course-details.component";
 import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { TimetablePlannerComponent } from '../timetable-planner/timetable-planner.component';
 
 @Component({
   selector: 'app-course-application',

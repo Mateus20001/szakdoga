@@ -1,3 +1,4 @@
+<div class="flex flex-col relative min-h-screen">
 <h1>Kurzusok:</h1>
 <mat-accordion>
     <mat-expansion-panel *ngFor="let course of courses" (opened)="loadCourseDetails(course.id)">
@@ -23,4 +24,4 @@
       </div>
     </mat-expansion-panel>
   </mat-accordion>
-  
+</div>

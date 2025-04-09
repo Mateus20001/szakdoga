@@ -4,7 +4,9 @@ import { AppliedCourse } from '../models/AppliedCourseDTO';
 import { CommonModule } from '@angular/common';
 import { CalendarView, CalendarEvent, CalendarModule } from 'angular-calendar';
 import { startOfWeek, addHours, parseISO, setHours, setMinutes } from 'date-fns';
-import { format } from 'date-fns'; 
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { EventDetailsDialogComponent } from './event-details-dialog/event-details-dialog.component';
+
 export interface Lesson {
   id: number;
   name: string;
@@ -20,11 +22,12 @@ export interface Lesson {
 @Component({
   selector: 'app-timetable-planner',
   standalone: true,
-  imports: [CommonModule, CalendarModule],
+  imports: [CommonModule, CalendarModule, MatDialogModule],
   templateUrl: './timetable-planner.component.html',
   styleUrl: './timetable-planner.component.scss'
 })
 export class TimetablePlannerComponent {
+  selectedEvent: CalendarEvent | null = null;
   hourFormat: string = "";
   view: CalendarView = CalendarView.Week;
   viewDate: Date = new Date(); // Your current view date
@@ -32,7 +35,7 @@ export class TimetablePlannerComponent {
   timetableCoursesIds: any[] = [];
   appliedCourses: AppliedCourse[] = [];
   timeTableCourses: Lesson[] = [];
-  constructor(private courseApplicationService: CourseApplicationService) {}
+  constructor(private courseApplicationService: CourseApplicationService, private dialog: MatDialog) {}
   events: CalendarEvent[] = [
   ];
   ngOnInit(): void {
@@ -83,5 +86,11 @@ export class TimetablePlannerComponent {
     const [hour, minute] = time.split(':').map(Number);
     const date = addHours(base, dayIndex * 24);
     return setMinutes(setHours(date, hour), minute);
+  }
+  handleEventClick(event: CalendarEvent): void {
+    this.dialog.open(EventDetailsDialogComponent, {
+      data: event,
+      width: '400px'
+    });
   }
 }

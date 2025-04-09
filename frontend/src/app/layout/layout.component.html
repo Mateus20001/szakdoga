@@ -46,3 +46,15 @@
   [ngStyle]="{ opacity: showBackToTop }">
   &#8593;
 </button>
+<!-- Timetable Wrapper -->
+<div *ngIf="showTimetable && isCourseApplication()" class="timetable-container">
+  <app-timetable-planner></app-timetable-planner>
+</div>
+
+<!-- Toggle Button -->
+<button mat-mini-fab color="primary" (click)="toggleTimetable()" class="toggle-button" *ngIf="isCourseApplication()">
+  <mat-icon>{{ showTimetable ? 'close' : 'schedule' }}</mat-icon>
+</button>
+
+
+  

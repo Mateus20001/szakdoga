@@ -4,18 +4,21 @@ import { DropdownMenuComponent } from '../dropdown-menu/dropdown-menu.component'
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../auth/auth.service';
 import { MatIconButton } from '@angular/material/button';
-import { MatIconAnchor } from '@angular/material/button';
 import { MenuDropdown, MenuDropdownMenuObjects, MenuItem } from '../shared/constants';
 import { Role } from '../models/userSessionEntity';
+import { TimetablePlannerComponent } from '../timetable-planner/timetable-planner.component';
+import { MatIcon } from '@angular/material/icon';
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [RouterOutlet, DropdownMenuComponent, CommonModule, MatIconButton],
+  imports: [RouterOutlet, DropdownMenuComponent, CommonModule, MatIconButton, TimetablePlannerComponent, MatIcon],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss',
 })
 
 export class LayoutComponent {
+  showTimetable: boolean = false;
+
   profileName: string | null = null;
   roles: Role[] = [];
   menuDropdownItems: MenuDropdown[] = MenuDropdownMenuObjects;
@@ -80,7 +83,9 @@ ngAfterViewInit() {
   isLoginPage(): boolean {
     return this.router.url === '/login';
   }
-
+  isCourseApplication(): boolean {
+    return this.router.url === '/courseApplication';
+  }
   @HostListener('window:scroll', ['$event'])
   onWindowScroll() {
     this.showBackToTop = window.scrollY > 300 ? 1 : 0;
@@ -130,4 +135,8 @@ ngAfterViewInit() {
         this.renderer.setStyle(bgElement, 'backgroundImage', imageUrl);
       }
     }
+    
+  toggleTimetable(): void {
+    this.showTimetable = !this.showTimetable;
+  }
 }
