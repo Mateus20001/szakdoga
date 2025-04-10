@@ -1,7 +1,9 @@
 package com.szakdoga.backend.courses.services;
 
 
+import com.szakdoga.backend.auth.model.GlobalSettings;
 import com.szakdoga.backend.auth.model.User;
+import com.szakdoga.backend.auth.repositories.GlobalSettingsRepository;
 import com.szakdoga.backend.auth.repositories.UserRepository;
 import com.szakdoga.backend.courses.dtos.CourseDateResponse;
 import com.szakdoga.backend.courses.dtos.EditCourseDateRequest;
@@ -33,6 +35,9 @@ public class CourseDateService {
     private final CourseDetailRepository courseDetailRepository;
 
     @Autowired
+    private final GlobalSettingsRepository globalSettingsRepository;
+
+    @Autowired
     private final UserRepository userRepository;
 
     public CourseDateEntity addCourseDate(CourseDateEntity courseDateEntity, Long courseId, List<String> teacherIds) {
@@ -41,12 +46,13 @@ public class CourseDateService {
         CourseDetailEntity courseDetail = courseDetailRepository.findById(courseId)
                 .orElseThrow(() -> new IllegalArgumentException("Course not found with ID: " + courseId));
         courseDateEntity.setCourseDetailEntity(courseDetail);
-
+        GlobalSettings globalSettings = globalSettingsRepository.findById(1L).orElseThrow();
         // Validate and set teachers
         List<User> teachers = userRepository.findAllById(teacherIds);
         if (teachers.isEmpty()) {
             throw new IllegalArgumentException("No valid teachers found for IDs: " + teacherIds);
         }
+        courseDateEntity.setSemester(globalSettings.getAttribute());
         courseDateEntity.setTeachers(teachers);
 
         // Save the entity
@@ -74,6 +80,7 @@ public class CourseDateService {
             response.setMaxLimit(courseDate.getMaxLimit());
             response.setLocation(courseDate.getLocation());
             response.setCurrentlyApplied(courseDate.getApplications() != null ? courseDate.getApplications().size() : 0);
+            response.setSemester(courseDate.getSemester());
             return response;
         }).toList();
     }
@@ -157,6 +164,7 @@ public class CourseDateService {
         response.setCurrentlyApplied(entity.getApplications() != null ? entity.getApplications().size() : 0);
         response.setMaxLimit(entity.getMaxLimit());
         response.setLocation(entity.getLocation());
+        response.setSemester(entity.getSemester());
         return response;
     }
 }

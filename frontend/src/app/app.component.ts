@@ -16,13 +16,14 @@ import { MessageService } from './services/message.service';
 import { CalendarModule, CalendarUtils, DateAdapter } from 'angular-calendar';
 
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { GlobalSettingsService } from './services/global-settings.service';
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, LayoutComponent, HttpClientModule, CommonModule], 
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  providers: [CalendarUtils, AuthService, MessageService, MajorService, NewsService, FacultyService, CourseService, CourseTeacherService, CourseDateService, CourseApplicationService, GradingService]
+  providers: [GlobalSettingsService,CalendarUtils, AuthService, MessageService, MajorService, NewsService, FacultyService, CourseService, CourseTeacherService, CourseDateService, CourseApplicationService, GradingService]
 })
 export class AppComponent {
   title = 'frontend';

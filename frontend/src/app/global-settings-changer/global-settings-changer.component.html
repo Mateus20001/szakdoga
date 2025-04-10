@@ -1,0 +1,28 @@
+<mat-card *ngFor="let setting of settings">
+    <div *ngIf="editSetting?.id !== setting.id">
+      <h3>{{ setting.name }}</h3>
+      <p><strong>Activated:</strong> {{ setting.activated }}</p>
+      <p><strong>Attribute:</strong> {{ setting.attribute }}</p>
+      <button mat-button color="primary" (click)="startEdit(setting)">Edit</button>
+    </div>
+  
+    <div *ngIf="editSetting?.id === setting.id">
+      <mat-form-field appearance="fill">
+        <mat-label>Name</mat-label>
+        <input matInput [(ngModel)]="editSetting!.name" />
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Attribute</mat-label>
+        <input matInput [(ngModel)]="editSetting!.attribute" />
+      </mat-form-field>
+  
+      <mat-checkbox [(ngModel)]="editSetting!.activated">Activated</mat-checkbox>
+  
+      <div>
+        <button mat-button color="primary" (click)="saveEdit()">Save</button>
+        <button mat-button (click)="cancelEdit()">Cancel</button>
+      </div>
+    </div>
+  </mat-card>
+  

@@ -1,0 +1,77 @@
+/* Global Styles for the Settings Page */
+mat-card {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  mat-card h3 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  mat-card p {
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  button {
+    margin-top: 10px;
+  }
+  
+  /* Edit Mode Styles */
+  mat-form-field {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  mat-checkbox {
+    margin-top: 15px;
+  }
+  
+  /* Button styling */
+  button.mat-button {
+    background-color: #3f51b5;
+    color: white;
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  button.mat-button:hover {
+    background-color: #303f9f;
+  }
+  
+  button.mat-button:disabled {
+    background-color: #b0bec5;
+  }
+  
+  /* Edit Section Button */
+  button.mat-button + button {
+    background-color: #e0e0e0;
+    color: #333;
+  }
+  
+  button.mat-button + button:hover {
+    background-color: #c0c0c0;
+  }
+  
+  /* Small Screen Responsiveness */
+  @media (max-width: 768px) {
+    mat-card {
+      padding: 15px;
+    }
+  
+    mat-form-field {
+      margin-bottom: 10px;
+    }
+  
+    mat-card h3 {
+      font-size: 1.25rem;
+    }
+  }
+  
+  

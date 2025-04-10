@@ -25,6 +25,7 @@ import { StudentStatisticComponent } from '../student-statistic/student-statisti
 import { GradingStudentsComponent } from '../grading-students/grading-students.component';
 import { TimetablePlannerComponent } from '../timetable-planner/timetable-planner.component';
 import { TeacherStatisticsComponent } from '../teacher-statistics/teacher-statistics.component';
+import { GlobalSettingsChangerComponent } from '../global-settings-changer/global-settings-changer.component';
 
 
 export const routes: Route[] = [
@@ -52,5 +53,6 @@ export const routes: Route[] = [
   { path: 'gradingStudents', component: GradingStudentsComponent, canActivate: [authGuard]},
   { path: 'timetable-planner', component: TimetablePlannerComponent, canActivate: [authGuard]},
   { path: 'teacherStatistics', component: TeacherStatisticsComponent, canActivate: [authGuard]},
+  { path: 'globalSettings', component: GlobalSettingsChangerComponent, canActivate: [authGuard, adminGuard]},
   { path: '**', redirectTo: 'login' }
 ];

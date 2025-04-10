@@ -7,11 +7,14 @@
       [yScaleMin]="-1"
       [yScaleMax]="5"
       [gradient]="false"
-      [legend]="true"
+      [legend]="false"
       [showXAxisLabel]="true"
       [showYAxisLabel]="true"
       [xAxisLabel]="'Félév'"
       [yAxisLabel]="'Átlag érdemjegy'"
+      [lineInterpolation]="'linear'"
+      [autoScale]="true"
+      [showDataLabel]="true"
       [tooltipDisabled]="false">
     </ngx-charts-line-chart>
   
@@ -24,4 +27,42 @@
       </div>
     </ng-template>
   </div>
+  <mat-form-field appearance="fill">
+    <mat-label>Válassz félévet</mat-label>
+    <mat-select [(value)]="selectedSemester" (selectionChange)="onSemesterChange()">
+      <mat-option *ngFor="let semester of allSemesters" [value]="semester">
+        {{ semester }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
   
+  
+  <!-- Grades Listing -->
+  <mat-card *ngIf="filteredGrades.length">
+    <h3>Jegyek – {{ selectedSemester }}</h3>
+    <mat-list>
+      <mat-list-item *ngFor="let grade of filteredGrades">
+        <strong class="mr-2">{{ grade.courseDetailName }}</strong>
+        – Jegy: {{ grade.bestGradeValue }}, Kredit: {{ grade.creditScore }}
+      </mat-list-item>
+    </mat-list>
+  </mat-card>
+  <!-- Credit Donut -->
+  <mat-card class="mt-4">
+    <h4>Kredit teljesítés arány</h4>
+    <ngx-charts-pie-chart
+      [results]="creditChartData"
+      [view]="[300, 300]"
+      [scheme]="creditColorScheme"
+      [doughnut]="true"
+      [labels]="true"
+      [legend]="false"
+      [explodeSlices]="false">
+    </ngx-charts-pie-chart>
+  </mat-card>
+
+  <!-- Credit Summary -->
+  <mat-card class="mt-4">
+    <h4>Összes kredit (érvényes jegyek): {{ summaryCredit }}</h4>
+    <h4>Összes felvett kredit: {{ totalCredit }}</h4>
+  </mat-card>

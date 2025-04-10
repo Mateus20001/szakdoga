@@ -21,7 +21,7 @@ public class ExamEntity {
     @Column(name = "exam_date", nullable = false)
     private LocalDateTime examDate;
 
-    @Column(name = "grade", nullable = false)
+    @Column(name = "grade")
     private int grade;
 
     @Enumerated(EnumType.STRING)

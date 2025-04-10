@@ -12,7 +12,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentStatisticDTO {
-
+    String courseDetailName;
     int bestGradeValue;
-    LocalDateTime creationDate;
+    String semester;
+    int creditScore;
 }

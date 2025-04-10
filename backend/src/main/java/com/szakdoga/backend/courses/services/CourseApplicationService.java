@@ -167,7 +167,9 @@ public class CourseApplicationService {
                             .map(bestGrade -> {
                                 StudentStatisticDTO dto = new StudentStatisticDTO();
                                 dto.setBestGradeValue(bestGrade.getGradeValue());
-                                dto.setCreationDate(bestGrade.getCreationDate());
+                                dto.setSemester(bestGrade.getCourseApplicationEntity().getCourseDateEntity().getSemester());
+                                dto.setCourseDetailName(bestGrade.getCourseApplicationEntity().getCourseDateEntity().getName());
+                                dto.setCreditScore(bestGrade.getCourseApplicationEntity().getCourseDateEntity().getCourseDetailEntity().getCredits());
                                 return dto;
                             }).orElse(null);
                 })

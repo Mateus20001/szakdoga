@@ -40,6 +40,7 @@ export class CourseDetailsComponent {
     maxLimit: number;
     currentlyApplied: number;
     location: string; // Now includes location
+    semester: string;
   }[] = [];
   userApplications: Set<number> = new Set();
   timeTableCourses: Lesson[] = [];
@@ -69,7 +70,8 @@ export class CourseDetailsComponent {
             teacherIds: cd.teacherIds,
             maxLimit: cd.maxLimit,
             currentlyApplied: cd.currentlyApplied,
-            location: cd.location
+            location: cd.location,
+            semester: cd.semester
           }));
         } else {
           this.courseDates = [];

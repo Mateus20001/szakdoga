@@ -18,4 +18,7 @@ public class GlobalSettings {
 
     @Column(name = "activated")
     private boolean activated;
+
+    @Column(name = "attribute")
+    private String attribute;
 }

@@ -21,4 +21,5 @@ public class CourseDateResponse {
     private int currentlyApplied;
     private int maxLimit;
     private LocationEnum location;
+    private String semester;
 }

@@ -62,4 +62,6 @@ public class CourseDateEntity {
     @OneToMany(mappedBy = "courseDateEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CourseApplicationEntity> applications;
 
+    @Column(name = "semester")
+    private String semester;
 }

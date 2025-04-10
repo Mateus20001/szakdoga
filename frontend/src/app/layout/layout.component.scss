@@ -193,7 +193,7 @@ body, html {
   position: fixed;
   bottom: 16px;  /* Button stays at the bottom left */
   left: 16px;
-  z-index: 100;  /* Make sure the toggle button is above everything else */
+  z-index: 10000;  /* Make sure the toggle button is above everything else */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   cursor: pointer;
 }

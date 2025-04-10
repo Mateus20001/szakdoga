@@ -147,6 +147,11 @@ export const MenuDropdownMenuObjects: MenuDropdown[] = [
             link: "/courses",
             roles: ["TEACHER"]
           },
+          {
+            name: "Beállítások módosítása",
+            link: "/globalSettings",
+            roles: ["ADMIN"]
+          },
         ]
       }
     ];

@@ -9,7 +9,8 @@ export interface AppliedCourse {
     grades: Grade[];
   }
   export interface StudentStatistic {
-    
+    courseDetailName: string;
     bestGradeValue: number;
-    creationDate: string;
+    semester: string;
+    creditScore: number
   }
