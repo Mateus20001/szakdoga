@@ -61,6 +61,15 @@ public class CourseDateController {
         }
         return ResponseEntity.ok(courseDates);
     }
+    @GetMapping("/{courseId}/{semester}-{enrollment}")
+    public ResponseEntity<List<CourseDateResponse>> getCourseDatesByCourseIdSemesterEnrollment(@PathVariable Long courseId, @PathVariable String semester, @PathVariable String enrollment) {
+        List<CourseDateResponse> courseDates = courseDateService.getCourseDatesAsResponseObjectsSemesterEnrollment(courseId, semester, enrollment);
+
+        if (courseDates.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(courseDates);
+    }
     @PutMapping
     public ResponseEntity<EditCourseDateRequest> updateCourseDate(
             @RequestBody EditCourseDateRequest request) {

@@ -6,11 +6,13 @@ import { CourseDetailsComponent } from "./course-details/course-details.componen
 import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { TimetablePlannerComponent } from '../timetable-planner/timetable-planner.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-course-application',
   standalone: true,
-  imports: [NgIf, NgFor, CourseDetailsComponent, MatExpansionModule, MatButtonModule],
+  imports: [NgIf, NgFor, CourseDetailsComponent, MatExpansionModule, MatButtonModule, FormsModule, MatInputModule, ReactiveFormsModule],
   templateUrl: './course-application.component.html',
   styleUrl: './course-application.component.scss'
 })
@@ -19,7 +21,9 @@ export class CourseApplicationComponent {
   errorMessage: string = '';
   expandedCourseId: number | null = null;
   constructor(private courseService: CourseService) {}
-
+  selectedSemester: string = '2025_1';
+  enrollmentFilter: string = 'all';
+  
   ngOnInit(): void {
     this.loadCourses();
   }

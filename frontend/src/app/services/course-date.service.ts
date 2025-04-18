@@ -44,7 +44,14 @@ export class CourseDateService {
       { headers }
     );
   }
+  getCourseDatesByCourseIdSemesterEnrollment(courseId: number, semester: string, enrollment: string): Observable<any[]> {
+    const token = localStorage.getItem('loggedInUser'); // Assuming you're using a token for auth
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
 
+    return this.http.get<any[]>(`${this.apiUrl}/${courseId}/${semester}-${enrollment}`, { headers });
+  }
   getCourseDatesByCourseId(courseId: number): Observable<any[]> {
     const token = localStorage.getItem('loggedInUser'); // Assuming you're using a token for auth
     const headers = new HttpHeaders({

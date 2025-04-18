@@ -55,8 +55,14 @@ public class CourseApplicationController {
         log.info("User ID: {}, Course Date ID: {}", userId, courseDateId);
 
         try {
-            courseApplicationService.applyToCourse(userId, courseDateId);
-            return ResponseEntity.ok("{\"message\": \"Sikeresen felvetted a kurzust!\"}");
+            CourseApplicationResponse response = courseApplicationService.applyToCourse(userId, courseDateId);
+
+            if (response.getStatus() == 0) {
+                return ResponseEntity.ok("{\"message\": \"" + response.getMessage() + "\"}");
+            } else {
+                return ResponseEntity.badRequest().body("{\"message\": \"" + response.getMessage() + "\"}");
+            }
+
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body("{\"message\": \"Hiba történt a kurzus felvételekor!\"}");
         }

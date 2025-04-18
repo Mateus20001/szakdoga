@@ -1,4 +1,26 @@
 <div class="flex flex-col relative min-h-screen">
+  <div class="flex flex-wrap gap-4 items-center mb-4">
+    <!-- Semester Select -->
+    <label class="flex flex-col text-sm font-medium text-gray-700">
+      Félév:
+      <select [(ngModel)]="selectedSemester" class="border p-2 rounded">
+        <option [value]="'2024_2'">2024/2</option>
+        <option [value]="'2025_1'">2025/1</option>
+      </select>
+    </label>
+  
+    <!-- Enrollment Filter -->
+    <label class="flex flex-col text-sm font-medium text-gray-700">
+      Szükségesség:
+      <select [(ngModel)]="enrollmentFilter" class="border p-2 rounded" disabled="true">
+        <option value="all">Összes</option>
+        <option value="Mandatory">Kötelező</option>
+        <option value="Mandatory Optional">Kötelezően választható</option>
+        <option value="Optional">Szabadon választható</option>
+      </select>
+    </label>
+  </div>
+  
 <h1>Kurzusok:</h1>
 <mat-accordion>
     <mat-expansion-panel *ngFor="let course of courses" (opened)="loadCourseDetails(course.id)">
@@ -14,7 +36,7 @@
   
       <div *ngIf="expandedCourseId === course.id">
         <div *ngIf="course.course_dates_size > 0; else noCourseDates">
-            <app-course-details [courseId]="expandedCourseId"></app-course-details>
+            <app-course-details [courseId]="expandedCourseId" [semester]="selectedSemester" [enrollment]="enrollmentFilter"></app-course-details>
           </div>
           
           <!-- Message for courses with no available course dates -->

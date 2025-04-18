@@ -1,6 +1,8 @@
 package com.szakdoga.backend.courses.services;
 
+import com.szakdoga.backend.auth.model.GlobalSettings;
 import com.szakdoga.backend.auth.model.User;
+import com.szakdoga.backend.auth.repositories.GlobalSettingsRepository;
 import com.szakdoga.backend.auth.repositories.UserRepository;
 import com.szakdoga.backend.courses.controllers.CourseController;
 import com.szakdoga.backend.courses.dtos.*;
@@ -11,12 +13,10 @@ import com.szakdoga.backend.courses.repositories.CourseTimetablePlannerRepositor
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,32 +25,90 @@ public class CourseApplicationService {
     private final UserRepository userRepository;
     private final CourseDateRepository courseDateRepository;
     private final CourseTimetablePlannerRepository courseTimetablePlannerRepository;
+    private final GlobalSettingsRepository globalSettingsRepository;
     private static final Logger log = LoggerFactory.getLogger(CourseApplicationService.class);
 
     public CourseApplicationService(
             CourseApplicationRepository courseApplicationRepository,
             UserRepository userRepository,
             CourseDateRepository courseDateRepository,
-            CourseTimetablePlannerRepository courseTimetablePlannerRepository) {
+            CourseTimetablePlannerRepository courseTimetablePlannerRepository, GlobalSettingsRepository globalSettingsRepository) {
         this.courseApplicationRepository = courseApplicationRepository;
         this.userRepository = userRepository;
         this.courseDateRepository = courseDateRepository;
         this.courseTimetablePlannerRepository = courseTimetablePlannerRepository;
+        this.globalSettingsRepository = globalSettingsRepository;
     }
     @Transactional
-    public void applyToCourse(String userId, Long courseDateId) {
+    public CourseApplicationResponse applyToCourse(String userId, Long courseDateId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         // Fetch the course date entity
         CourseDateEntity courseDate = courseDateRepository.findById(courseDateId)
                 .orElseThrow(() -> new RuntimeException("Course date not found"));
+        CourseDetailEntity courseDetail = courseDate.getCourseDetailEntity();
+        List<CourseDetailEntity> requiredCourses = courseDetail.getRequiredCourses();
+        List<String> notCompletedCourses = new ArrayList<>();
 
+        for (CourseDetailEntity requiredCourse : requiredCourses) {
+            boolean completed = false;
+
+            for (CourseDateEntity requiredCourseDate : requiredCourse.getCourseDates()) {
+                Optional<CourseApplicationEntity> userApplicationOpt =
+                        courseApplicationRepository.findByUserIdAndCourseDateEntity(userId, requiredCourseDate);
+
+                if (userApplicationOpt.isPresent()) {
+                    CourseApplicationEntity userApplication = userApplicationOpt.get();
+
+                    if (userApplication.getGrades() == null || userApplication.getGrades().isEmpty()) {
+                        notCompletedCourses.add(requiredCourse.getName());
+                        completed = false;
+                        break; // no point checking other dates
+                    }
+
+                    boolean passed = userApplication.getGrades().stream()
+                            .anyMatch(g -> {
+                                try {
+                                    return g.getGradeValue() > 1;
+                                } catch (NumberFormatException e) {
+                                    return false;
+                                }
+                            });
+
+                    if (passed) {
+                        completed = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!completed) {
+                notCompletedCourses.add(requiredCourse.getName());
+            }
+        }
+
+        if (!notCompletedCourses.isEmpty()) {
+            String failedCourses = String.join(", ", notCompletedCourses);
+            return new CourseApplicationResponse(4,
+                    "Nem teljesítetted az alábbi előfeltétel kurzus(ok)at: " + failedCourses);
+        }
+
+        GlobalSettings semester = globalSettingsRepository.getReferenceById(1L);
+        GlobalSettings exam_period = globalSettingsRepository.getReferenceById(4L);
+        if (!Objects.equals(courseDate.getSemester(), semester.getAttribute())) {
+            return new CourseApplicationResponse(1, "Csak ezen szemeszter kurzusait veheted fel!");
+        }
+        if (!exam_period.isActivated()) {
+            return new CourseApplicationResponse(2, "Nincs kurzusjelentkezési időszak!");
+        }
         // Check if the user has already applied
         Optional<CourseApplicationEntity> existingApplication =
                 courseApplicationRepository.findByUserIdAndCourseDateEntity(userId, courseDate);
 
         if (existingApplication.isPresent()) {
-            throw new RuntimeException("User has already applied to this course date.");
+            return new CourseApplicationResponse(3, "Már felvetted ezt a kurzust!");
         }
+
+
         Optional<CourseApplicationEntity> existingApplicationCourseDetail =
                 courseApplicationRepository.findByUserIdAndCourseDetailId(userId, courseDate.getCourseDetailEntity().getId());
         if (existingApplicationCourseDetail.isPresent()) {
@@ -66,6 +124,7 @@ public class CourseApplicationService {
         application.setCourseDateEntity(courseDate);
         this.addCourseToTimetable(userId, courseDateId);
         courseApplicationRepository.save(application);
+        return new CourseApplicationResponse(0, "Sikeresen felvetted a kurzust!");
     }
 
     @Transactional

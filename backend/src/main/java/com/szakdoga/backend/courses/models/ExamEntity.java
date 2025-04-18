@@ -21,12 +21,13 @@ public class ExamEntity {
     @Column(name = "exam_date", nullable = false)
     private LocalDateTime examDate;
 
-    @Column(name = "grade")
-    private int grade;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "location")
     private LocationEnum location;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type")
+    private ExamType type;
 
     @ManyToOne
     @JoinColumn(name = "course_application_id", nullable = false)

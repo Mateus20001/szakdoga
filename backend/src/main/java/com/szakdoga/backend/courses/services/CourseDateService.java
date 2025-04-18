@@ -85,6 +85,29 @@ public class CourseDateService {
         }).toList();
     }
 
+    @Transactional
+    public List<CourseDateResponse> getCourseDatesAsResponseObjectsSemesterEnrollment(Long courseId, String semester, String enrollment) {
+        log.info("getCourseDatesAsRequestObjects courseDates: ");
+        List<CourseDateEntity> courseDates = courseDateRepository.findByCourseDetailEntityIdAndSemester(courseId, semester);
+
+        return courseDates.stream().map(courseDate -> {
+            CourseDateResponse response = new CourseDateResponse();
+            response.setId(courseDate.getId());
+            response.setName(courseDate.getName());
+            response.setCourseId(courseDate.getCourseDetailEntity().getId());
+            response.setTeacherIds(courseDate.getTeachers().stream()
+                    .map(User::getId)
+                    .toList());
+            response.setDayOfWeek(courseDate.getDayOfWeek());
+            response.setStartTime(courseDate.getStartTime());
+            response.setEndTime(courseDate.getEndTime());
+            response.setMaxLimit(courseDate.getMaxLimit());
+            response.setLocation(courseDate.getLocation());
+            response.setCurrentlyApplied(courseDate.getApplications() != null ? courseDate.getApplications().size() : 0);
+            response.setSemester(courseDate.getSemester());
+            return response;
+        }).toList();
+    }
     public CourseDateEntity updateCourseDate(EditCourseDateRequest request) {
         // Find the existing CourseDateEntity by ID
         log.info("OK");

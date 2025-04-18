@@ -24,6 +24,8 @@ import { Lesson } from '../../timetable-planner/timetable-planner.component';
 })
 export class CourseDetailsComponent {
   @Input() courseId!: number;
+  @Input() semester!: string;
+  @Input() enrollment!: string;
   teacherDetails: UserShowDTO | null = null;
   selectedTeacherId: string | null = null;
   hoveringTooltip = false;
@@ -58,7 +60,7 @@ export class CourseDetailsComponent {
     return this.timeTableCourses.some(lesson => lesson.id === courseId);
   }
   fetchCourseDates(): void {
-    this.courseDateService.getCourseDatesByCourseId(this.courseId).subscribe(
+    this.courseDateService.getCourseDatesByCourseIdSemesterEnrollment(this.courseId, this.semester, this.enrollment).subscribe(
       (courseDates) => {
         if (courseDates && courseDates.length > 0) {
           this.courseDates = courseDates.map(cd => ({

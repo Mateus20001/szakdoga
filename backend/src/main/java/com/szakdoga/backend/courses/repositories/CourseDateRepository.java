@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface CourseDateRepository  extends JpaRepository<CourseDateEntity, Long> {
     List<CourseDateEntity> findByCourseDetailEntityId(Long courseId);
+    List<CourseDateEntity> findByCourseDetailEntityIdAndSemester(Long courseId, String semester);
 }
