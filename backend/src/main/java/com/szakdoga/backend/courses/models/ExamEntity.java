@@ -25,12 +25,17 @@ public class ExamEntity {
     @Column(name = "location")
     private LocationEnum location;
 
+    @Column(name = "longevity", nullable = false)
+    private int longevity;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "type")
     private ExamType type;
 
     @ManyToOne
-    @JoinColumn(name = "course_application_id", nullable = false)
-    private CourseApplicationEntity courseApplicationEntity;
+    @JoinColumn(name = "course_date_id")
+    private CourseDateEntity courseDateEntity;
 
+    @OneToMany
+    private List<ExamApplicationEntity> examApplicationEntities;
 }
