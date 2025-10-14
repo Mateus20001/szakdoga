@@ -1,20 +1,20 @@
 <form (ngSubmit)="onSubmit()" [formGroup]="form" enctype="multipart/form-data">
     <mat-form-field appearance="fill">
-      <mat-label>Title</mat-label>
+      <mat-label>Cím</mat-label>
       <input matInput formControlName="title" placeholder="Enter the title" />
     </mat-form-field>
   
     <mat-form-field appearance="fill">
-      <mat-label>Short Description</mat-label>
+      <mat-label>Rövid leírás</mat-label>
       <input matInput formControlName="shortDesc" placeholder="Enter short description" />
     </mat-form-field>
   
     <mat-form-field appearance="fill">
-      <mat-label>Long Description</mat-label>
+      <mat-label>Teljes leírás</mat-label>
       <textarea matInput formControlName="longDesc" placeholder="Enter long description"></textarea>
     </mat-form-field>
   
-    <label for="file-upload">Upload Image:</label>
+    <label for="file-upload">Kép feltöltése:</label>
     <input type="file" id="file-upload" (change)="onFileSelect($event)" />
     <div *ngIf="selectedFile">
         <img *ngIf="selectedFile.type.startsWith('image')" [src]="filePreview" alt="Image preview" style="max-width: 200px; max-height: 200px;"/>
@@ -23,6 +23,6 @@
         {{ message }}
     </div>
     
-    <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Submit</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Létrehozás</button>
   </form>
   

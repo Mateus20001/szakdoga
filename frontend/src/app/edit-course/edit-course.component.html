@@ -3,36 +3,36 @@
     <form [formGroup]="courseForm" (ngSubmit)="submit()">
       <!-- Same form structure as Add Course -->
       <div>
-        <label>Name:</label>
+        <label>Név:</label>
         <input formControlName="name" type="text" />
       </div>
   
       <div>
-        <label>Description:</label>
+        <label>Leírás:</label>
         <textarea formControlName="description"></textarea>
       </div>
   
       <div>
-        <label>Credits:</label>
+        <label>Kreditek:</label>
         <input formControlName="credits" type="number" />
       </div>
   
       <div>
-        <label>Recommended Half Year:</label>
+        <label>Ajánlott félév:</label>
         <input formControlName="recommendedHalfYear" type="number" />
       </div>
 
       <div>
-        <label>Requirement Type:</label>
+        <label>Típus:</label>
         <select formControlName="requirementType">
           <option value="COLLOQUIUM">Colloquium</option>
-          <option value="PRACTICE">Practice</option>
-          <option value="PE">PE</option>
+          <option value="PRACTICE">Gyakorlat</option>
+          <option value="PE">Testnevelés</option>
         </select>
       </div>
   
       <div>
-        <label>Required Courses:</label>
+        <label>Szükséges kurzusok:</label>
         <select formControlName="requiredCourses" multiple>
           <option *ngFor="let course of courses" [value]="course.id">
             {{ course.name }}
@@ -41,54 +41,54 @@
       </div>
 
       <div formArrayName="teachers">
-        <h3>Teachers</h3>
+        <h3>Oktatók</h3>
         <div *ngFor="let teacher of teachers.controls; let i = index" [formGroupName]="i">
           <mat-form-field appearance="outline">
-            <mat-label style="color: black;">Teacher</mat-label>
+            <mat-label style="color: black;">Oktató</mat-label>
             <select matNativeControl formControlName="teacherId" required style="color: black;">
               <option  *ngFor="let teacher of allTeachers" [value]="teacher.identifier">{{ teacher.firstName }} {{ teacher.lastName }} ({{ teacher.name }})</option>
             </select>
           </mat-form-field>
       
-          <mat-checkbox formControlName="responsible"><p style="color: black;">Responsible</p></mat-checkbox>
+          <mat-checkbox formControlName="responsible"><p style="color: black;">Felelős</p></mat-checkbox>
       
-          <button type="button" (click)="removeTeacher(i)">Remove</button>
+          <button type="button" (click)="removeTeacher(i)">Törlés</button>
         </div>
-        <button type="button" (click)="addTeacher()">Add Teacher</button>
+        <button type="button" (click)="addTeacher()">Oktató hozzáadása</button>
       </div>
       
 
       <div>
-        <h3>Enrollment Types</h3>
-        <button type="button" (click)="addEnrollmentType()">Add Enrollment Type</button>
+        <h3>Szükségesség beállítása</h3>
+        <button type="button" (click)="addEnrollmentType()">Szükségesség hozzáadása</button>
         <div formArrayName="enrollmentTypes">
           <div
             *ngFor="let enrollmentType of enrollmentTypes.controls; let i = index"
             [formGroupName]="i"
           >
             <div>
-              <label>Major:</label>
+              <label>Szak:</label>
               <select formControlName="majorId">
-                <option value = "All">All</option>
+                <option value = "All">Összes</option>
                 <option *ngFor="let major of majors" [value]="major.id">
                   {{ major.name }}
                 </option>
               </select>
             </div>
             <div>
-              <label>Enrollment Type:</label>
+              <label>Szükségesség fajtája:</label>
               <select formControlName="enrollmentType">
-                <option value="MANDATORY">Mandatory</option>
-                <option value="MANDATORY_OPTIONAL">Mandatory Optional</option>
-                <option value="OPTIONAL">Optional</option>
+                <option value="MANDATORY">Kötelező</option>
+                <option value="MANDATORY_OPTIONAL">Kötelezően választható</option>
+                <option value="OPTIONAL">Szabadon választható</option>
               </select>
             </div>
-            <button type="button" (click)="removeEnrollmentType(i)">Remove</button>
+            <button type="button" (click)="removeEnrollmentType(i)">Törlés</button>
           </div>
         </div>
       </div>
   
-      <button type="submit" [disabled]="courseForm.invalid">Save Changes</button>
+      <button type="submit" [disabled]="courseForm.invalid">Változtatások mentése</button>
     </form>
   </div>
   

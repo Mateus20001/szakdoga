@@ -36,6 +36,6 @@ public class ExamEntity {
     @JoinColumn(name = "course_date_id")
     private CourseDateEntity courseDateEntity;
 
-    @OneToMany
+    @OneToMany(mappedBy = "examEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ExamApplicationEntity> examApplicationEntities;
 }

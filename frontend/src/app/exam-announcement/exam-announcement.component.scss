@@ -1,0 +1,26 @@
+.exam-card {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.exam-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.success {
+  color: #2e7d32;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.error {
+  color: #c62828;
+  text-align: center;
+  margin-top: 1rem;
+}

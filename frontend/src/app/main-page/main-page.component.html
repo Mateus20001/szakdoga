@@ -1,5 +1,9 @@
 <h1>Üdvözöllek a Szegedi Tudományegyetem Neptun oldalán!</h1>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsum similique dolores a dignissimos illum eum magni iste tempora odit!</p>
+<div *ngIf="quote">
+  <p>Mai napi idézet:</p>
+  <blockquote>{{ quote.q }}</blockquote>
+  <cite>– {{ quote.a }}</cite>
+</div>
 
 <div class="messages-table">
   <h2>Üzenetei</h2>

@@ -1,27 +1,33 @@
 package com.szakdoga.backend.courses.controllers;
 
 import com.szakdoga.backend.courses.dtos.AddExamRequest;
+import com.szakdoga.backend.courses.dtos.AppliedExamResponse;
 import com.szakdoga.backend.courses.dtos.ExamResponse;
 import com.szakdoga.backend.courses.models.ExamApplicationEntity;
 import com.szakdoga.backend.courses.services.ExamService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/exams")
 public class ExamController {
     @Autowired
     private ExamService examService;
+    private static final Logger log = LoggerFactory.getLogger(CourseController.class);
 
 
+    @PreAuthorize("hasRole('STUDENT')")
     @PostMapping("/apply")
     public ResponseEntity<ExamApplicationEntity> addCourse(@RequestBody long id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -41,10 +47,51 @@ public class ExamController {
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasRole('TEACHER')")
     @PostMapping("/add")
-    public ResponseEntity<Void> addExam(@RequestBody AddExamRequest request) {
-        examService.addExam(request);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> addExam(@RequestBody AddExamRequest request) {
+        log.info("ASD");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Return 401 if not authenticated
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // Return 403 if unauthorized
+        }
+
+        UserDetails userDetails = (UserDetails) principal;
+        String userId = userDetails.getUsername();
+        try {
+            log.info("ASD");
+            examService.addExam(userId, request);
+            return ResponseEntity.ok().build();
+        } catch (ResponseStatusException e) {
+            return ResponseEntity.status(403).body(e.getReason());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Internal server error");
+        }
+    }
+    @GetMapping("/me")
+    public ResponseEntity<List<AppliedExamResponse>> getAllAppliedExams() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Return 401 if not authenticated
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // Return 403 if unauthorized
+        }
+
+        UserDetails userDetails = (UserDetails) principal;
+        String userId = userDetails.getUsername();
+        List<AppliedExamResponse> exams = examService.getAllExams(userId);
+        return ResponseEntity.ok(exams);
     }
     @GetMapping
     public ResponseEntity<List<ExamResponse>> getAllExams() {
@@ -61,7 +108,9 @@ public class ExamController {
 
         UserDetails userDetails = (UserDetails) principal;
         String userId = userDetails.getUsername();
-        List<ExamResponse> exams = examService.getAllExams(userId);
-        return ResponseEntity.ok(exams);
+        log.info("ASD");
+        List<ExamResponse> response =  examService.getExamsForCurrentUser(userId);
+
+        return ResponseEntity.ok(response);
     }
 }

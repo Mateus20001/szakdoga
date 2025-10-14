@@ -26,6 +26,8 @@ import { GradingStudentsComponent } from '../grading-students/grading-students.c
 import { TimetablePlannerComponent } from '../timetable-planner/timetable-planner.component';
 import { TeacherStatisticsComponent } from '../teacher-statistics/teacher-statistics.component';
 import { GlobalSettingsChangerComponent } from '../global-settings-changer/global-settings-changer.component';
+import { ExamApplyComponent } from '../exam-apply/exam-apply.component';
+import { ExamAnnouncementComponent } from '../exam-announcement/exam-announcement.component';
 
 
 export const routes: Route[] = [
@@ -54,5 +56,7 @@ export const routes: Route[] = [
   { path: 'timetable-planner', component: TimetablePlannerComponent, canActivate: [authGuard]},
   { path: 'teacherStatistics', component: TeacherStatisticsComponent, canActivate: [authGuard]},
   { path: 'globalSettings', component: GlobalSettingsChangerComponent, canActivate: [authGuard, adminGuard]},
+  { path: 'examApply', component: ExamApplyComponent, canActivate: [authGuard]},
+  { path: 'examAdd', component: ExamAnnouncementComponent, canActivate: [authGuard]},
   { path: '**', redirectTo: 'login' }
 ];

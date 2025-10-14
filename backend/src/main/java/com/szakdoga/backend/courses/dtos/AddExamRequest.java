@@ -14,11 +14,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddExamRequest {
-    private LocalDateTime examDate;
-    private LocationEnum location;
+    private String examDate;
+    private String location;
     private int longevity;
     private ExamType type;
     private Long courseDateId;
-
-    // Getters and setters
 }

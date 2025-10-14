@@ -79,7 +79,7 @@ export const MenuDropdownMenuObjects: MenuDropdown[] = [
           },
           { 
             name: "Vizsgajelentkezés",
-            link: "/examadmission",
+            link: "/examApply",
             roles: ["STUDENT"]
           },
           { 
@@ -109,12 +109,12 @@ export const MenuDropdownMenuObjects: MenuDropdown[] = [
           },
           { 
             name: "Vizsga meghirdetése",
-            link: "/examadd",
+            link: "/examAdd",
             roles: ["TEACHER"]
           },
           { 
             name: "Meghirdetett vizsgák",
-            link: "/examsannounced",
+            link: "/examsAnnounced",
             roles: ["TEACHER"]
           }
         ]

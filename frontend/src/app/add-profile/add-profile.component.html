@@ -1,15 +1,15 @@
 <div class="add-user-form">
-  <h2>Add User</h2>
+  <h2>Felhasználó hozzáadása</h2>
   <form (ngSubmit)="onSubmit()" #userForm="ngForm">
     <!-- First Name -->
     <mat-form-field appearance="fill">
-      <mat-label>First Name</mat-label>
+      <mat-label>Vezetéknév</mat-label>
       <input matInput type="text" name="firstName" [(ngModel)]="user.firstName" required />
     </mat-form-field>
 
     <!-- Last Name -->
     <mat-form-field appearance="fill">
-      <mat-label>Last Name</mat-label>
+      <mat-label>Keresztnév</mat-label>
       <input matInput type="text" name="lastName" [(ngModel)]="user.lastName" required />
     </mat-form-field>
 
@@ -25,7 +25,7 @@
                [ngClass]="{'invalid-email': !isEmailValid(index)}" 
                (blur)="onEmailBlur(index)"
                placeholder="Enter email">
-        <mat-error *ngIf="!isEmailValid(index)">Invalid email format</mat-error>
+        <mat-error *ngIf="!isEmailValid(index)">Nem megfelelő email formátum</mat-error>
       </mat-form-field>
       <button type="button" mat-icon-button *ngIf="user.emails.length > 0 && user.emails[index]" (click)="removeEmail(index)">&times; </button>
 
@@ -34,7 +34,7 @@
 
     <div *ngFor="let i of getRange(currentmajors+1); let index = index" class="input-container">
       <mat-form-field appearance="fill">
-        <mat-label>Major {{ index + 1 }}</mat-label>
+        <mat-label>Szak {{ index + 1 }}</mat-label>
         <mat-select id="major{{ index }}" [(ngModel)]="user.majors[index]" name="major{{ index }}" (ngModelChange)="onMajorChange(index)">
           <mat-option *ngFor="let major of majors" [value]="major.id">
             {{ major.name }}
@@ -46,7 +46,7 @@
 
     <div *ngFor="let i of getRange(currentphonenumberscount+1); let index = index" class="input-container">
       <mat-form-field appearance="fill" style="width: 100%; position: relative;">
-        <mat-label>Phone Number {{index +1}}: </mat-label>
+        <mat-label>Telefonszám {{index +1}}: </mat-label>
         <input matInput 
             type="text" 
             name="phone_number{{index}}" 
@@ -62,10 +62,10 @@
     </div>
 
     
-    <h3>Roles</h3>
+    <h3>Jogok</h3>
     <div>
       <div>
-        <label>Select Roles:</label>
+        <label>Jogok kiválasztása:</label>
         <div *ngFor="let role of roles">
           <input
             type="checkbox"
@@ -78,7 +78,7 @@
       </div>
     </div>
     <!-- Submit Button -->
-    <button mat-raised-button color="primary" type="submit">Add User</button>
+    <button mat-raised-button color="primary" type="submit">Felhasználó hozzáadása</button>
   </form>
   <div *ngIf="message" [ngClass]="{'success-message': messageType === 'success', 'error-message': messageType === 'error'}">
     {{ message }}
