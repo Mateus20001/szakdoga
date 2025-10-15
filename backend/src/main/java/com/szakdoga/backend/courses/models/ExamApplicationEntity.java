@@ -17,10 +17,10 @@ public class ExamApplicationEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = true)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "exam_entity_id")
+    @JoinColumn(name = "exam_entity_id", nullable = true)
     private ExamEntity examEntity;
 }

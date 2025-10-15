@@ -1,0 +1,40 @@
+.exam-container {
+  display: grid;
+  gap: 16px;
+  padding: 24px;
+}
+
+.exam-card {
+  max-width: 500px;
+  margin: auto;
+}
+
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 40px;
+}
+
+.empty-state {
+  text-align: center;
+  color: gray;
+  margin-top: 40px;
+}
+.exam-row {
+  display: flex;     
+  flex-wrap: wrap;      
+  gap: 16px;             
+  margin-bottom: 24px;     
+}
+
+.exam-card {
+  flex: 1 1 250px;
+  max-width: 300px;
+}
+
+.course-date-title {
+  margin: 16px 0 8px;
+  font-weight: bold;
+  font-size: 1.2rem;
+}

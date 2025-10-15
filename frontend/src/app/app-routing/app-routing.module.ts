@@ -28,6 +28,7 @@ import { TeacherStatisticsComponent } from '../teacher-statistics/teacher-statis
 import { GlobalSettingsChangerComponent } from '../global-settings-changer/global-settings-changer.component';
 import { ExamApplyComponent } from '../exam-apply/exam-apply.component';
 import { ExamAnnouncementComponent } from '../exam-announcement/exam-announcement.component';
+import { ExamAppliedComponent } from '../exam-applied/exam-applied.component';
 
 
 export const routes: Route[] = [
@@ -58,5 +59,6 @@ export const routes: Route[] = [
   { path: 'globalSettings', component: GlobalSettingsChangerComponent, canActivate: [authGuard, adminGuard]},
   { path: 'examApply', component: ExamApplyComponent, canActivate: [authGuard]},
   { path: 'examAdd', component: ExamAnnouncementComponent, canActivate: [authGuard]},
+  { path: 'examApplied', component: ExamAppliedComponent, canActivate: [authGuard]},
   { path: '**', redirectTo: 'login' }
 ];

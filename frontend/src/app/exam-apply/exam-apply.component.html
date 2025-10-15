@@ -1,1 +1,48 @@
-<p>exam-apply works!</p>
+<div *ngIf="!loading; else loadingSpinner">
+  <ng-container *ngFor="let group of groupedExams">
+    <h3 class="course-date-title">{{ group.courseDateName }}</h3>
+    
+    <div class="exam-row">
+      <mat-card *ngFor="let exam of group.exams" class="exam-card">
+        <mat-card-header>
+          <mat-card-title>Vizsga azonosító: {{ exam.id }}</mat-card-title>
+          <mat-card-subtitle>Típus: {{ exam.type }}</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <p><strong>Dátum:</strong> {{ exam.examDate | date:'yyyy. MMMM d. HH:mm' }}</p>
+          <p><strong>Helyszín:</strong> {{ exam.location }}</p>
+          <p><strong>Időtartam:</strong> {{ exam.longevity }} perc</p>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button 
+            mat-raised-button 
+            color="primary" 
+            (click)="applyForExam(exam.id)"
+            [disabled]="exam.applied">
+            {{ exam.applied ? 'Jelentkezve' : 'Jelentkezés' }}
+          </button>
+          <button 
+            mat-raised-button 
+            color="warn" 
+            *ngIf="exam.applied"
+            (click)="removeExamApplication(exam.id)">
+            Jelentkezés visszavonása
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </ng-container>
+
+  <div *ngIf="exams.length === 0" class="empty-state">
+    <p>Nincsenek elérhető vizsgák.</p>
+  </div>
+</div>
+
+<ng-template #loadingSpinner>
+  <div class="spinner-container">
+    <mat-spinner></mat-spinner>
+    <p>Betöltés...</p>
+  </div>
+</ng-template>

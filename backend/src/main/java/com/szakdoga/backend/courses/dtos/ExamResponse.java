@@ -11,8 +11,10 @@ import java.time.LocalDateTime;
 @Setter
 public class ExamResponse {
     private Long id;
-    private LocalDateTime examDate;
-    private LocationEnum location;
+    private String examDate;
+    private String location;
     private int longevity;
     private ExamType type;
+    private boolean applied;
+    private String courseDateName;
 }

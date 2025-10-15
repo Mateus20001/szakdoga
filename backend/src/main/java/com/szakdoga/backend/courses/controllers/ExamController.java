@@ -28,23 +28,29 @@ public class ExamController {
 
 
     @PreAuthorize("hasRole('STUDENT')")
-    @PostMapping("/apply")
-    public ResponseEntity<ExamApplicationEntity> addCourse(@RequestBody long id) {
+    @PostMapping("/{id}/apply")
+    public ResponseEntity<String> applyToExam(@PathVariable long id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Return 401 if not authenticated
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 401
         }
 
         Object principal = authentication.getPrincipal();
         if (!(principal instanceof UserDetails)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // Return 403 if unauthorized
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // 403
         }
 
         UserDetails userDetails = (UserDetails) principal;
         String userId = userDetails.getUsername();
-        examService.applyToExam(id, userId);
-        return ResponseEntity.ok().build();
+        log.info("Applying user: " + userId + " and " + id);
+
+        try {
+            String message = examService.applyToExam(id, userId);
+            return ResponseEntity.ok(message);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PreAuthorize("hasRole('TEACHER')")
@@ -90,9 +96,10 @@ public class ExamController {
 
         UserDetails userDetails = (UserDetails) principal;
         String userId = userDetails.getUsername();
-        List<AppliedExamResponse> exams = examService.getAllExams(userId);
+        List<AppliedExamResponse> exams = examService.getAllAppliedExams(userId);
         return ResponseEntity.ok(exams);
     }
+    @PreAuthorize("hasRole('STUDENT')")
     @GetMapping
     public ResponseEntity<List<ExamResponse>> getAllExams() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -108,9 +115,34 @@ public class ExamController {
 
         UserDetails userDetails = (UserDetails) principal;
         String userId = userDetails.getUsername();
-        log.info("ASD");
         List<ExamResponse> response =  examService.getExamsForCurrentUser(userId);
 
         return ResponseEntity.ok(response);
     }
+
+    @PreAuthorize("hasRole('STUDENT')")
+    @DeleteMapping("/{id}/remove")
+    public ResponseEntity<String> removeApplication(@PathVariable long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Nincs bejelentkezett felhasználó.");
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Hozzáférés megtagadva.");
+        }
+
+        UserDetails userDetails = (UserDetails) principal;
+        String userId = userDetails.getUsername();
+
+        try {
+            examService.removeApplication(id, userId);
+            return ResponseEntity.ok("Sikeresen visszavontad a jelentkezést.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }

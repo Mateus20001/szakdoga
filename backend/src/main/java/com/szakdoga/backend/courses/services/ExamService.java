@@ -33,27 +33,47 @@ public class ExamService {
     private UserRepository userRepository;
 
     @Transactional
-    public void applyToExam(long id, String user_id) {
-        User user = userRepository.findById(user_id).orElseThrow(() -> new RuntimeException("User not found"));
-        ExamEntity examEntity = examRepository.findById(id).orElseThrow(() -> new RuntimeException("Exam not found"));
-        ExamApplicationEntity alreadyExamApplicationEntity = examApplicationRepository.findByUserAndExamEntity(user, examEntity);
-        if (alreadyExamApplicationEntity != null) {
-            alreadyExamApplicationEntity.setExamEntity(null);
-            alreadyExamApplicationEntity.setUser(null);
-            examApplicationRepository.save(alreadyExamApplicationEntity);
-            examApplicationRepository.delete(alreadyExamApplicationEntity);
-            examApplicationRepository.deleteOrphanedExamApplicationEntities();
+    public String applyToExam(long examId, String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Felhasználó nem található."));
+        ExamEntity examEntity = examRepository.findById(examId)
+                .orElseThrow(() -> new RuntimeException("Vizsga nem található."));
+
+        ExamApplicationEntity existing = examApplicationRepository.findByUserAndExamEntity(user, examEntity);
+        if (existing != null) {
+            return "Már jelentkeztél erre a vizsgára.";
         }
-        ExamApplicationEntity examApplicationEntity = new ExamApplicationEntity();
-        examApplicationEntity.setUser(user);
-        examApplicationEntity.setExamEntity(examEntity);
-        examApplicationRepository.save(examApplicationEntity);
+
+        if (examEntity.getCourseDateEntity() == null || examEntity.getCourseDateEntity().getApplications() == null) {
+            throw new RuntimeException("Csak olyan vizsgára jelentkezhetsz, amelynek kurzusára már jelentkeztél.");
+        }
+
+        boolean hasCourseDateApplication = examEntity.getCourseDateEntity().getApplications().stream()
+                .anyMatch(app -> app.getUser() != null && userId.equals(app.getUser().getId()));
+
+        if (!hasCourseDateApplication) {
+            throw new RuntimeException("Csak olyan vizsgára jelentkezhetsz, amelynek kurzusára már jelentkeztél.");
+        }
+
+        boolean alreadyAppliedToCourseDate = examApplicationRepository.existsByUserAndExamEntity_CourseDateEntity(user, examEntity.getCourseDateEntity());
+        if (alreadyAppliedToCourseDate) {
+            return "Már jelentkeztél egy másik vizsgára ezen a kurzusidőponton.";
+        }
+        ExamApplicationEntity newApplication = new ExamApplicationEntity();
+        newApplication.setUser(user);
+        newApplication.setExamEntity(examEntity);
+        examApplicationRepository.save(newApplication);
+
+        return "Sikeresen jelentkeztél a vizsgára.";
     }
+
     @Transactional
     public void removeApplication(long id, String user_id) {
-        User user = userRepository.findById(user_id).orElseThrow(() -> new RuntimeException("User not found"));
-        ExamEntity examEntity = examRepository.findById(id).orElseThrow(() -> new RuntimeException("Exam not found"));
-        ExamApplicationEntity alreadyExamApplicationEntity = examApplicationRepository.findByUserAndExamEntity(user, examEntity);
+        User user = userRepository.findById(user_id)
+                .orElseThrow(() -> new RuntimeException("Felhasználó nem található."));
+        ExamEntity exam = examRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Vizsga nem található."));
+        ExamApplicationEntity alreadyExamApplicationEntity = examApplicationRepository.findByUserAndExamEntity(user, exam);
         alreadyExamApplicationEntity.setExamEntity(null);
         alreadyExamApplicationEntity.setUser(null);
         examApplicationRepository.save(alreadyExamApplicationEntity);
@@ -99,7 +119,62 @@ public class ExamService {
         examRepository.deleteOrphanedExamApplicationEntities();
     }
     @Transactional
-    public List<AppliedExamResponse> getAllExams(String userId) {
+    public List<AppliedExamResponse> getAllAppliedExams(String userId) {
+        // Find all applications by this user
+        List<ExamApplicationEntity> userApplications = examApplicationRepository.findAllByUserId(userId);
+
+        return userApplications.stream()
+                .map(app -> {
+                    ExamEntity exam = app.getExamEntity();
+
+                    AppliedExamResponse response = new AppliedExamResponse();
+                    response.setId(exam.getId());
+                    response.setExamDate(exam.getExamDate().toString());
+                    response.setLocation(exam.getLocation().toString());
+                    response.setLongevity(exam.getLongevity());
+                    response.setType(exam.getType());
+                    response.setCourseApplicationId(app.getId());
+                    response.setCourseDetailName(exam.getCourseDateEntity().getCourseDetailEntity().getName());
+                    if (exam.getCourseDateEntity() != null) {
+                        response.setCourseDateName(exam.getCourseDateEntity().getName());
+                    }
+
+                    return response;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<ExamResponse> getExamsForCurrentUser(String userId) {
+        return examRepository.findAllByUserId(userId).stream()
+                .filter(exam -> {
+                    if (exam.getCourseDateEntity() == null) return false;
+                    var applications = exam.getCourseDateEntity().getApplications();
+                    if (applications == null) return false;
+                    return applications.stream()
+                            .anyMatch(app ->
+                                    app.getUser() != null &&
+                                            app.getUser().getId() != null &&
+                                            userId.equals(app.getUser().getId()));
+                })
+                .map(exam -> {
+                    ExamResponse response = new ExamResponse();
+                    response.setId(exam.getId());
+                    response.setExamDate(exam.getExamDate().toString());
+                    response.setLocation(exam.getLocation() != null ? exam.getLocation().toString() : null);
+                    response.setLongevity(exam.getLongevity());
+                    response.setType(exam.getType());
+                    response.setCourseDateName(exam.getCourseDateEntity().getName());
+                    boolean applied = exam.getExamApplicationEntities() != null &&
+                            exam.getExamApplicationEntities().stream()
+                                    .anyMatch(app -> app.getUser() != null && userId.equals(app.getUser().getId()));
+                    response.setApplied(applied);
+                    return response;
+                })
+                .collect(Collectors.toList());
+    }
+    @Transactional
+    public List<AppliedExamResponse> getAllTeachedExams(String userId) {
         return examRepository.findAll().stream()
                 .filter(exam -> exam.getCourseDateEntity() != null &&
                         exam.getCourseDateEntity().getApplications().stream()
@@ -107,8 +182,8 @@ public class ExamService {
                 .map(exam -> {
                     AppliedExamResponse response = new AppliedExamResponse();
                     response.setId(exam.getId());
-                    response.setExamDate(exam.getExamDate());
-                    response.setLocation(exam.getLocation());
+                    response.setExamDate(exam.getExamDate().toString());
+                    response.setLocation(exam.getLocation().toString());
                     response.setLongevity(exam.getLongevity());
                     response.setType(exam.getType());
 
@@ -124,20 +199,4 @@ public class ExamService {
                 })
                 .collect(Collectors.toList());
     }
-    public List<ExamResponse> getExamsForCurrentUser(String userId) {
-        return examRepository.findAllByUserId(userId).stream()
-                .filter(exam -> exam.getCourseDateEntity() != null &&
-                        exam.getCourseDateEntity().getApplications().stream()
-                                .anyMatch(app -> app.getUser() != null && app.getUser().getId().equals(userId)))
-                .map(exam -> {
-                    ExamResponse response = new ExamResponse();
-                    response.setId(exam.getId());
-                    response.setExamDate(exam.getExamDate());
-                    response.setLocation(exam.getLocation());
-                    response.setLongevity(exam.getLongevity());
-                    response.setType(exam.getType());
-                    return response;
-                }).collect(Collectors.toList());
-    }
-
 }

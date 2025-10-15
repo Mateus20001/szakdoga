@@ -15,9 +15,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class AppliedExamResponse {
     private Long id;
-    private LocalDateTime examDate;
-    private LocationEnum location;
+    private String examDate;
+    private String location;
     private int longevity;
     private ExamType type;
     private Long courseApplicationId;
+    private String courseDateName;
+    private String courseDetailName;
 }

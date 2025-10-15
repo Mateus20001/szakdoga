@@ -84,7 +84,7 @@ export const MenuDropdownMenuObjects: MenuDropdown[] = [
           },
           { 
             name: "Felvett vizsgák",
-            link: "/examstaken",
+            link: "/examApplied",
             roles: ["STUDENT"]
           }
         ]
