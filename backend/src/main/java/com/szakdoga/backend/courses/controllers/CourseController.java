@@ -58,8 +58,7 @@ public class CourseController {
         }
 
         UserDetails userDetails = (UserDetails) principal;
-        String teacherId = userDetails.getUsername(); // Assuming teacherId is stored in the username field
-        log.info("getCoursesByTeacher: " + teacherId);
+        String teacherId = userDetails.getUsername();
         // Verify the user exists
         User user = userService.findUserById(teacherId);
         if (user == null) {

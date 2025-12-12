@@ -10,6 +10,7 @@ import { UserDetailsDTO } from '../models/userDetailsDTO';
 import { MessageDto } from '../models/email';
 import { environment } from '../../environments/environment';
 import { UserListingDTO } from '../models/TeacherStudentGradingDTO';
+import { Quote } from '../models/Quote';
 
 @Injectable({
   providedIn: 'root',

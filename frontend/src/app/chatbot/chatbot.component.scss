@@ -1,0 +1,41 @@
+/* Floating chat button */
+.chat-btn {
+  position: fixed;
+  bottom: 50px; /* Adjust to place near your scroll-to-top button */
+  right: 20px;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  border: none;
+  background: #0078ff;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+/* Chat iframe container */
+.chat-container {
+    z-index: 9999999;
+  position: fixed;
+  bottom: 140px; /* above the buttons */
+  right: 25px;
+  width: 380px;
+  height: 500px;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  z-index: 1000;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+.close-chat-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #fff;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 1001;
+}

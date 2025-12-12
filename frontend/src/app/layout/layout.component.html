@@ -50,11 +50,11 @@
 <div *ngIf="showTimetable && isCourseApplication()" class="timetable-container">
   <app-timetable-planner></app-timetable-planner>
 </div>
-
+<app-chatbot 
+  *ngIf="!isLoginPage()" 
+  class="chatbot-floating">
+</app-chatbot>
 <!-- Toggle Button -->
 <button mat-mini-fab color="primary" (click)="toggleTimetable()" class="toggle-button" *ngIf="isCourseApplication()">
   <mat-icon>{{ showTimetable ? 'close' : 'schedule' }}</mat-icon>
 </button>
-
-
-  

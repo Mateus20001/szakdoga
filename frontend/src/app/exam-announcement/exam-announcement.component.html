@@ -1,16 +1,16 @@
 <mat-card class="exam-card">
-  <h2>Create New Exam</h2>
+  <h2>Új vizsga meghirdetése</h2>
 
   <form [formGroup]="examForm" (ngSubmit)="onSubmit()" class="exam-form">
 
     <mat-form-field appearance="outline">
-      <mat-label>Exam Date & Time</mat-label>
+      <mat-label>Vizsga dátuma</mat-label>
       <input matInput type="datetime-local" formControlName="examDate" required>
       <mat-error *ngIf="examForm.get('examDate')?.hasError('required')">Exam date is required</mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Location</mat-label>
+      <mat-label>Helyszín</mat-label>
       <mat-select formControlName="location" required>
         <mat-option *ngFor="let loc of locations" [value]="loc">{{ loc }}</mat-option>
       </mat-select>
@@ -18,14 +18,14 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Longevity (minutes)</mat-label>
+      <mat-label>Hossz</mat-label>
       <input matInput type="number" formControlName="longevity" required>
       <mat-error *ngIf="examForm.get('longevity')?.hasError('required')">Required</mat-error>
       <mat-error *ngIf="examForm.get('longevity')?.hasError('min')">Must be > 0</mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Exam Type</mat-label>
+      <mat-label>Vizsga típusa</mat-label>
       <mat-select formControlName="type" required>
         <mat-option *ngFor="let t of types" [value]="t">{{ t }}</mat-option>
       </mat-select>
@@ -33,7 +33,7 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Course Date ID</mat-label>
+      <mat-label>A kurzus azonosítója</mat-label>
       <input matInput type="number" formControlName="courseDateId" required>
       <mat-error *ngIf="examForm.get('courseDateId')?.hasError('required')">Course Date ID is required</mat-error>
     </mat-form-field>

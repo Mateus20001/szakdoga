@@ -29,6 +29,7 @@ import { GlobalSettingsChangerComponent } from '../global-settings-changer/globa
 import { ExamApplyComponent } from '../exam-apply/exam-apply.component';
 import { ExamAnnouncementComponent } from '../exam-announcement/exam-announcement.component';
 import { ExamAppliedComponent } from '../exam-applied/exam-applied.component';
+import { ChatbotComponent } from '../chatbot/chatbot.component';
 
 
 export const routes: Route[] = [

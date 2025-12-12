@@ -8,10 +8,11 @@ import { MenuDropdown, MenuDropdownMenuObjects, MenuItem } from '../shared/const
 import { Role } from '../models/userSessionEntity';
 import { TimetablePlannerComponent } from '../timetable-planner/timetable-planner.component';
 import { MatIcon } from '@angular/material/icon';
+import { ChatbotComponent } from "../chatbot/chatbot.component";
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [RouterOutlet, DropdownMenuComponent, CommonModule, MatIconButton, TimetablePlannerComponent, MatIcon],
+  imports: [RouterOutlet, DropdownMenuComponent, CommonModule, MatIconButton, TimetablePlannerComponent, MatIcon, ChatbotComponent],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss',
 })
@@ -117,7 +118,7 @@ ngAfterViewInit() {
     
       if (month === 11 || month === 0 || month === 1) {
         // Winter: December, January, February
-        imageUrl = 'url("../../assets/mainbuilding-winter.jpg")';
+        imageUrl = 'url("../../assets/mainbuilding-winter.jpeg")';
       } else if (month >= 2 && month <= 4) {
         // Spring
         imageUrl = 'url("../../assets/mainbuilding-spring.jpg")';
